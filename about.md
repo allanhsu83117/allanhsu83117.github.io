@@ -5,8 +5,6 @@ title: 關於我
 
 ## About Me
 
-<img class="profile-picture" src="sherlock.jpg">
-
 Hi! I am a graduate student of Finance at National Sun Yat-sen University.
 
 Here I will record my learning note and some projects developed in R or Python.
