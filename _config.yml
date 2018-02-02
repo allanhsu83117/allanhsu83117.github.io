@@ -1,1 +1,62 @@
-theme: jekyll-theme-cayman
+# Basic
+title: 許修銘(Allan Hsu)
+subtitle: Personal website
+description: 紀錄一些學習心得
+# 头像里面的标题
+avatarTitle: AllanHsu
+# 头像里面的描述
+avatarDesc: Finance / 機器學習
+url: "http://allanhsu83117.github.io"
+
+# Comment
+comment:
+    disqus: allanhsu
+    # uyan: 2143225  # 有言id,登录有言官网申请
+
+# Social
+social:
+    github: allanhsu83117
+    # twitter:
+    mail: allan83117@gmail.com
+
+# Google Analytics
+# 使用博客模板请去掉或者更换 id
+ga:
+    id: UA-113494500-1
+    host: auto
+
+
+# 《----------------- 上面的信息修改成你自己的 ---------------------------》
+#
+#
+#  _post/ 下的文章更换成你自己的文章
+#  帮忙star一下，感谢~😆 地址： https://github.com/leopardpan/leopardpan.github.io
+#
+#
+# 《--------------- 下面的信息可以自行选择是否修改 ------------------------》
+
+
+permalink: /:year/:month/:title/
+# Format
+highlighter: rouge
+
+textColor: #FF0000
+
+# supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
+cover_color: clear
+
+# The blog button should not be removed.
+blog_button:
+    title: 首頁
+
+# Navigation buttons in the front page.s
+nav:
+    - {title: 所有文章, description: archive, url: '/archive'}
+    - {title: 標籤, description: tags, url: '/tags'}
+    - {title: 關於我, description: about, url: '/about'}
+
+
+# Pagination
+gems: [jekyll-paginate,jekyll-sitemap]
+paginate: 20
+paginate_path: "page/:num/"
