@@ -3,7 +3,7 @@ layout: page
 title: 關於我
 ---
 
-## About Me
+<h3> About Me </h3>
 
 Hi! I am a graduate student of Finance at National Sun Yat-sen University.
 
@@ -12,7 +12,7 @@ Here I will record my learning note and some projects developed in R or Python.
 And this is my github [GitHub](https://github.com/allanhsu83117)
 
 
-## Education
+<h3> Education </h3>
 
 * 2017年9月-2019年6月
 國立中山大學財務管理所 碩士
@@ -21,13 +21,13 @@ And this is my github [GitHub](https://github.com/allanhsu83117)
 國立中興大學財務金融系 學士
 
 
-## Research / Interest
+<h3> Research / Interest </h3>
 * 量化投資策略
 * 機器學習之財務方面應用
 * R / Python
 
 
-## Contest
+<h3> Contest </h3>
 
 Year | Award | Category
 -----|-------|--------
