@@ -26,23 +26,15 @@ tag: [R,clustering]
 ### Distance
 #### 歐式距離
 在2維空間(平面)中，點x=(x1, x2)與點y=(y1, y2)之間的歐式距離為
-$$
-d(x,y)={\sqrt{(x_1-y_1)^2+(x_2-y_2)^2}}
-$$
+![](/images/formula/euclidean1.png)
 一般通式寫成：
-$$
-d(x,y)={\sqrt{\sum_{i=1}^n(x_i-y_i)^2}}
-$$
+![](/images/formula/euclidean2.png)
 
 #### 曼哈頓距離（絕對誤差）
 在2維空間(平面)中，點x=(x1, x2)與點y=(y1, y2)之間的曼哈頓距離為
-$$
-d(x,y)={\vert x_1-y_1 \vert+\vert x_2-y_2\vert}
-$$
+![](/images/formula/manhattan1.png)
 一般通式寫成：
-$$
-d(x,y)={\sum_{i=1}^n \vert x_i-y_i\vert}
-$$
+![](/images/formula/manhattan2.png)
 
 ### 切割式分群（Partitional Clustering）
 #### K-means
@@ -226,9 +218,7 @@ fviz_nbclust(iris.x, hcut, method = "wss") +
 2. 計算樣本點 i 至其他某群Cj的所有樣本之平均距離 bij，bi 越大，代表樣本點 i 越不屬於該群
 3. ai稱為組內不相似度，bi稱為組間不相似度，根據兩者定義**輪廓係數（Silhouette coefficient）**
 
-$$
-s(i)={b(i)-a(i) \over max \{ a(i), b(i) \}}
-$$
+![](/images/formula/silhouette_coefficient.png)
 
 4. 判斷：
     * si接近1，代表樣本 i 的分群合理
@@ -261,13 +251,7 @@ fviz_nbclust(iris.x, hcut, method = "silhouette",
 ![](https://i.imgur.com/8ClQpRt.png)
 * 將原本Elbow method中所提到的缺陷進行改良
 
-$$
-Gap_n(k)=E^*_n(log(W_k))-log(W_k)
-$$
-
-$$
-W_k 為組內總變異數
-$$
+![](/images/formula/gap.png)
 
 * 當k最小，Gap值最大時，k即為最佳分群數
 * [R. Tibshirani, G. Walther, and T. Hastie (Standford University, 2001)](http://web.stanford.edu/~hastie/Papers/gap.pdf)
