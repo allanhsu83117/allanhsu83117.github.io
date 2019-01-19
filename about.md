@@ -9,7 +9,9 @@ Hi! I am a graduate student of Finance at National Sun Yat-sen University.
 
 Here I will record my learning note and some projects developed in R or Python.
 
-And this is my github [GitHub](https://github.com/allanhsu83117)
+[E-mail](mailto:allan83117@gmail.com)
+
+[GitHub](https://github.com/allanhsu83117)
 
 
 <h3> Education </h3>
@@ -22,13 +24,15 @@ And this is my github [GitHub](https://github.com/allanhsu83117)
 
 
 <h3> Research / Interest </h3>
-* 量化投資策略
-* 機器學習之財務方面應用
+* 量化投資 Quantitative investment
+* 機器 / 深度學習在財務方面應用 Machine & Deep Learning in Investment
 * R / Python
 
 
 <h3> Contest </h3>
 
-Year | Award | Category
------|-------|--------
-2017 | 亞 軍 | 台灣證券交易所-第14屆校園證券投資智慧王總決賽
+Date    | Award | Category
+--------|------ |--------
+2018-11 | 優 選 | 第二屆國泰大數據競賽
+2018-06 | 優 勝 | 第七屆大數據資料科學家競賽-FinTech跨界整合 X 未來模型-資料時代領航者挑戰賽
+2017-12 | 亞 軍 | 台灣證券交易所-第14屆校園證券投資智慧王總決賽
