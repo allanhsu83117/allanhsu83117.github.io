@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "蒙地卡羅模擬法（Monte Carlo）與選擇權定價（Options Pricing）"
-date: 2018-09-11
+date: 2017-11-15
 description: "蒙地卡羅"
 tag: [Python]
 ---
@@ -10,12 +10,13 @@ tag: [Python]
 
 ![](/images/formula/price.png)
 
+
+### 參數設定
+
 ```python=
 from scipy.stats import norm
 import numpy as np
 ```
-
-### 參數設定
 
 ```python=
 # Black-Scholes Model參數
