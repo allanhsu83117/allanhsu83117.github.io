@@ -75,19 +75,19 @@ library(cluster)
 ```
 # 讀取資料
 data("iris")
-
 # 將特徵標準化以利分群
 iris.x <- apply(iris[, -5], 2, function(x){(x-mean(x))/sd(x)})
 ```
+
 * k-means
 ```
 # k-means
 km.iris <- kmeans(iris.x, centers = 3)
-
 # 分群視覺化
 fviz_cluster(km.iris, data = iris.x, geom = "point",
              stand = T, ellipse.type = "norm")
 ```
+
 ![](https://i.imgur.com/dksPbGI.png)
 
 #### K-medoid / PAM（Patition around medoid）
