@@ -66,12 +66,14 @@ $$
     * Species（物種）：山鳶尾(setosa)、變色鳶尾(versicolor)、維吉尼亞鳶尾(virginica)
 
 * 套件讀取
+
 ```
 library(factoextra)
 library(cluster)
 ```
 
 * 資料處理
+
 ```
 # 讀取資料
 data("iris")
@@ -80,6 +82,7 @@ iris.x <- apply(iris[, -5], 2, function(x){(x-mean(x))/sd(x)})
 ```
 
 * k-means
+
 ```
 # k-means
 km.iris <- kmeans(iris.x, centers = 3)
