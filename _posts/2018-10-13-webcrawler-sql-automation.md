@@ -3,7 +3,7 @@ layout: post
 title: "Python爬蟲+SQL建置+自動化更新"
 date: 2018-10-13
 description: "yahoo股價資料爬取"
-tag: [爬蟲 + SQL]
+tag: [爬蟲]
 ---
 
 ### 一、前言

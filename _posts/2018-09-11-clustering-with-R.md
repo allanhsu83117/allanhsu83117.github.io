@@ -3,7 +3,7 @@ layout: post
 title: "集群分析"
 date: 2018-09-11
 description: "R語言集群分析教學"
-tag: [R,clustering]
+tag: [R]
 ---
 
 
