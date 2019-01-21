@@ -118,7 +118,6 @@ Epoch 3/3
 <td style="text-align:center">1440</td>
 <td style="text-align:center">10586</td>
 </tr>
-</tr>
 </tbody>
 </table>
 
@@ -209,7 +208,6 @@ Epoch 3/3
 <td style="text-align:center">1</td>
 <td style="text-align:center">1721</td>
 <td style="text-align:center">11159</td>
-</tr>
 </tr>
 </tbody>
 </table>
@@ -303,7 +301,6 @@ Epoch 3/3
 <td style="text-align:center">1</td>
 <td style="text-align:center">1072</td>
 <td style="text-align:center">10588</td>
-</tr>
 </tr>
 </tbody>
 </table>
@@ -421,7 +418,6 @@ Epoch 3/3
 <td style="text-align:center">1112</td>
 <td style="text-align:center">11096</td>
 </tr>
-</tr>
 </tbody>
 </table>
 
@@ -524,7 +520,6 @@ Epoch 3/3
 <td style="text-align:center">1267</td>
 <td style="text-align:center">10831</td>
 </tr>
-</tr>
 </tbody>
 </table>
 
@@ -539,9 +534,9 @@ Epoch 3/3
 <tr>
 <th style="text-align:center">Ensemble</th>
 <th style="text-align:center" colspan = "3">真實值</th>
-
 </tr>
 </thead>
+
 <tbody>
 <tr>
 <td style="text-align:center" rowspan="3">預測值</td>
@@ -559,7 +554,6 @@ Epoch 3/3
 <td style="text-align:center">1</td>
 <td style="text-align:center">1077</td>
 <td style="text-align:center">11141</td>
-</tr>
 </tr>
 </tbody>
 </table>
