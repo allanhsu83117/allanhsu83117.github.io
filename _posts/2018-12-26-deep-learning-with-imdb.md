@@ -560,11 +560,11 @@ Epoch 3/3
 
 ### 預測結果
 
-模型|test_set<br>準確率
+模型|test_set準確率
 :---:|:---:
 MLP|       86.584%
 Bi-GRU|   87.752%
 CNN+Bi-GRU|88.064%
 merge-GRU|88.256%
 merge-CNN| 89.936%
-Ensembling model<br>(多數決:至少3個以上)|  90.256%
+Ensembling model(多數決:至少3個以上)|  90.256%
