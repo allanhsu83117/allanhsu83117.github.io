@@ -24,6 +24,7 @@ Here I will record my learning note and some projects developed in R or Python.
 
 
 <h3> Research / Interest </h3>
+
 * 量化投資 Quantitative Investment
 * 資料科學 Data Science
 * 機器學習 / 深度學習 Machine Learning & Deep Learning
