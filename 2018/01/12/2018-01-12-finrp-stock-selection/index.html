@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="財報因子選股">
+<meta property="og:type" content="article">
+<meta property="og:title" content="簡單運用財報因子選股也能創造好績效">
+<meta property="og:url" content="https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="財報因子選股">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/6deFh8i.png">
+<meta property="article:published_time" content="2018-01-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T11:48:39.836Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="Investment">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/6deFh8i.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>簡單運用財報因子選股也能創造好績效</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2018/01/22/2018-01-22-gradient-descent/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2017/11/15/2017-11-15-monte-carlo-and-options-pricing/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&text=簡單運用財報因子選股也能創造好績效"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&is_video=false&description=簡單運用財報因子選股也能創造好績效"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=簡單運用財報因子選股也能創造好績效&body=Check out this article: https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&name=簡單運用財報因子選股也能創造好績效&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&t=簡單運用財報因子選股也能創造好績效"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%B2%A1%E5%A0%B1%E5%9B%A0%E5%AD%90"><span class="toc-number">2.</span> <span class="toc-text">二、財報因子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%81%B8%E5%AE%9A%E5%9B%A0%E5%AD%90"><span class="toc-number">2.1.</span> <span class="toc-text">選定因子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AF%A9%E9%81%B8%E6%96%B9%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">篩選方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B2%B7%E8%B3%A3%E6%99%82%E9%BB%9E"><span class="toc-number">2.3.</span> <span class="toc-text">買賣時點</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E7%94%A2%E9%85%8D%E7%BD%AE"><span class="toc-number">2.4.</span> <span class="toc-text">資產配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B8%BE%E6%95%88%E5%9B%9E%E6%B8%AC"><span class="toc-number">2.5.</span> <span class="toc-text">績效回測</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B4%E5%BA%A6%E5%88%86%E6%9E%90%EF%BC%88%E4%BB%A5%E7%AD%89%E6%AC%8A%E9%87%8D%E9%85%8D%E7%BD%AE%EF%BC%88EW%EF%BC%89%E7%82%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">2.6.</span> <span class="toc-text">年度分析（以等權重配置（EW）為例）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BE%8C%E7%BA%8C%E6%94%B9%E9%80%B2"><span class="toc-number">3.</span> <span class="toc-text">三、後續改進</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        簡單運用財報因子選股也能創造好績效
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-01-11T16:00:00.000Z" itemprop="datePublished">2018-01-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Investment/">Investment</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Investment/" rel="tag">Investment</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>試想投資如果是一件簡單的事情該有多好，如同 Warren Buffett 所言：「投資是一門簡單的事情，但做得好往往很少。」投資確實可以很簡單也可以很困難，今天嘗試使用簡單的方式帶著讀者們一起選股，與其隨波逐流、大海撈針，不如先過濾一些體質比較差的股票，避免雜亂無章的選股。<br>如標題所示，今天會使用兩方面的因子做股票篩選，分別是財報因子與技術因子，財報與技術分析基本上對於投資人都是投資股票的參考依據，接著再搭配資產配置的方式，也就是持有一段時間後賣出，長期持有比起短線波段操作往往更能賺錢，而資產配置的另一個好處是分散風險，避免投資人重押特定股票產生劇烈虧損。</p>
+<h3 id="二、財報因子"><a href="#二、財報因子" class="headerlink" title="二、財報因子"></a>二、財報因子</h3><p>在進入正題前，首先要先了解財報公佈日的問題，在每年的 3&#x2F;31、5&#x2F;15、8&#x2F;14、11&#x2F;14 會公布前一季的財報，也就是說<code>第一季財報5/15公布</code>，<code>第二季財報8/14公布</code>、<code>第三季財報11/14公布</code>、<code>第四季財報(年報)於隔年3/31公布</code>，記好這些時間後，接著我們開始介紹今天所使用的財報因子。</p>
+<table>
+<thead>
+<tr>
+<th align="center">季別</th>
+<th align="center">公布日</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">第一季財報</td>
+<td align="center">05&#x2F;15</td>
+</tr>
+<tr>
+<td align="center">第二季財報</td>
+<td align="center">08&#x2F;14</td>
+</tr>
+<tr>
+<td align="center">第三季財報</td>
+<td align="center">11&#x2F;14</td>
+</tr>
+<tr>
+<td align="center">第四季財報(年報)</td>
+<td align="center">03&#x2F;31</td>
+</tr>
+</tbody></table>
+<h4 id="選定因子"><a href="#選定因子" class="headerlink" title="選定因子"></a><strong>選定因子</strong></h4><table>
+<thead>
+<tr>
+<th align="center">編號</th>
+<th align="center">因子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">$$\dfrac{營收(Sales)}{企業價值(EV)}$$</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">$$現金殖利率&#x3D;\dfrac{每股自由現金流}{價格}$$</td>
+</tr>
+</tbody></table>
+<ol>
+<li></li>
+</ol>
+<ul>
+<li>講解第一個因子前，先了解何謂企業價值（Enterprise Value，EV），企業價值乃是併購一間企業需要付出的成本，一般計算企業價值的公式為：權益市值＋債務市值－現金，由此公式可知道企業價值涵蓋了股東、債權人等種種的訴求，透漏著一些帳面數字無法揭露的資訊。</li>
+<li>往往驅動企業價值（EV）的因素大多來自企業的營收（Sales），會選用營收（Sales）是因為這數字比起稅前息前利益（EBIT）、稅後淨利（NI）被操弄的機會來的小，看過損益表的讀者們應該知道，營收（Sales）是損益表的第一個數字，減去一堆費用後才會得到稅前息前利益（EBIT）與稅後淨利（NI），因此筆者才會選定<code>營收/企業價值</code>當作其中一個財報因子。</li>
+</ul>
+<ol start="2">
+<li>現金殖利率通常被投資人拿來當作選擇定存股的依據，也有一些投資人也會拿現金殖利率判斷現在的價格是否太便宜或是太貴，因此筆者想透過這兩種指標挑選體質不錯的股票。</li>
+</ol>
+<h4 id="篩選方式"><a href="#篩選方式" class="headerlink" title="篩選方式"></a><strong>篩選方式</strong></h4><ul>
+<li>為避免流動性問題而買不到股票，因此先選擇市值前 300 大的股票作為起始的股票池（pool）。</li>
+<li>接著使用第一個指標<code>營收/企業價值</code>由大到小排列，從股票池中再篩選出前 100 大的股票。</li>
+<li>最後使用第二個指標<code>現金殖利率</code>由大到小排列，選出前 10%的股票，也就是最後會選出 10 檔股票。</li>
+</ul>
+<h4 id="買賣時點"><a href="#買賣時點" class="headerlink" title="買賣時點"></a><strong>買賣時點</strong></h4><p>根據上述所說的財報公布日，我們簡單將這些日期作為買賣時點的操作，簡單來說我們每季更換投資標的，重新挑選股票。</p>
+<ul>
+<li>買進：財報公布日的下一個交易日買進</li>
+<li>賣出：下個財報公布日的前一個交易日賣出</li>
+</ul>
+<h4 id="資產配置"><a href="#資產配置" class="headerlink" title="資產配置"></a><strong>資產配置</strong></h4><p>接著配置我們選出來的 10 檔股票，資產配置方法大致有以下方法：</p>
+<ol>
+<li><strong>等權重配置（Equal weight）</strong></li>
+<li><strong>等風險配置（Equal risk）</strong></li>
+<li><strong>最小變異組合（Global MinVar）</strong></li>
+<li><strong>波動擇時組合（Volatility Timing）</strong></li>
+<li><strong>切線投資組合（Tangency Portfolio）</strong></li>
+</ol>
+<h4 id="績效回測"><a href="#績效回測" class="headerlink" title="績效回測"></a><strong>績效回測</strong></h4><p>由夏普值來看，波動擇時組合（VT）是表現最好的，最大回撤率也僅有 8.8%，平均而言年化報酬率約在 6%上下，且從累積報酬圖來看各個投資組合皆擊敗大盤，顯示這樣的選股策略能創造一定的獲利品質。</p>
+<ul>
+<li>回測期間：2010&#x2F;01&#x2F;04~2018&#x2F;5&#x2F;31</li>
+</ul>
+<p><img src="https://i.imgur.com/6deFh8i.png"></p>
+<blockquote>
+<p>註：圖中紫色的線為大盤</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">投資組合</th>
+<th align="center">總報酬率</th>
+<th align="center">年化報酬率</th>
+<th align="center">最大回撤率</th>
+<th align="center">勝率</th>
+<th align="center">夏普值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">等權重配置（EW）</td>
+<td align="center">70.27%</td>
+<td align="center">6.09%</td>
+<td align="center">-15.5%</td>
+<td align="center">55.0%</td>
+<td align="center">0.69</td>
+</tr>
+<tr>
+<td align="center">等風險配置（ER）</td>
+<td align="center">76.21%</td>
+<td align="center">6.49%</td>
+<td align="center">-12.2%</td>
+<td align="center">55.3%</td>
+<td align="center">0.76</td>
+</tr>
+<tr>
+<td align="center">最小變異組合（GMV）</td>
+<td align="center">61.42%</td>
+<td align="center">5.46%</td>
+<td align="center">-9.5%</td>
+<td align="center">57.0%</td>
+<td align="center">0.81</td>
+</tr>
+<tr>
+<td align="center">波動擇時組合（VT）</td>
+<td align="center">79.36%</td>
+<td align="center">6.71%</td>
+<td align="center">-8.8%</td>
+<td align="center">55.0%</td>
+<td align="center">0.86</td>
+</tr>
+<tr>
+<td align="center">切線投資組合（TP）</td>
+<td align="center">71.70%</td>
+<td align="center">6.14%</td>
+<td align="center">-18.3%</td>
+<td align="center">52.6%</td>
+<td align="center">0.70</td>
+</tr>
+</tbody></table>
+<h4 id="年度分析（以等權重配置（EW）為例）"><a href="#年度分析（以等權重配置（EW）為例）" class="headerlink" title="年度分析（以等權重配置（EW）為例）"></a><strong>年度分析（以等權重配置（EW）為例）</strong></h4><p>從各年度來看，虧損的年度僅有 2010 年與 2015 年，獲利比較好的年份為 2016 年，其餘年分約莫也有 3~5%的平均報酬率。</p>
+<table>
+<thead>
+<tr>
+<th align="center">年度</th>
+<th align="center">平均季報酬率</th>
+<th align="center">最大報酬</th>
+<th align="center">最小報酬</th>
+<th align="center">勝率</th>
+<th align="center">波動度</th>
+<th align="center">夏普值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">2010</td>
+<td align="center">-1.18%</td>
+<td align="center">18.77%</td>
+<td align="center">-16.21%</td>
+<td align="center">52.50%</td>
+<td align="center">13.75%</td>
+<td align="center">-0.34</td>
+</tr>
+<tr>
+<td align="center">2011</td>
+<td align="center">0.85%</td>
+<td align="center">23.66%</td>
+<td align="center">-17.07%</td>
+<td align="center">55.00%</td>
+<td align="center">11.20%</td>
+<td align="center">0.30</td>
+</tr>
+<tr>
+<td align="center">2012</td>
+<td align="center">3.09%</td>
+<td align="center">39.97%</td>
+<td align="center">-20.79%</td>
+<td align="center">60.00%</td>
+<td align="center">19.26%</td>
+<td align="center">0.64</td>
+</tr>
+<tr>
+<td align="center">2013</td>
+<td align="center">3.95%</td>
+<td align="center">41.93%</td>
+<td align="center">-15.96%</td>
+<td align="center">57.50%</td>
+<td align="center">18.74%</td>
+<td align="center">0.84</td>
+</tr>
+<tr>
+<td align="center">2014</td>
+<td align="center">5.31%</td>
+<td align="center">39.34%</td>
+<td align="center">-20.91%</td>
+<td align="center">67.50%</td>
+<td align="center">14.89%</td>
+<td align="center">1.43</td>
+</tr>
+<tr>
+<td align="center">2015</td>
+<td align="center">-3.56%</td>
+<td align="center">29.55%</td>
+<td align="center">-28.15%</td>
+<td align="center">40.00%</td>
+<td align="center">20.47%</td>
+<td align="center">-0.69</td>
+</tr>
+<tr>
+<td align="center">2016</td>
+<td align="center">8.59%</td>
+<td align="center">70.56%</td>
+<td align="center">-8.42%</td>
+<td align="center">68.06%</td>
+<td align="center">20.28%</td>
+<td align="center">1.69</td>
+</tr>
+<tr>
+<td align="center">2017</td>
+<td align="center">5.05%</td>
+<td align="center">44.01%</td>
+<td align="center">-12.52%</td>
+<td align="center">57.50%</td>
+<td align="center">12.00%</td>
+<td align="center">1.68</td>
+</tr>
+<tr>
+<td align="center">2018</td>
+<td align="center">5.54%</td>
+<td align="center">30.66%</td>
+<td align="center">-25.68%</td>
+<td align="center">54.70%</td>
+<td align="center">18.36%</td>
+<td align="center">0.60</td>
+</tr>
+</tbody></table>
+<h3 id="三、後續改進"><a href="#三、後續改進" class="headerlink" title="三、後續改進"></a>三、後續改進</h3><p>本次回測並未考慮停損機制，若再加入停損，績效勢必再往上提升，對於一般投資人來說，這樣的選股邏輯確實能有較穩定的獲利，唯獨需要做好資金管理與風險控管，避免在下跌趨勢產生巨大虧損。</p>
+<hr>
+<p><strong>溫馨提醒：</strong></p>
+<ol>
+<li>以上實證皆為本人使用 R&#x2F;Python 撰寫，請勿抄襲。</li>
+<li>投資有賺有賠，本次實作僅為研究使用，投資人投資前應審慎評估，本人不負任何投資賠償責任。</li>
+</ol>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%B2%A1%E5%A0%B1%E5%9B%A0%E5%AD%90"><span class="toc-number">2.</span> <span class="toc-text">二、財報因子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%81%B8%E5%AE%9A%E5%9B%A0%E5%AD%90"><span class="toc-number">2.1.</span> <span class="toc-text">選定因子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AF%A9%E9%81%B8%E6%96%B9%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">篩選方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B2%B7%E8%B3%A3%E6%99%82%E9%BB%9E"><span class="toc-number">2.3.</span> <span class="toc-text">買賣時點</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E7%94%A2%E9%85%8D%E7%BD%AE"><span class="toc-number">2.4.</span> <span class="toc-text">資產配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B8%BE%E6%95%88%E5%9B%9E%E6%B8%AC"><span class="toc-number">2.5.</span> <span class="toc-text">績效回測</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B4%E5%BA%A6%E5%88%86%E6%9E%90%EF%BC%88%E4%BB%A5%E7%AD%89%E6%AC%8A%E9%87%8D%E9%85%8D%E7%BD%AE%EF%BC%88EW%EF%BC%89%E7%82%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">2.6.</span> <span class="toc-text">年度分析（以等權重配置（EW）為例）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BE%8C%E7%BA%8C%E6%94%B9%E9%80%B2"><span class="toc-number">3.</span> <span class="toc-text">三、後續改進</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&text=簡單運用財報因子選股也能創造好績效"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&is_video=false&description=簡單運用財報因子選股也能創造好績效"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=簡單運用財報因子選股也能創造好績效&body=Check out this article: https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&title=簡單運用財報因子選股也能創造好績效"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&name=簡單運用財報因子選股也能創造好績效&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/01/12/2018-01-12-finrp-stock-selection/&t=簡單運用財報因子選股也能創造好績效"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

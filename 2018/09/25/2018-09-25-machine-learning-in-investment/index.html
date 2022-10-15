@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="機器學習與財務投資上的結合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習在投資上的應用">
+<meta property="og:url" content="https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="機器學習與財務投資上的結合">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/0PUqaLf.png">
+<meta property="article:published_time" content="2018-09-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T11:24:49.311Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="Machine Learning + Investment">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/0PUqaLf.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>機器學習在投資上的應用</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2018/09/30/2018-09-30-linear-model-strategy-construction/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2018/09/13/2018-09-13-basic-r/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&text=機器學習在投資上的應用"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&is_video=false&description=機器學習在投資上的應用"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=機器學習在投資上的應用&body=Check out this article: https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&name=機器學習在投資上的應用&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&t=機器學習在投資上的應用"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80%EF%BC%88Introduction%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">一、前言（Introduction）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%88Data-set%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">二、資料集（Data set）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%89%B9%E5%BE%B5%E5%B7%A5%E7%A8%8B%EF%BC%88Feature-Engineering%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">三、特徵工程（Feature Engineering）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A8%A1%E5%9E%8B%EF%BC%88Machine-Learning-Model%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">四、模型（Machine Learning Model）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#XGboost-%E7%B0%A1%E4%BB%8B"><span class="toc-number">4.1.</span> <span class="toc-text">XGboost 簡介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XGboost-%E5%8E%9F%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">XGboost 原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%A0%90%E6%B8%AC%E7%9B%AE%E6%A8%99%EF%BC%88Target%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">五、預測目標（Target）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%A0%90%E6%B8%AC%E7%B5%90%E6%9E%9C%EF%BC%88Result%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">六、預測結果（Result）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E7%B5%90%E8%AB%96%EF%BC%88Conclusion%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">七、結論（Conclusion）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%8C%E7%BA%8C%E6%94%B9%E9%80%B2"><span class="toc-number">8.</span> <span class="toc-text">後續改進</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        機器學習在投資上的應用
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-09-24T16:00:00.000Z" itemprop="datePublished">2018-09-25</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Machine-Learning-Investment/" rel="tag">Machine Learning + Investment</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="一、前言（Introduction）"><a href="#一、前言（Introduction）" class="headerlink" title="一、前言（Introduction）"></a>一、前言（Introduction）</h3><p>近年來人工智慧的技術大爆發，這波浪潮也影響了各產業的改造，然而在金融投資上也不例外，今天以基金為例，如何以現有的資訊讓研究投資這件事可以幫助你省下時間，快速告訴你哪些基金標的未來可以進場，以下實作會帶讀者們如何運用現今火紅的機器學習技術預測基金未來一週的漲跌，當作投資下單的依據。</p>
+<h3 id="二、資料集（Data-set）"><a href="#二、資料集（Data-set）" class="headerlink" title="二、資料集（Data set）"></a>二、資料集（Data set）</h3><ul>
+<li>資料來源：台灣經濟新報 TEJ</li>
+<li>資料期間：2013&#x2F;01&#x2F;01 至 2018&#x2F;07&#x2F;22</li>
+</ul>
+<p>資料為 TEJ 上的境外隨機挑取的 500 檔基金，資料包含以下內容：</p>
+<ol>
+<li>基金基本資料</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">欄位說明</th>
+<th align="center">說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">基金碼</td>
+<td align="center">基金代碼</td>
+</tr>
+<tr>
+<td align="center">市場別</td>
+<td align="center">基金所屬市場</td>
+</tr>
+<tr>
+<td align="center">區域別</td>
+<td align="center">基金所屬區域</td>
+</tr>
+<tr>
+<td align="center">標的別</td>
+<td align="center">基金大項分類</td>
+</tr>
+<tr>
+<td align="center">幣別</td>
+<td align="center">基金計價之幣別</td>
+</tr>
+<tr>
+<td align="center">風險報酬等級</td>
+<td align="center">依據中華民國證券投資信託暨顧問商業同業公會針對基金風險報酬等級分類標準，將每檔基金之風險區分為 RR1~RR5，其中 RR1 風險最低，RR5 風險最高</td>
+</tr>
+<tr>
+<td align="center">成立日期</td>
+<td align="center">基金成立日期</td>
+</tr>
+<tr>
+<td align="center">經理費%</td>
+<td align="center">經理公司之報酬，係按基金淨資產價值每年計算比率，逐日累計計算，自基金成立日起每曆月給付乙次</td>
+</tr>
+<tr>
+<td align="center">保管費%</td>
+<td align="center">保管機構之報酬，係按基金淨資產價值每年計算比率，逐日累計計算，自基金成立日起每曆月給付乙次。</td>
+</tr>
+<tr>
+<td align="center">銷售費%</td>
+<td align="center">申購手續費</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>基金淨值資料</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">欄位說明</th>
+<th align="center">說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">基金碼</td>
+<td align="center">基金代碼</td>
+</tr>
+<tr>
+<td align="center">年月日</td>
+<td align="center">交易日(日頻)</td>
+</tr>
+<tr>
+<td align="center">原幣值</td>
+<td align="center">基金淨值</td>
+</tr>
+<tr>
+<td align="center">幣別</td>
+<td align="center">該檔共同基金計價幣別</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>基金配息資料</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">欄位說明</th>
+<th align="center">說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">基金碼</td>
+<td align="center">基金代碼，已匿名處理</td>
+</tr>
+<tr>
+<td align="center">除息日期</td>
+<td align="center">基金配息日期</td>
+</tr>
+<tr>
+<td align="center">股息</td>
+<td align="center">息值</td>
+</tr>
+<tr>
+<td align="center">幣別</td>
+<td align="center">基金計價之幣別</td>
+</tr>
+</tbody></table>
+<h3 id="三、特徵工程（Feature-Engineering）"><a href="#三、特徵工程（Feature-Engineering）" class="headerlink" title="三、特徵工程（Feature Engineering）"></a>三、特徵工程（Feature Engineering）</h3><ul>
+<li>以上這些資料只是基金的基本資料，真正能拿來當作特徵並不多，若要讓模型告訴我們這些基金未來是否會漲會跌，勢必要讓模型吃入更多的資訊，那這些資訊在機器學習中一般稱為特徵，以下為我們這次實作額外新增的特徵：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">特徵</th>
+<th align="center">計算方式</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">位置指標（4 個）</td>
+<td align="center">$$ \frac{均線}{收盤價}$$</td>
+<td>許多投資人會透過技術分析觀察今天股票是否跌破均線或是突破均線，進而當作買賣點的決策。</td>
+</tr>
+<tr>
+<td align="center">近 X 天最大回撤率（2 個）</td>
+<td align="center">$$ max(1-\frac{當日價值}{當日之前最高價值}) $$</td>
+<td>最大回撤率也是投資人會觀察的指標之一，它告訴投資者當我買進之後，最大可能發生的虧損是多少。</td>
+</tr>
+<tr>
+<td align="center">動能指標（4 個）</td>
+<td align="center">過去 X 天的期間報酬</td>
+<td>動能因子是學界和實務界很常被拿來討論的因子，人們普遍相信過去的贏家，未來也能為他們創造更高的獲利。</td>
+</tr>
+<tr>
+<td align="center">趨勢指標（3 個）</td>
+<td align="center">過去 X 天的斜率</td>
+<td>在市場上流傳著一句話：「永遠不要與趨勢作對」，我們利用均線去計算斜率，斜率在數學上用來度量線的傾斜程度，斜率大意味著市場正面臨漲或跌的趨勢，斜率接近 0 則可視為趨勢面臨轉折或盤整。</td>
+</tr>
+<tr>
+<td align="center">國際趨勢</td>
+<td align="center">過去 X 天的斜率</td>
+<td>計算目前國際上的趨勢走升走跌，但因資料取得不易以及代表性問題，這裡僅以 S&amp;P 500 為例。</td>
+</tr>
+<tr>
+<td align="center">VIX</td>
+<td align="center">無</td>
+<td>VIX 指數也常被投資人拿來當作景氣變化的指標，當有異常事件發生，VIX 指數通常會飆高，平時則正常波動。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>以上為本次實作選定的 15 個特徵，這 15 個特徵並非絕對賺錢，讀者們可以依自己的看法或是喜好加入其他特徵。</li>
+<li>有讀者可能認為為何不加入總經指標像是失業人口、非農就業人口等等，那是因為這些數據時間發布不一定，有些是每個月發布，有些一季才發布一次，資料處理相對要花上更多功夫，另外這些數據與財報數據同樣具有滯後性（Lagged），意思是我現在看到的數據其實是前一季或是前一個月已發生的事情，對未來的預測並不會比較準確，因此這邊的特徵比較建議使用具有日頻的資料，在短期預測上會相對準確。</li>
+</ul>
+<h3 id="四、模型（Machine-Learning-Model）"><a href="#四、模型（Machine-Learning-Model）" class="headerlink" title="四、模型（Machine Learning Model）"></a>四、模型（Machine Learning Model）</h3><p>機器學習的模型相當多元，包括隨機森林（RandomForest）、決策樹（Decision Tree）、SVM 等等，當然也能考慮深度學習模型：多層感知器（MLP）、卷積神經網路（CNN）、遞歸神經網路（RNN、LSTM、GRU）等等，最後選擇 XGBoost 原因是：在許多實作經驗上，XGBoost 比起上述所列之機器學習模型都表現地非常好，而深度學習模型則相對耗時且普遍需要顯示卡（GPU）的運算，成本耗費相當大。</p>
+<h4 id="XGboost-簡介"><a href="#XGboost-簡介" class="headerlink" title="XGboost 簡介"></a>XGboost 簡介</h4><p>在這次實作當中，我們選擇 XGBOOST 作為主要使用的演算法，在近年也相當火熱，常常是 Kaggle 比賽的常勝軍。這個演算法背後使用 C++來實作，比起傳統的 Gradient Booosting Tree 也做了許多優化（高度利用平行運算）。</p>
+<h4 id="XGboost-原理"><a href="#XGboost-原理" class="headerlink" title="XGboost 原理"></a>XGboost 原理</h4><p>XGBoost 的主要核心是 CART（迴歸樹），最後一個葉節點是一個實數，如果想要做分類器的話，會將此數值送進 Sigmoid 函數，即可生成機率來達到分類的效果。</p>
+<p>但最原始的 CART 只有一顆樹，XGBOOST 加入了集成學習「Boosting」的迭代思想來生成許多棵樹，最後的預測值是所有樹的葉節點相加。Boosting 的直觀意義是，每添加一棵樹是為了擬和上次樹集合預測的殘差，更精確的說，每生成一棵樹是根據損失函數的梯度下降方向，就像是「知錯能改」的概念。</p>
+<p>故在 XGboost 中，會將損失函數去做泰勒二次展開，就可以求得最優化後的節點分數。</p>
+<p><img src="https://i.imgur.com/0PUqaLf.png"></p>
+<h3 id="五、預測目標（Target）"><a href="#五、預測目標（Target）" class="headerlink" title="五、預測目標（Target）"></a>五、預測目標（Target）</h3><p>本次實作測試資料集期間為 2018 年 4 月 30 日(一)至 2018 年 7 月 22 日(日)，預測 500 檔基金各 12 週的週報酬率，總計需預測 6,000 筆週報酬率。</p>
+<ul>
+<li><strong>模型準確度評分依據：</strong></li>
+</ul>
+<p>準確度評分以<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Mean_absolute_error">平均絕對誤差</a>（MAE, Mean Absolute Error）計算，計算公式如下：</p>
+<p>$$<br>\mathrm{MAE} &#x3D; \frac{\sum_{i&#x3D;1}^n\left| y_i-\hat{y_i}\right|}{n}<br>$$</p>
+<table>
+<thead>
+<tr>
+<th align="center">符號</th>
+<th align="center">說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$$ y_i $$</td>
+<td align="center">實際基金週報酬率</td>
+</tr>
+<tr>
+<td align="center">$$ \hat{y_i} $$</td>
+<td align="center">模型預測基金週報酬率</td>
+</tr>
+<tr>
+<td align="center">$$ n $$</td>
+<td align="center">樣本數，初賽共需預測 6,000 筆週報酬率(500 檔基金，12 週)</td>
+</tr>
+</tbody></table>
+<ul>
+<li>MAE 越小代表模型的預測力越好</li>
+</ul>
+<h3 id="六、預測結果（Result）"><a href="#六、預測結果（Result）" class="headerlink" title="六、預測結果（Result）"></a>六、預測結果（Result）</h3><ul>
+<li>本次預測結果 MAE 為 0.0099，該結果是經過參數調整後 MAE 最低的參數。 *　讀者們可將預測出來的報酬率當作進出場的依據，當預測報酬大於 0 買進，直到預測報酬小於 0 賣出。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">基金代碼</th>
+<th align="center">預測第 1 週報酬率</th>
+<th align="center">預測第 2 週報酬率</th>
+<th align="center">預測第 3 週報酬率</th>
+<th align="center">預測第 4 週報酬率</th>
+<th align="center">預測第 5 週報酬率</th>
+<th align="center">預測第 6 週報酬率</th>
+<th align="center">預測第 7 週報酬率</th>
+<th align="center">預測第 8 週報酬率</th>
+<th align="center">預測第 9 週報酬率</th>
+<th align="center">預測第 10 週報酬率</th>
+<th align="center">預測第 11 週報酬率</th>
+<th align="center">預測第 12 週報酬率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Fund_001</td>
+<td align="center">-0.00107</td>
+<td align="center">0.00787</td>
+<td align="center">0.004198</td>
+<td align="center">-0.00269</td>
+<td align="center">0.001837</td>
+<td align="center">0.000461</td>
+<td align="center">-0.00193</td>
+<td align="center">-0.00347</td>
+<td align="center">0.000544</td>
+<td align="center">0.00156</td>
+<td align="center">0.000416</td>
+<td align="center">-0.00341</td>
+</tr>
+<tr>
+<td align="center">Fund_002</td>
+<td align="center">-0.00063</td>
+<td align="center">-0.00073</td>
+<td align="center">0.000354</td>
+<td align="center">-0.00067</td>
+<td align="center">0.002317</td>
+<td align="center">0.000717</td>
+<td align="center">-0.00026</td>
+<td align="center">0.001707</td>
+<td align="center">0.000531</td>
+<td align="center">-0.0007</td>
+<td align="center">0.000566</td>
+<td align="center">-0.00065</td>
+</tr>
+<tr>
+<td align="center">Fund_003</td>
+<td align="center">-0.00064</td>
+<td align="center">-0.00299</td>
+<td align="center">-0.00234</td>
+<td align="center">-0.00167</td>
+<td align="center">0.000389</td>
+<td align="center">-0.00053</td>
+<td align="center">-0.00234</td>
+<td align="center">-0.00101</td>
+<td align="center">0.000682</td>
+<td align="center">-0.00583</td>
+<td align="center">0.004074</td>
+<td align="center">0.001028</td>
+</tr>
+<tr>
+<td align="center">Fund_004</td>
+<td align="center">0.000571</td>
+<td align="center">0.00058</td>
+<td align="center">0.000569</td>
+<td align="center">0.000572</td>
+<td align="center">0.000574</td>
+<td align="center">0.000574</td>
+<td align="center">0.000575</td>
+<td align="center">0.000577</td>
+<td align="center">0.000578</td>
+<td align="center">0.000582</td>
+<td align="center">0.000578</td>
+<td align="center">0.000583</td>
+</tr>
+<tr>
+<td align="center">Fund_005</td>
+<td align="center">-0.0016</td>
+<td align="center">-0.0025</td>
+<td align="center">-0.00167</td>
+<td align="center">-0.00124</td>
+<td align="center">-0.0013</td>
+<td align="center">-0.00139</td>
+<td align="center">-0.0015</td>
+<td align="center">-0.00216</td>
+<td align="center">-0.00095</td>
+<td align="center">0.000596</td>
+<td align="center">-0.00163</td>
+<td align="center">0.000678</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>因基金有 500 檔，在此僅列出 5 檔示意</p>
+</blockquote>
+<h3 id="七、結論（Conclusion）"><a href="#七、結論（Conclusion）" class="headerlink" title="七、結論（Conclusion）"></a>七、結論（Conclusion）</h3><p>從資料取得 → 整理 → 特徵工程 → 模型挑選 → 預測，這過程一開始會花上許多時間，但程式只要寫一次，之後只要每天執行即可，甚至厲害的讀者們可能馬上想到可以跟各個券商的下單 API 直接做串接，如此一來不太需要花太多時間盯盤，電腦自動幫你把交易做好，讀者們也能利用空出來的時間享受其他休閒娛樂。</p>
+<h3 id="後續改進"><a href="#後續改進" class="headerlink" title="後續改進"></a>後續改進</h3><p>本次實作僅著重於機器學習應用到投資的部分，後續可再加入績效回測，觀察這樣做投資是否也能賺錢，惟筆者時間不足，有時間再做後續更新。</p>
+<hr>
+<p><strong>溫馨提醒：</strong></p>
+<ol>
+<li>以上實證皆為本人使用 R&#x2F;Python 撰寫，請勿抄襲。</li>
+<li>投資有賺有賠，本次實作僅為研究使用，投資人投資前應審慎評估，本人不負任何投資賠償責任。</li>
+</ol>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80%EF%BC%88Introduction%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">一、前言（Introduction）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%88Data-set%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">二、資料集（Data set）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%89%B9%E5%BE%B5%E5%B7%A5%E7%A8%8B%EF%BC%88Feature-Engineering%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">三、特徵工程（Feature Engineering）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A8%A1%E5%9E%8B%EF%BC%88Machine-Learning-Model%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">四、模型（Machine Learning Model）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#XGboost-%E7%B0%A1%E4%BB%8B"><span class="toc-number">4.1.</span> <span class="toc-text">XGboost 簡介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XGboost-%E5%8E%9F%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">XGboost 原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%A0%90%E6%B8%AC%E7%9B%AE%E6%A8%99%EF%BC%88Target%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">五、預測目標（Target）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%A0%90%E6%B8%AC%E7%B5%90%E6%9E%9C%EF%BC%88Result%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">六、預測結果（Result）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E7%B5%90%E8%AB%96%EF%BC%88Conclusion%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">七、結論（Conclusion）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%8C%E7%BA%8C%E6%94%B9%E9%80%B2"><span class="toc-number">8.</span> <span class="toc-text">後續改進</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&text=機器學習在投資上的應用"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&is_video=false&description=機器學習在投資上的應用"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=機器學習在投資上的應用&body=Check out this article: https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&title=機器學習在投資上的應用"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&name=機器學習在投資上的應用&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/09/25/2018-09-25-machine-learning-in-investment/&t=機器學習在投資上的應用"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

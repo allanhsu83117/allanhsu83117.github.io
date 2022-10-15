@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="yahoo股價資料爬取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python爬蟲+SQL建置+自動化更新">
+<meta property="og:url" content="https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="yahoo股價資料爬取">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-10-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T11:25:41.708Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="爬蟲">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Python爬蟲+SQL建置+自動化更新</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2018/12/26/2018-12-26-deep-learning-with-imdb/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2018/09/30/2018-09-30-linear-model-strategy-construction/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&text=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&is_video=false&description=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Python爬蟲+SQL建置+自動化更新&body=Check out this article: https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&name=Python爬蟲+SQL建置+自動化更新&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&t=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%88%AC%E8%9F%B2-amp-SQL-%E5%8C%AF%E5%85%A5"><span class="toc-number">2.</span> <span class="toc-text">二、爬蟲 &amp; SQL 匯入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A5%97%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">套件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%98%AF%E5%90%A6%E9%87%8D%E6%96%B0%E6%8A%93%E5%8F%96%E8%B3%87%E6%96%99"><span class="toc-number">2.2.</span> <span class="toc-text">是否重新抓取資料</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AF%8F%E6%97%A5%E8%B3%87%E6%96%99%E6%9B%B4%E6%96%B0"><span class="toc-number">2.3.</span> <span class="toc-text">每日資料更新</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E6%9B%B4%E6%96%B0%E6%89%80%E6%9C%89%E8%B3%87%E6%96%99"><span class="toc-number">2.4.</span> <span class="toc-text">重新更新所有資料</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%87%AA%E5%8B%95%E5%8C%96%E6%9B%B4%E6%96%B0"><span class="toc-number">3.</span> <span class="toc-text">三、自動化更新</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Python爬蟲+SQL建置+自動化更新
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-10-12T16:00:00.000Z" itemprop="datePublished">2018-10-13</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%88%AC%E8%9F%B2/">爬蟲</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E7%88%AC%E8%9F%B2/" rel="tag">爬蟲</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>因本人目前在幫忙建置理財機器人的部分，剛好有機會到後台玩玩，因此這篇簡易教學也就順手誕生了。本程式由 Python 撰寫，因 Python 執行速度快，在爬蟲方面也有完善的套件，可與 SQL 相連接，做自動化相當順手，可維護性極高。</p>
+<h3 id="二、爬蟲-amp-SQL-匯入"><a href="#二、爬蟲-amp-SQL-匯入" class="headerlink" title="二、爬蟲 &amp; SQL 匯入"></a>二、爬蟲 &amp; SQL 匯入</h3><p>本程式會由 Yahoo Finance 抓取資料以國外的 ETF 為主，大概講解一下程式架構，基本的 Python 語法和 SQL 語法就不一一贅述。</p>
+<h4 id="套件"><a href="#套件" class="headerlink" title="套件"></a>套件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匯入套件</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> io</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> mysql.connector</span><br><span class="line"></span><br><span class="line"><span class="comment"># 設定路徑</span></span><br><span class="line">os.chdir(<span class="string">&quot;C:/你的/路徑&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="是否重新抓取資料"><a href="#是否重新抓取資料" class="headerlink" title="是否重新抓取資料"></a>是否重新抓取資料</h4><ul>
+<li>這邊設定 <strong>y</strong> 時，程式會重新抓取 2000 年到現在的所有 ETF 資料，因為極度耗費時間，所以定期執行就好，不需要每天執行。</li>
+<li>設定 <strong>n</strong> 時，程式則會每天更新近 10 天的股價資料。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 設定是否重抓資料</span></span><br><span class="line">recrawling_data = <span class="string">&#x27;n&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="每日資料更新"><a href="#每日資料更新" class="headerlink" title="每日資料更新"></a>每日資料更新</h4><ul>
+<li>注意時差問題，Yahoo Finance 資料更新與台灣時間落後一天，因此抓資料時必須將時間往前推移一天。</li>
+<li>本程式會自動判斷今日是否開盤，沒有開盤則不需要更新資料。（21 行~58 行，透過 if else 決定今天是否開盤）</li>
+<li>觀察抓取網址（以 SPY 該檔 ETF 為例）</li>
+</ul>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://query1.finance.yahoo.com/v7/finance/download/SPY?period1=1544893628&amp;period2=1547572028&amp;interval=1d&amp;events=history&amp;crumb=Vc9GVPFLZgc">https://query1.finance.yahoo.com/v7/finance/download/SPY?period1=1544893628&amp;period2=1547572028&amp;interval=1d&amp;events=history&amp;crumb=Vc9GVPFLZgc</a></p>
+</blockquote>
+<ol>
+<li>可以發現粗體的地方 download&#x2F;<strong>SPY</strong>?為該 ETF 的代號，因此若要抓取所有的 ETF 勢必要有代碼。</li>
+<li><strong>period1&#x3D;1544893628</strong>&amp;<strong>period2&#x3D;1547572028</strong> 由此發現 period1 為起始日，period2 為結束日，另外各自後面的一串數字為日期的 unix 格式，因此在爬取前必須將日期設定好並轉成 unix 格式。</li>
+<li><strong>interval&#x3D;1d</strong> 為資料頻率，在 yahoo finance 可設定周頻或是月頻，不過我們要抓取日頻資料，因此不需做修改。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">if recrawling_data == &#x27;N&#x27; or recrawling_data == &#x27;n&#x27;:</span><br><span class="line">    # 日期設定</span><br><span class="line">    # 今日日期(台灣)</span><br><span class="line">    today_date = datetime.datetime.today().strftime(&#x27;%Y-%m-%d&#x27;)</span><br><span class="line">    # 交易日期(美國)</span><br><span class="line">    df_last_date = (datetime.date.today() - datetime.timedelta(days=1)).strftime(&#x27;%Y-%m-%d&#x27;)</span><br><span class="line">    # 資料抓取起始日</span><br><span class="line">    start_date = (datetime.date.today() - datetime.timedelta(days=10)).strftime(&#x27;%Y-%m-%d&#x27;)</span><br><span class="line">    # 資料抓取起始日前一天(為了刪除資料庫內的資料而設定)</span><br><span class="line">    bf_st_date = (datetime.date.today() - datetime.timedelta(days=11)).strftime(&#x27;%Y-%m-%d&#x27;)</span><br><span class="line"></span><br><span class="line">    # 將日期轉成unix格式</span><br><span class="line">    st_unix = str(int(time.mktime(datetime.datetime.strptime(start_date, &#x27;%Y-%m-%d&#x27;).timetuple())))</span><br><span class="line">    ed_unix = str(int(time.mktime(datetime.datetime.strptime(today_date, &#x27;%Y-%m-%d&#x27;).timetuple())))</span><br><span class="line"></span><br><span class="line">    # 爬蟲設定</span><br><span class="line">    s = requests.Session()</span><br><span class="line">    # 請求頭設定</span><br><span class="line">    cookies = dict(B=&#x27;2dlj1k5dn0vg0&amp;b=3&amp;s=g3&#x27;)</span><br><span class="line">    headers = &#123;&#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    # 抓取大盤資料(S&amp;P500)確定今天是否開盤</span><br><span class="line">    bench_url = &#x27;https://query1.finance.yahoo.com/v7/finance/download/%5EGSPC?period1=&#x27; + st_unix + &#x27;&amp;period2=&#x27; + ed_unix + &#x27;&amp;interval=1d&amp;events=history&amp;crumb=xxy94FXoLdp&#x27;</span><br><span class="line">    r = s.get(bench_url, cookies=cookies, headers=headers).content</span><br><span class="line">    bench_data = pd.read_csv(io.StringIO(r.decode(&#x27;utf-8&#x27;)))</span><br><span class="line"></span><br><span class="line">    error_ticker = []</span><br><span class="line"></span><br><span class="line">    # 若今日有開盤則開始更新資料</span><br><span class="line">    if bench_data[&#x27;Date&#x27;].iloc[-1] == df_last_date:</span><br><span class="line"></span><br><span class="line">        # 匯入ETF代碼資料</span><br><span class="line">        code_list = open(&#x27;ETF_code.txt&#x27;)</span><br><span class="line">        ticker = code_list.readlines()</span><br><span class="line">        code_list.close()</span><br><span class="line">        ticker = list(map(lambda s: s.strip(), ticker))</span><br><span class="line">        # 開始爬資料</span><br><span class="line">        for i in ticker:</span><br><span class="line">            print(&quot;Running to : &quot;, ticker.index(i), &quot;/&quot;, (len(ticker)-1), &quot;\n&quot;)</span><br><span class="line">            url=&#x27;https://query1.finance.yahoo.com/v7/finance/download/&#x27;+ i +&#x27;?period1=&#x27; + st_unix + &#x27;&amp;period2=&#x27; + ed_unix + &#x27;&amp;interval=1d&amp;events=history&amp;crumb=xxy94FXoLdp&#x27;</span><br><span class="line">            r = s.get(url, cookies=cookies, headers=headers).content</span><br><span class="line"></span><br><span class="line">            # 紀錄下市名單</span><br><span class="line">            if len(r) &lt; 500:</span><br><span class="line">                error_ticker.append(i)</span><br><span class="line">                next</span><br><span class="line"></span><br><span class="line">            # 合併ETF價格資料</span><br><span class="line">            else:</span><br><span class="line">                if i == ticker[0]:</span><br><span class="line">                    data = pd.read_csv(io.StringIO(r.decode(&#x27;utf-8&#x27;)))</span><br><span class="line">                    data[&#x27;code&#x27;] = i</span><br><span class="line">                else:</span><br><span class="line">                    df = pd.read_csv(io.StringIO(r.decode(&#x27;utf-8&#x27;)))</span><br><span class="line">                    df[&#x27;code&#x27;] = i</span><br><span class="line">                    data = data.append(df)</span><br><span class="line"></span><br><span class="line">            #time.sleep(5)</span><br><span class="line">        # 重新命名欄位</span><br><span class="line">        data.columns = [&#x27;date&#x27;,&#x27;open&#x27;,&#x27;high&#x27;,&#x27;low&#x27;,&#x27;close&#x27;,&#x27;adjusted&#x27;,&#x27;volume&#x27;,&#x27;code&#x27;]</span><br><span class="line">        # 針對日期格式處理以便匯入SQL資料庫</span><br><span class="line">        data[&#x27;date&#x27;] = data[&#x27;date&#x27;].str.replace(&quot;-&quot;, &quot;&quot;)</span><br><span class="line">        data.to_csv(&#x27;ETF_Data_new.csv&#x27;, sep=&#x27;,&#x27;, encoding=&#x27;utf-8&#x27;, index=False)</span><br><span class="line">        print(&quot;Saving Complete!&quot;)</span><br><span class="line"></span><br><span class="line">    # 若今日沒有開盤則不更新資料</span><br><span class="line">    else :</span><br><span class="line">        print(&quot;Today is holiday!&quot;)</span><br><span class="line"></span><br><span class="line">    # 連接 mysql</span><br><span class="line">    etfdb = mysql.connector.connect(</span><br><span class="line">      host=&quot;xxx.xxx.xx.xxx&quot;,</span><br><span class="line">      user=&quot;xxxxx&quot;,</span><br><span class="line">      passwd=&quot;xxxxxxxxxxxxxx&quot;</span><br><span class="line">    )</span><br><span class="line">    etfcursor = etfdb.cursor()</span><br><span class="line"></span><br><span class="line">    # 刪除某段時間的資料</span><br><span class="line">    bf_st_date = bf_st_date.replace(&quot;-&quot;, &quot;&quot;)</span><br><span class="line">    df_last_date = df_last_date.replace(&quot;-&quot;, &quot;&quot;)</span><br><span class="line">    # 送入SQL指令將資料刪除</span><br><span class="line">    query =&quot;DELETE FROM etf.historical_data WHERE date &gt;= &quot; + bf_st_date + &quot; and date &lt;= &quot; + df_last_date + &quot;;&quot;</span><br><span class="line">    etfcursor.execute(query)</span><br><span class="line">    etfdb.commit()</span><br><span class="line">    print(&quot;Data Deleted!&quot;)</span><br><span class="line"></span><br><span class="line">    # 送入SQL指令將資料匯入</span><br><span class="line">    query = &quot;LOAD DATA LOCAL INFILE &#x27;E:/NSYSU/昭文團隊/ETF/ETF_Data_new.csv&#x27; INTO TABLE etf.historical_data FIELDS TERMINATED BY &#x27;,&#x27; LINES TERMINATED BY &#x27;\r\n&#x27; IGNORE 1 ROWS;&quot;</span><br><span class="line">    etfcursor.execute(query)</span><br><span class="line">    etfdb.commit()</span><br><span class="line">    print(&quot;Data Inserted!&quot;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="重新更新所有資料"><a href="#重新更新所有資料" class="headerlink" title="重新更新所有資料"></a>重新更新所有資料</h4><ul>
+<li>寫法與上段程式碼相近，僅需更改資料起始日，並將是否開盤的判斷條件拿掉即可。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">elif recrawling_data == &#x27;Y&#x27; or recrawling_data == &#x27;y&#x27;:</span><br><span class="line">    # 日期設定</span><br><span class="line">    today_date = datetime.datetime.today().strftime(&#x27;%Y-%m-%d&#x27;)</span><br><span class="line">    df_last_date = (datetime.date.today() - datetime.timedelta(days=1)).strftime(&#x27;%Y-%m-%d&#x27;)</span><br><span class="line">    start_date = &#x27;2000-01-01&#x27;</span><br><span class="line"></span><br><span class="line">    st_unix = str(int(time.mktime(datetime.datetime.strptime(start_date, &#x27;%Y-%m-%d&#x27;).timetuple())))</span><br><span class="line">    ed_unix = str(int(time.mktime(datetime.datetime.strptime(today_date, &#x27;%Y-%m-%d&#x27;).timetuple())))</span><br><span class="line"></span><br><span class="line">    # 爬蟲設定</span><br><span class="line">    s = requests.Session()</span><br><span class="line"></span><br><span class="line">    cookies = dict(B=&#x27;2dlj1k5dn0vg0&amp;b=3&amp;s=g3&#x27;)</span><br><span class="line">    headers = &#123;&#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&#x27;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    error_ticker = []</span><br><span class="line"></span><br><span class="line">    # 匯入ETF代碼資料</span><br><span class="line">    code_list = open(&#x27;ETF_code.txt&#x27;)</span><br><span class="line">    ticker = code_list.readlines()</span><br><span class="line">    code_list.close()</span><br><span class="line">    ticker = list(map(lambda s: s.strip(), ticker))</span><br><span class="line">        # 開始爬資料</span><br><span class="line">    for i in ticker:</span><br><span class="line">        print(&quot;Running to : &quot;, ticker.index(i), &quot;/&quot;, (len(ticker)-1), &quot;\n&quot;)</span><br><span class="line">        url=&#x27;https://query1.finance.yahoo.com/v7/finance/download/&#x27;+ i +&#x27;?period1=&#x27; + st_unix + &#x27;&amp;period2=&#x27; + ed_unix + &#x27;&amp;interval=1d&amp;events=history&amp;crumb=xxy94FXoLdp&#x27;</span><br><span class="line">        r = s.get(url, cookies=cookies, headers=headers).content</span><br><span class="line"></span><br><span class="line">        if len(r) &lt; 500:</span><br><span class="line">            error_ticker.append(i)</span><br><span class="line">            next</span><br><span class="line">        else:</span><br><span class="line">            if i == ticker[0]:</span><br><span class="line">                data = pd.read_csv(io.StringIO(r.decode(&#x27;utf-8&#x27;)))</span><br><span class="line">                data[&#x27;code&#x27;] = i</span><br><span class="line">            else:</span><br><span class="line">                df = pd.read_csv(io.StringIO(r.decode(&#x27;utf-8&#x27;)))</span><br><span class="line">                df[&#x27;code&#x27;] = i</span><br><span class="line">                data = data.append(df)</span><br><span class="line"></span><br><span class="line">            #time.sleep(5)</span><br><span class="line">    data.columns = [&#x27;date&#x27;,&#x27;open&#x27;,&#x27;high&#x27;,&#x27;low&#x27;,&#x27;close&#x27;,&#x27;adjusted&#x27;,&#x27;volume&#x27;,&#x27;code&#x27;]</span><br><span class="line">    data[&#x27;date&#x27;] = data[&#x27;date&#x27;].str.replace(&quot;-&quot;, &quot;&quot;)</span><br><span class="line">    data.to_csv(&#x27;ETF_Data.csv&#x27;, sep=&#x27;,&#x27;, encoding=&#x27;utf-8&#x27;, index=False)</span><br><span class="line">    print(&quot;Saving Complete!&quot;)</span><br><span class="line"></span><br><span class="line">    # 連接 mysql</span><br><span class="line">    etfdb = mysql.connector.connect(</span><br><span class="line">      host=&quot;xxx.xxx.x.xxx&quot;,</span><br><span class="line">      user=&quot;xxxxx&quot;,</span><br><span class="line">      passwd=&quot;xxxxxxxxxxxxx&quot;</span><br><span class="line">    )</span><br><span class="line">    etfcursor = etfdb.cursor()</span><br><span class="line"></span><br><span class="line">    # 刪除 MySQL內的表格</span><br><span class="line">    query =&quot;TRUNCATE TABLE etf.historical_data;&quot;</span><br><span class="line">    etfcursor.execute(query)</span><br><span class="line">    etfdb.commit()</span><br><span class="line">    print(&quot;Data Truncated!&quot;)</span><br><span class="line"></span><br><span class="line">    # 將資料匯入</span><br><span class="line">    query = &quot;LOAD DATA LOCAL INFILE &#x27;E:/NSYSU/昭文團隊/ETF/ETF_Data.csv&#x27; INTO TABLE etf.historical_data FIELDS TERMINATED BY &#x27;,&#x27; LINES TERMINATED BY &#x27;\r\n&#x27; IGNORE 1 ROWS;&quot;</span><br><span class="line">    etfcursor.execute(query)</span><br><span class="line">    etfdb.commit()</span><br><span class="line">    print(&quot;Data Inserted!&quot;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、自動化更新"><a href="#三、自動化更新" class="headerlink" title="三、自動化更新"></a>三、自動化更新</h3><ul>
+<li>將以上的檔案存成.py 檔後，利用 windows 的自動排程系統定時執行爬蟲的 script</li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%88%AC%E8%9F%B2-amp-SQL-%E5%8C%AF%E5%85%A5"><span class="toc-number">2.</span> <span class="toc-text">二、爬蟲 &amp; SQL 匯入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A5%97%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">套件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%98%AF%E5%90%A6%E9%87%8D%E6%96%B0%E6%8A%93%E5%8F%96%E8%B3%87%E6%96%99"><span class="toc-number">2.2.</span> <span class="toc-text">是否重新抓取資料</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AF%8F%E6%97%A5%E8%B3%87%E6%96%99%E6%9B%B4%E6%96%B0"><span class="toc-number">2.3.</span> <span class="toc-text">每日資料更新</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E6%9B%B4%E6%96%B0%E6%89%80%E6%9C%89%E8%B3%87%E6%96%99"><span class="toc-number">2.4.</span> <span class="toc-text">重新更新所有資料</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%87%AA%E5%8B%95%E5%8C%96%E6%9B%B4%E6%96%B0"><span class="toc-number">3.</span> <span class="toc-text">三、自動化更新</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&text=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&is_video=false&description=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Python爬蟲+SQL建置+自動化更新&body=Check out this article: https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&title=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&name=Python爬蟲+SQL建置+自動化更新&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/10/13/2018-10-13-webcrawler-sql-automation/&t=Python爬蟲+SQL建置+自動化更新"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

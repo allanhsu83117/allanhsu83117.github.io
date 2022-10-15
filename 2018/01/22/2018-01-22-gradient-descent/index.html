@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="梯度下降">
+<meta property="og:type" content="article">
+<meta property="og:title" content="梯度下降法 - Gradient Descent">
+<meta property="og:url" content="https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="梯度下降">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/uG3Dkow.png">
+<meta property="og:image" content="https://i.imgur.com/JGWZzeY.png">
+<meta property="article:published_time" content="2018-01-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T11:24:22.422Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="R">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/uG3Dkow.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>梯度下降法 - Gradient Descent</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2018/09/11/2018-09-11-clustering-with-R/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2018/01/12/2018-01-12-finrp-stock-selection/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&text=梯度下降法 - Gradient Descent"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&is_video=false&description=梯度下降法 - Gradient Descent"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=梯度下降法 - Gradient Descent&body=Check out this article: https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&name=梯度下降法 - Gradient Descent&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&t=梯度下降法 - Gradient Descent"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%B4%B9"><span class="toc-number">2.</span> <span class="toc-text">介紹</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E6%96%99"><span class="toc-number">2.1.</span> <span class="toc-text">資料</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%85%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D-Batch-Gradient-Descent%EF%BC%8CBGD"><span class="toc-number">3.</span> <span class="toc-text">一、全量梯度下降(Batch Gradient Descent，BGD)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9A%A8%E6%A9%9F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D-SGD"><span class="toc-number">4.</span> <span class="toc-text">二、隨機梯度下降(SGD)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81Adagrade"><span class="toc-number">5.</span> <span class="toc-text">三、Adagrade</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%B9%AA%E8%A3%BD%E7%AD%89%E9%AB%98%E7%B7%9A%E5%9C%96"><span class="toc-number">6.</span> <span class="toc-text">四、繪製等高線圖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%B5%90%E8%AB%96"><span class="toc-number">7.</span> <span class="toc-text">五、結論</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-number">8.</span> <span class="toc-text">六、參考資料</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        梯度下降法 - Gradient Descent
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-01-21T16:00:00.000Z" itemprop="datePublished">2018-01-22</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/R/" rel="tag">R</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>首先感謝台大李弘毅老師的 youtube 影片開啟了我對深度學習的學習之路，在影片中也針對梯度下降有了詳盡的<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=fegAeph9UaA&index=3&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49">解說</a>，今天僅分享實作梯度下降的結果。</p>
+<h3 id="介紹"><a href="#介紹" class="headerlink" title="介紹"></a>介紹</h3><p>梯度下降法是優化／最佳化（Optimization）演算法的一種，深度學習中常透過這種方式，反覆迭代，找到損失函數的局部最佳解。</p>
+<h4 id="資料"><a href="#資料" class="headerlink" title="資料"></a>資料</h4><ul>
+<li><p>今天使用的資料集：**R 的內建資料<a target="_blank" rel="noopener" href="https://ggplot2.tidyverse.org/reference/diamonds.html">diamonds</a>**，連結內有此資料集的欄位說明。</p>
+</li>
+<li><p>最後決定挑選<strong>切割品質為 Ideal</strong>且<strong>透明度為 IF</strong>的鑽石資料，只保留價格與克拉數的欄位，並且針對克拉數的欄位進行標準化。</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">library(tidyverse)</span><br><span class="line">library(ggplot2)</span><br><span class="line"></span><br><span class="line">data &lt;- diamonds %&gt;% filter((cut==&quot;Ideal&quot;) &amp; (clarity==&quot;IF&quot;)) %&gt;% select(price,carat)</span><br><span class="line"></span><br><span class="line"># 標準化</span><br><span class="line">data$carat_std &lt;- (data$carat-mean(data$carat))/sd(data$carat)</span><br><span class="line">x &lt;- data %&gt;% select(carat_std) %&gt;% as.matrix()</span><br><span class="line">y &lt;- data$price</span><br></pre></td></tr></table></figure>
+
+<h3 id="一、全量梯度下降-Batch-Gradient-Descent，BGD"><a href="#一、全量梯度下降-Batch-Gradient-Descent，BGD" class="headerlink" title="一、全量梯度下降(Batch Gradient Descent，BGD)"></a>一、全量梯度下降(Batch Gradient Descent，BGD)</h3><p>每次迭代使用<strong>全部的樣本</strong>去計算損失函數的梯度，然後使用學習比率依據梯度的反方向更新參數，然而此方法存在一個缺點，當樣本數極大時，運算時間非常久，而且需要消耗許多記憶體，因此衍生出下方 SGD 的演算法。</p>
+<ul>
+<li>程式碼如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># 參數</span><br><span class="line">b &lt;- 1000</span><br><span class="line">w1 &lt;- 5000</span><br><span class="line">lr &lt;- 0.0001        # 學習比率</span><br><span class="line">iteration &lt;- 10000  # 迭代次數</span><br><span class="line"></span><br><span class="line"># 初始化</span><br><span class="line">b_history &lt;- b</span><br><span class="line">w1_history &lt;- w1</span><br><span class="line">Loss_history &lt;- sum((data$price-b-w1*data$carat_std)^2)</span><br><span class="line">intercept_org &lt;- data.frame(b=b_history,w1=w1_history,L=Loss_history)</span><br><span class="line"></span><br><span class="line">for(i in 1:iteration)&#123;</span><br><span class="line">  b_grad &lt;- 0</span><br><span class="line">  w1_grad &lt;- 0</span><br><span class="line"></span><br><span class="line">  b_grad &lt;- sum(-2*(data$price - b - w1*data$carat_std)*1)</span><br><span class="line">  w1_grad &lt;- sum(-2*(data$price - b - w1*data$carat_std)*data$carat_std)</span><br><span class="line"></span><br><span class="line">  # 更新參數</span><br><span class="line">  b &lt;- b - lr * b_grad</span><br><span class="line">  w1 &lt;- w1 - lr * w1_grad</span><br><span class="line"></span><br><span class="line">  # 損失函數</span><br><span class="line">  L &lt;- sum((data$price-b-w1*data$carat_std)^2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # 儲存所有參數</span><br><span class="line">  intcp &lt;- cbind(b,w1,L)</span><br><span class="line">  intercept_org &lt;- rbind(intercept_org,intcp)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、隨機梯度下降-SGD"><a href="#二、隨機梯度下降-SGD" class="headerlink" title="二、隨機梯度下降(SGD)"></a>二、隨機梯度下降(SGD)</h3><p>SGD 全名為 Stochastic Gradient Descent，相對於全量梯度下降，隨機梯度下降在每次迭代時<strong>隨機挑選一組樣本</strong>進行參數更新，更新速度極快，然而 SGD 也並非沒有缺點，SGD 每次更新時並非朝著最佳解的方向進行更新，也因為更新頻繁，下圖可看到每次更新時的變動相當大，雖然速度快，但準確度也下降。</p>
+<p><img src="https://i.imgur.com/uG3Dkow.png"></p>
+<ul>
+<li>程式碼如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"># 參數</span><br><span class="line">b &lt;- 1000</span><br><span class="line">w1 &lt;- 5000</span><br><span class="line">lr &lt;- 0.001       # 學習比率</span><br><span class="line">iteration &lt;- 20   # 迭代次數</span><br><span class="line"></span><br><span class="line"># 初始化</span><br><span class="line">b_history &lt;- b</span><br><span class="line">w1_history &lt;- w1</span><br><span class="line">Loss_history &lt;- sum((data$price-b-w1*data$carat_std)^2)</span><br><span class="line">intercept_SGD &lt;- data.frame(b=b_history,w1=w1_history,L=Loss_history)</span><br><span class="line">intercept_SGD_all &lt;- data.frame(b=b_history,w1=w1_history,L=Loss_history)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for(i in 1:iteration)&#123;</span><br><span class="line"></span><br><span class="line">  for(ix in 1:nrow(data))&#123;</span><br><span class="line"></span><br><span class="line">    data_SGD &lt;- data[ix,]</span><br><span class="line"></span><br><span class="line">    b_grad &lt;- -2*(data_SGD$price - b - w1*data_SGD$carat_std)*1</span><br><span class="line">    w1_grad &lt;- -2*(data_SGD$price - b - w1*data_SGD$carat_std)*data_SGD$carat_std</span><br><span class="line"></span><br><span class="line">    # 更新參數</span><br><span class="line">    b &lt;- b - lr * b_grad</span><br><span class="line">    w1 &lt;- w1 - lr * w1_grad</span><br><span class="line"></span><br><span class="line">    # 顯示進度條</span><br><span class="line">    cat(&quot;第&quot;,i,&quot;次疊代 &quot;,&quot;第&quot;,ix,&quot;樣本 &quot;,&quot;b=&quot;,b,&quot; w=&quot;,w1,&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    # 損失函數</span><br><span class="line">    L &lt;- (data_SGD$price-b-w1*data_SGD$carat_std)^2</span><br><span class="line"></span><br><span class="line">    # 儲存每次迭代每筆樣本參數</span><br><span class="line">    intcp_SGD_all &lt;- cbind(b,w1,L)</span><br><span class="line">    intercept_SGD_all &lt;- rbind(intercept_SGD_all,intcp_SGD_all)</span><br><span class="line"></span><br><span class="line">    # 僅儲存每次迭代的參數</span><br><span class="line">    if(ix==nrow(data))&#123;</span><br><span class="line">      intcp_SGD &lt;- cbind(b,w1,L)</span><br><span class="line">      intercept_SGD &lt;- rbind(intercept_SGD,intcp_SGD)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="三、Adagrade"><a href="#三、Adagrade" class="headerlink" title="三、Adagrade"></a>三、Adagrade</h3><p>Adagrade 全名為 Adaptive Gradient Algorithm，此算法能針對稀疏特徵，增加其更新幅度，而對非稀疏特徵，縮小其更新幅度，因此此方法適合稀疏數據，另外 Adagrade 的另一個優點是能自動調整學習比率，減少手動調整的麻煩，然而這是優點也是缺點，可看到學習比率每次更新會一直累加，導致迭代到後期更新參數時，學習比率<code>lr/sqrt(b_lr)</code>變得很小。</p>
+<ul>
+<li>程式碼如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"># 參數</span><br><span class="line">b &lt;- 1000</span><br><span class="line">w1 &lt;- 5000</span><br><span class="line">lr &lt;- 1000           # 學習比率</span><br><span class="line">iteration &lt;- 10000   # 迭代次數</span><br><span class="line">b_lr &lt;- 0</span><br><span class="line">w1_lr &lt;- 0</span><br><span class="line"></span><br><span class="line"># 初始化</span><br><span class="line">b_history &lt;- b</span><br><span class="line">w1_history &lt;- w1</span><br><span class="line">Loss_history &lt;- sum((data$price-b-w1*data$carat_std)^2)</span><br><span class="line">intercept_ada &lt;- data.frame(b=b_history,w1=w1_history,L=Loss_history)</span><br><span class="line"></span><br><span class="line">for(i in 1:iteration)&#123;</span><br><span class="line">  b_grad &lt;- 0</span><br><span class="line">  w1_grad &lt;- 0</span><br><span class="line"></span><br><span class="line">  b_grad &lt;- sum(-2*(data$price - b - w1*data$carat_std)*1)</span><br><span class="line">  w1_grad &lt;- sum(-2*(data$price - b - w1*data$carat_std)*data$carat_std)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # 調整學習比率</span><br><span class="line">  b_lr &lt;- b_lr + b_grad^2</span><br><span class="line">  w1_lr &lt;- w1_lr + w1_grad^2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # 更新參數</span><br><span class="line">  b &lt;- b - lr/sqrt(b_lr) * b_grad</span><br><span class="line">  w1 &lt;- w1 - lr/sqrt(w1_lr) * w1_grad</span><br><span class="line">  L &lt;- sum((data$price-b-w1*data$carat_std)^2)</span><br><span class="line"></span><br><span class="line">  # 儲存參數</span><br><span class="line">  intcp &lt;- cbind(b,w1,L)</span><br><span class="line">  intercept_ada &lt;- rbind(intercept_ada,intcp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、繪製等高線圖"><a href="#四、繪製等高線圖" class="headerlink" title="四、繪製等高線圖"></a>四、繪製等高線圖</h3><ul>
+<li>（上）藍色的線為 Adagrade</li>
+<li>（中）紫色的線為 BGD</li>
+<li>（下）粉紅色的線為 SGD</li>
+</ul>
+<p><img src="https://i.imgur.com/JGWZzeY.png"></p>
+<h3 id="五、結論"><a href="#五、結論" class="headerlink" title="五、結論"></a>五、結論</h3><p>除了這 3 個方法以外，還有其他很多種的梯度下降法，目前看到最好的梯度下降法似乎為**Adam(Adaptive Moment Estimation)**，但最重要的是了解資料的特性再來選擇適合的演算法才是做資料科學的最重要的步驟。</p>
+<h3 id="六、參考資料"><a href="#六、參考資料" class="headerlink" title="六、參考資料"></a>六、參考資料</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/heyongluoyao8/article/details/52478715">https://blog.csdn.net/heyongluoyao8/article/details/52478715</a></li>
+<li><a target="_blank" rel="noopener" href="https://hk.saowen.com/a/97823dc63110d2508082bc94fa390acc72503ebb23e0d4b4f490c58cde7fdf54">https://hk.saowen.com/a/97823dc63110d2508082bc94fa390acc72503ebb23e0d4b4f490c58cde7fdf54</a></li>
+</ol>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%B4%B9"><span class="toc-number">2.</span> <span class="toc-text">介紹</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E6%96%99"><span class="toc-number">2.1.</span> <span class="toc-text">資料</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%85%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D-Batch-Gradient-Descent%EF%BC%8CBGD"><span class="toc-number">3.</span> <span class="toc-text">一、全量梯度下降(Batch Gradient Descent，BGD)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9A%A8%E6%A9%9F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D-SGD"><span class="toc-number">4.</span> <span class="toc-text">二、隨機梯度下降(SGD)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81Adagrade"><span class="toc-number">5.</span> <span class="toc-text">三、Adagrade</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%B9%AA%E8%A3%BD%E7%AD%89%E9%AB%98%E7%B7%9A%E5%9C%96"><span class="toc-number">6.</span> <span class="toc-text">四、繪製等高線圖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%B5%90%E8%AB%96"><span class="toc-number">7.</span> <span class="toc-text">五、結論</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-number">8.</span> <span class="toc-text">六、參考資料</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&text=梯度下降法 - Gradient Descent"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&is_video=false&description=梯度下降法 - Gradient Descent"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=梯度下降法 - Gradient Descent&body=Check out this article: https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&title=梯度下降法 - Gradient Descent"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&name=梯度下降法 - Gradient Descent&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/01/22/2018-01-22-gradient-descent/&t=梯度下降法 - Gradient Descent"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

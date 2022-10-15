@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="線性模型與財務策略">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用線性回歸、Lasso、彈性網針對4種商品建構策略">
+<meta property="og:url" content="https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="線性模型與財務策略">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/7ApX4CN.png">
+<meta property="og:image" content="https://i.imgur.com/uozB5Qg.png">
+<meta property="og:image" content="https://i.imgur.com/T75qSzw.png">
+<meta property="og:image" content="https://i.imgur.com/xw5jK6Y.jpg">
+<meta property="og:image" content="https://i.imgur.com/mKYKb2V.png">
+<meta property="og:image" content="https://i.imgur.com/uadmwd2.png">
+<meta property="og:image" content="https://i.imgur.com/1SOdn5x.png">
+<meta property="og:image" content="https://i.imgur.com/1NlnXk3.png">
+<meta property="og:image" content="https://i.imgur.com/LaXK66W.png">
+<meta property="og:image" content="https://i.imgur.com/sKUWZFw.png">
+<meta property="og:image" content="https://i.imgur.com/ptr0TFJ.png">
+<meta property="og:image" content="https://i.imgur.com/QkqZnBf.png">
+<meta property="og:image" content="https://i.imgur.com/Itxa6lF.png">
+<meta property="og:image" content="https://i.imgur.com/PbE0BL1.png">
+<meta property="og:image" content="https://i.imgur.com/CQ5FNpy.png">
+<meta property="og:image" content="https://i.imgur.com/Lanh93M.png">
+<meta property="og:image" content="https://i.imgur.com/jJGytXu.png">
+<meta property="og:image" content="https://i.imgur.com/v2QWvMt.png">
+<meta property="og:image" content="https://i.imgur.com/JdBoh4w.png">
+<meta property="og:image" content="https://i.imgur.com/b5IMNM2.png">
+<meta property="og:image" content="https://i.imgur.com/lTGkQuG.png">
+<meta property="og:image" content="https://i.imgur.com/8lYJrjb.png">
+<meta property="og:image" content="https://i.imgur.com/efcVKP5.png">
+<meta property="og:image" content="https://i.imgur.com/FBFapyf.png">
+<meta property="og:image" content="https://i.imgur.com/lyGDij7.png">
+<meta property="og:image" content="https://i.imgur.com/BDB9y2Q.png">
+<meta property="og:image" content="https://i.imgur.com/2JfbSAx.png">
+<meta property="og:image" content="https://i.imgur.com/7hktDOG.png">
+<meta property="article:published_time" content="2018-09-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T14:42:42.663Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="Machine Learning + Investment">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/7ApX4CN.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>利用線性回歸、Lasso、彈性網針對4種商品建構策略</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2018/10/13/2018-10-13-webcrawler-sql-automation/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2018/09/25/2018-09-25-machine-learning-in-investment/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&text=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&is_video=false&description=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=利用線性回歸、Lasso、彈性網針對4種商品建構策略&body=Check out this article: https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&name=利用線性回歸、Lasso、彈性網針對4種商品建構策略&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&t=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%BF%B4%E6%AD%B8%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">一、迴歸模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MSE-Loss-Function"><span class="toc-number">1.1.</span> <span class="toc-text">MSE(Loss Function)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%AD%A3%E8%A6%8F%E5%8C%96%E6%A8%A1%E5%9E%8B%EF%BC%88Regularization-Model"><span class="toc-number">2.</span> <span class="toc-text">二、正規化模型（Regularization Model)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">2.1.</span> <span class="toc-text">核心思想</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Lasso-Regularization-L1"><span class="toc-number">2.2.</span> <span class="toc-text">1. Lasso Regularization(L1)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%99%95%E7%BD%B0%E5%87%BD%E6%95%B8"><span class="toc-number">2.2.1.</span> <span class="toc-text">處罰函數</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%84%8F%E7%BE%A9"><span class="toc-number">2.2.2.</span> <span class="toc-text">意義</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Ridge-Regularization-L2"><span class="toc-number">2.3.</span> <span class="toc-text">2. Ridge Regularization(L2)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%99%95%E7%BD%B0%E5%87%BD%E6%95%B8-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">處罰函數</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%84%8F%E7%BE%A9-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">意義</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Elastic-Net"><span class="toc-number">2.4.</span> <span class="toc-text">3. Elastic Net</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%99%95%E7%BD%B0%E5%87%BD%E6%95%B8-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">處罰函數</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%84%8F%E7%BE%A9-2"><span class="toc-number">2.4.2.</span> <span class="toc-text">意義</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%B3%87%E6%96%99%E4%BE%86%E6%BA%90%E8%88%87%E5%BB%BA%E6%A8%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">三、資料來源與建模流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Data"><span class="toc-number">3.1.</span> <span class="toc-text">1. Data</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Rolling"><span class="toc-number">3.2.</span> <span class="toc-text">2. Rolling</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%B8%BE%E6%95%88"><span class="toc-number">4.</span> <span class="toc-text">四、績效</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Linear-Model"><span class="toc-number">4.1.</span> <span class="toc-text">1. Linear Model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Lasso"><span class="toc-number">4.2.</span> <span class="toc-text">2. Lasso</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Elastic-Net-1"><span class="toc-number">4.3.</span> <span class="toc-text">3. Elastic Net</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%90%84%E7%94%A2%E5%93%81%E7%B8%BE%E6%95%88%E6%96%B9%E6%B3%95%E6%AF%94%E8%BC%83"><span class="toc-number">4.4.</span> <span class="toc-text">4. 各產品績效方法比較</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#a-0050tw"><span class="toc-number">4.4.1.</span> <span class="toc-text">a. 0050tw</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#b-GLD"><span class="toc-number">4.4.2.</span> <span class="toc-text">b. GLD</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#c-SPY"><span class="toc-number">4.4.3.</span> <span class="toc-text">c. SPY</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#d-UUP"><span class="toc-number">4.4.4.</span> <span class="toc-text">d. UUP</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%9F%BA%E9%87%91%E7%B8%BE%E6%95%88%E5%9C%96"><span class="toc-number">5.</span> <span class="toc-text">五、基金績效圖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-0050tw"><span class="toc-number">5.1.</span> <span class="toc-text">1. 0050tw</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-GLD"><span class="toc-number">5.2.</span> <span class="toc-text">2. GLD</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-SPY"><span class="toc-number">5.3.</span> <span class="toc-text">3. SPY</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-UUP"><span class="toc-number">5.4.</span> <span class="toc-text">4. UUP</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%B5%90%E8%AB%96"><span class="toc-number">6.</span> <span class="toc-text">六、結論</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        利用線性回歸、Lasso、彈性網針對4種商品建構策略
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-09-29T16:00:00.000Z" itemprop="datePublished">2018-09-30</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Investment/">Investment</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Machine-Learning-Investment/" rel="tag">Machine Learning + Investment</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="一、迴歸模型"><a href="#一、迴歸模型" class="headerlink" title="一、迴歸模型"></a>一、迴歸模型</h3><p>$$<br>{y_i &#x3D; \alpha + \beta_1x_{1, i} +…+\beta_nx_{n, i}}<br>$$</p>
+<h4 id="MSE-Loss-Function"><a href="#MSE-Loss-Function" class="headerlink" title="MSE(Loss Function)"></a>MSE(Loss Function)</h4><p>$$<br>{\min L &#x3D; (\sum_{n &#x3D; 1}^N \beta_ix_i - \alpha - y_i)^2}<br>$$</p>
+<ul>
+<li>Loss Function 分布</li>
+</ul>
+<p><img src="https://i.imgur.com/7ApX4CN.png"></p>
+<h3 id="二、正規化模型（Regularization-Model"><a href="#二、正規化模型（Regularization-Model" class="headerlink" title="二、正規化模型（Regularization Model)"></a>二、正規化模型（Regularization Model)</h3><h4 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h4><p>在模型訓練的過程中，越是非線性的參數修改的越嚴重(如高次方$$x$$之係數$$\beta$$)，故隨著模型的次方數提高，模型會更複雜，模型會為了追求更小的損失進而有 over-fitting 的現象。<br>為了抑制 over-fitting，加入了懲罰項，用以限制模型的複雜度。</p>
+<h4 id="1-Lasso-Regularization-L1"><a href="#1-Lasso-Regularization-L1" class="headerlink" title="1. Lasso Regularization(L1)"></a>1. Lasso Regularization(L1)</h4><h5 id="處罰函數"><a href="#處罰函數" class="headerlink" title="處罰函數"></a>處罰函數</h5><p>$$<br>L &#x3D; {(\sum_{n &#x3D; 1}^N \beta_ix_i - \alpha - y_i)^2} + {\sum_{n &#x3D; 1}^N \vert \beta_n \vert}<br>$$</p>
+<p><img src="https://i.imgur.com/uozB5Qg.png"></p>
+<h5 id="意義"><a href="#意義" class="headerlink" title="意義"></a>意義</h5><p>因為 Lasso 之值域為絕對值相加，故其分布為多邊形(圖示為二維，若更高維則會產生更多邊角)，故值域與最低 Loss Function 之交點應為最低點，故多為頂點、或是易在最接近邊上滑動。<br>因 Lasso 所述的特性，使得最佳點常為頂點，意即 Lasso 會降低影響力較低、不顯著之變數的權重，甚至降低至 0。</p>
+<h4 id="2-Ridge-Regularization-L2"><a href="#2-Ridge-Regularization-L2" class="headerlink" title="2. Ridge Regularization(L2)"></a>2. Ridge Regularization(L2)</h4><h5 id="處罰函數-1"><a href="#處罰函數-1" class="headerlink" title="處罰函數"></a>處罰函數</h5><p>$$<br>L &#x3D; {(\sum_{n &#x3D; 1}^N \beta_ix_i - \alpha - y_i)^2} + {\sum_{n &#x3D; 1}^N \beta_i^2}<br>$$</p>
+<p><img src="https://i.imgur.com/T75qSzw.png"></p>
+<h5 id="意義-1"><a href="#意義-1" class="headerlink" title="意義"></a>意義</h5><p>由於是每個係數 Beta 的平方項總和值域為一個圓，故接近最低時會較穩定，且不會使任一係數為 0。<br>故較為常用。</p>
+<h4 id="3-Elastic-Net"><a href="#3-Elastic-Net" class="headerlink" title="3. Elastic Net"></a>3. Elastic Net</h4><h5 id="處罰函數-2"><a href="#處罰函數-2" class="headerlink" title="處罰函數"></a>處罰函數</h5><p>$$<br>L &#x3D; {(\sum_{n &#x3D; 1}^N \beta_ix_i - \alpha - y_i)^2} + \lambda<br>{\sum_{n &#x3D; 1}^N \vert \beta_n \vert}+<br>(1-\lambda)<br>{\sum_{n &#x3D; 1}^N \beta_i^2}<br>$$</p>
+<h5 id="意義-2"><a href="#意義-2" class="headerlink" title="意義"></a>意義</h5><p>$$L_1 + L_2$$ 之組合，使迴歸式具有彈性。</p>
+<hr>
+<h3 id="三、資料來源與建模流程"><a href="#三、資料來源與建模流程" class="headerlink" title="三、資料來源與建模流程"></a>三、資料來源與建模流程</h3><h4 id="1-Data"><a href="#1-Data" class="headerlink" title="1. Data"></a>1. Data</h4><ul>
+<li>S&amp;P500：SPDR S&amp;P 500 ETF (SPY)</li>
+<li>台灣 50： TEJ (0050tw)</li>
+<li>黃金價格：SPDR Gold Shares (GLD)</li>
+<li>美元對台幣：Invesco DB US Dollar Bullish (UUP)</li>
+</ul>
+<h4 id="2-Rolling"><a href="#2-Rolling" class="headerlink" title="2. Rolling"></a>2. Rolling</h4><p>每三個月，以過去 500 天的價格資料，重新 train 一次模型，概念如下<br><img src="https://i.imgur.com/xw5jK6Y.jpg"></p>
+<h3 id="四、績效"><a href="#四、績效" class="headerlink" title="四、績效"></a>四、績效</h3><h4 id="1-Linear-Model"><a href="#1-Linear-Model" class="headerlink" title="1. Linear Model"></a>1. Linear Model</h4><table>
+<thead>
+<tr>
+<th align="center">資產代碼</th>
+<th align="center">平均報酬</th>
+<th align="center">年化報酬</th>
+<th align="center">累積報酬</th>
+<th align="center">標準差</th>
+<th align="center">夏普值</th>
+<th align="center">最大報酬</th>
+<th align="center">最小報酬</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0050tw</td>
+<td align="center">0.53%</td>
+<td align="center">3.36%</td>
+<td align="center">34.16%</td>
+<td align="center">2.71%</td>
+<td align="center">0.34</td>
+<td align="center">11.88%</td>
+<td align="center">-6.53%</td>
+</tr>
+<tr>
+<td align="center">GLD</td>
+<td align="center">-0.86%</td>
+<td align="center">-8.92%</td>
+<td align="center">-39.16%</td>
+<td align="center">4.56%</td>
+<td align="center">-0.79</td>
+<td align="center">6.02%</td>
+<td align="center">-26.26%</td>
+</tr>
+<tr>
+<td align="center">SPY</td>
+<td align="center">1.13%</td>
+<td align="center">8.29%</td>
+<td align="center">52.71%</td>
+<td align="center">2.27%</td>
+<td align="center">0.83</td>
+<td align="center">10.62%</td>
+<td align="center">-4.78%</td>
+</tr>
+<tr>
+<td align="center">UUP</td>
+<td align="center">0.15%</td>
+<td align="center">-0.57%</td>
+<td align="center">-2.99%</td>
+<td align="center">1.65%</td>
+<td align="center">-0.11</td>
+<td align="center">7.65%</td>
+<td align="center">-4.01%</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">資產代碼</th>
+<th align="center">勝率</th>
+<th align="center">交易次數</th>
+<th align="center">最大回撤率</th>
+<th align="center">獲利因子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0050tw</td>
+<td align="center">61.81%</td>
+<td align="center">55</td>
+<td align="center">18.42%</td>
+<td align="center">1.92</td>
+</tr>
+<tr>
+<td align="center">GLD</td>
+<td align="center">35.55%</td>
+<td align="center">45</td>
+<td align="center">41.00%</td>
+<td align="center">0.43</td>
+</tr>
+<tr>
+<td align="center">SPY</td>
+<td align="center">72.00%</td>
+<td align="center">50</td>
+<td align="center">10.56%</td>
+<td align="center">6.67</td>
+</tr>
+<tr>
+<td align="center">UUP</td>
+<td align="center">53.7%</td>
+<td align="center">55</td>
+<td align="center">16.47%</td>
+<td align="center">1.35</td>
+</tr>
+</tbody></table>
+<p>交易策略報酬率直方圖，X 軸為單次交易之報酬率，Y 軸為交易次數，如此可方便檢視該產品在特定方法下，報酬率的分布狀況。</p>
+<p><img src="https://i.imgur.com/mKYKb2V.png"><img src="https://i.imgur.com/uadmwd2.png"><img src="https://i.imgur.com/1SOdn5x.png"><img src="https://i.imgur.com/1NlnXk3.png"></p>
+<h4 id="2-Lasso"><a href="#2-Lasso" class="headerlink" title="2. Lasso"></a>2. Lasso</h4><table>
+<thead>
+<tr>
+<th align="center">資產代碼</th>
+<th align="center">平均報酬</th>
+<th align="center">年化報酬</th>
+<th align="center">累積報酬</th>
+<th align="center">標準差</th>
+<th align="center">夏普值</th>
+<th align="center">最大報酬</th>
+<th align="center">最小報酬</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0050tw</td>
+<td align="center">1.03%</td>
+<td align="center">7.00%</td>
+<td align="center">43.36%</td>
+<td align="center">3.77%</td>
+<td align="center">0.58</td>
+<td align="center">16.49%</td>
+<td align="center">-10.69%</td>
+</tr>
+<tr>
+<td align="center">GLD</td>
+<td align="center">-1.97%</td>
+<td align="center">-7.57%</td>
+<td align="center">-34.21%</td>
+<td align="center">7.36%</td>
+<td align="center">-0.79</td>
+<td align="center">5.31%</td>
+<td align="center">-26.63%</td>
+</tr>
+<tr>
+<td align="center">SPY</td>
+<td align="center">2.20%</td>
+<td align="center">11.63%</td>
+<td align="center">79.52%</td>
+<td align="center">2.20%</td>
+<td align="center">1.05</td>
+<td align="center">35.30%</td>
+<td align="center">-7.32%</td>
+</tr>
+<tr>
+<td align="center">UUP</td>
+<td align="center">0.24%</td>
+<td align="center">0.12%</td>
+<td align="center">0.63%</td>
+<td align="center">1.83%</td>
+<td align="center">0.02</td>
+<td align="center">3.57%</td>
+<td align="center">-4.47%</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">資產代碼</th>
+<th align="center">勝率</th>
+<th align="center">交易次數</th>
+<th align="center">最大回撤率</th>
+<th align="center">獲利因子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0050tw</td>
+<td align="center">76.08%</td>
+<td align="center">46</td>
+<td align="center">20.11%</td>
+<td align="center">2.80</td>
+</tr>
+<tr>
+<td align="center">GLD</td>
+<td align="center">50.00%</td>
+<td align="center">18</td>
+<td align="center">34.34%</td>
+<td align="center">0.32</td>
+</tr>
+<tr>
+<td align="center">SPY</td>
+<td align="center">64.70%</td>
+<td align="center">17</td>
+<td align="center">16.02%</td>
+<td align="center">4.48</td>
+</tr>
+<tr>
+<td align="center">UUP</td>
+<td align="center">60.0%</td>
+<td align="center">20</td>
+<td align="center">8.88%</td>
+<td align="center">1.48</td>
+</tr>
+</tbody></table>
+<p><img src="https://i.imgur.com/LaXK66W.png"><img src="https://i.imgur.com/sKUWZFw.png"><img src="https://i.imgur.com/ptr0TFJ.png"><img src="https://i.imgur.com/QkqZnBf.png"></p>
+<h4 id="3-Elastic-Net-1"><a href="#3-Elastic-Net-1" class="headerlink" title="3. Elastic Net"></a>3. Elastic Net</h4><table>
+<thead>
+<tr>
+<th align="center">資產代碼</th>
+<th align="center">平均報酬</th>
+<th align="center">年化報酬</th>
+<th align="center">累積報酬</th>
+<th align="center">標準差</th>
+<th align="center">夏普值</th>
+<th align="center">最大報酬</th>
+<th align="center">最小報酬</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0050tw</td>
+<td align="center">1.00%</td>
+<td align="center">6.65%</td>
+<td align="center">40.86%</td>
+<td align="center">3.87%</td>
+<td align="center">0.55</td>
+<td align="center">19.57%</td>
+<td align="center">-10.70%</td>
+</tr>
+<tr>
+<td align="center">GLD</td>
+<td align="center">-2.59%</td>
+<td align="center">-6.18%</td>
+<td align="center">-28.79%</td>
+<td align="center">8.30%</td>
+<td align="center">-0.72</td>
+<td align="center">2.27%</td>
+<td align="center">-26.63%</td>
+</tr>
+<tr>
+<td align="center">SPY</td>
+<td align="center">2.52%</td>
+<td align="center">11.39%</td>
+<td align="center">77.46%</td>
+<td align="center">9.86%</td>
+<td align="center">1.02</td>
+<td align="center">35.29%</td>
+<td align="center">-9.01%</td>
+</tr>
+<tr>
+<td align="center">UUP</td>
+<td align="center">0.17%</td>
+<td align="center">-0.20%</td>
+<td align="center">-1.09%</td>
+<td align="center">1.53%</td>
+<td align="center">-0.03</td>
+<td align="center">3.57%</td>
+<td align="center">-4.39%</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">資產代碼</th>
+<th align="center">勝率</th>
+<th align="center">交易次數</th>
+<th align="center">最大回撤率</th>
+<th align="center">獲利因子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0050tw</td>
+<td align="center">71.74%</td>
+<td align="center">46</td>
+<td align="center">20.23%</td>
+<td align="center">2.92</td>
+</tr>
+<tr>
+<td align="center">GLD</td>
+<td align="center">45.45%</td>
+<td align="center">11</td>
+<td align="center">28.80%</td>
+<td align="center">0.24</td>
+</tr>
+<tr>
+<td align="center">SPY</td>
+<td align="center">71.42%</td>
+<td align="center">14</td>
+<td align="center">17.17%</td>
+<td align="center">4.11</td>
+</tr>
+<tr>
+<td align="center">UUP</td>
+<td align="center">63.3%</td>
+<td align="center">30</td>
+<td align="center">10.85%</td>
+<td align="center">1.43</td>
+</tr>
+</tbody></table>
+<p><img src="https://i.imgur.com/Itxa6lF.png"><img src="https://i.imgur.com/PbE0BL1.png"><img src="https://i.imgur.com/CQ5FNpy.png"><img src="https://i.imgur.com/Lanh93M.png"></p>
+<h4 id="4-各產品績效方法比較"><a href="#4-各產品績效方法比較" class="headerlink" title="4. 各產品績效方法比較"></a>4. 各產品績效方法比較</h4><h5 id="a-0050tw"><a href="#a-0050tw" class="headerlink" title="a. 0050tw"></a>a. 0050tw</h5><p>可以發現正規化後平均報酬、累積報酬、年化報酬、夏普比率、最大報酬、勝率等有提升，但一方面最小報酬與最大回撤率也變大了，交易次數降低幅度不大。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">平均報酬</th>
+<th align="center">年化報酬</th>
+<th align="center">累積報酬</th>
+<th align="center">標準差</th>
+<th align="center">夏普值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Linear Model</td>
+<td align="center">0.53%</td>
+<td align="center">3.36%</td>
+<td align="center">34.16%</td>
+<td align="center">2.71%</td>
+<td align="center">0.34</td>
+</tr>
+<tr>
+<td align="center">Lasso</td>
+<td align="center">1.03%</td>
+<td align="center">7.00%</td>
+<td align="center">43.36%</td>
+<td align="center">3.77%</td>
+<td align="center">0.58</td>
+</tr>
+<tr>
+<td align="center">Elastic Net</td>
+<td align="center">1.00%</td>
+<td align="center">6.65%</td>
+<td align="center">40.86%</td>
+<td align="center">3.87%</td>
+<td align="center">0.55</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">最大報酬</th>
+<th align="center">最小報酬</th>
+<th align="center">勝率</th>
+<th align="center">交易次數</th>
+<th align="center">最大回撤率</th>
+<th align="center">獲利因子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Linear Model</td>
+<td align="center">11.88%</td>
+<td align="center">-6.53%</td>
+<td align="center">61.81%</td>
+<td align="center">55</td>
+<td align="center">18.42%</td>
+<td align="center">1.92</td>
+</tr>
+<tr>
+<td align="center">Lasso</td>
+<td align="center">16.49%</td>
+<td align="center">-10.69%</td>
+<td align="center">76.08%</td>
+<td align="center">46</td>
+<td align="center">20.11%</td>
+<td align="center">2.80</td>
+</tr>
+<tr>
+<td align="center">Elastic Net</td>
+<td align="center">19.57%</td>
+<td align="center">-10.70%</td>
+<td align="center">71.42%</td>
+<td align="center">14</td>
+<td align="center">17.17%</td>
+<td align="center">4.11</td>
+</tr>
+</tbody></table>
+<h5 id="b-GLD"><a href="#b-GLD" class="headerlink" title="b. GLD"></a>b. GLD</h5><p>正規化後平均報酬率表現反而不佳，是四項產品中表現最差，標準差漸變大，夏普值差異不大，最大報酬率降低，勝率皆不超過 50%，交易次數大幅降低，但最大回撤率也有降低。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">平均報酬</th>
+<th align="center">年化報酬</th>
+<th align="center">累積報酬</th>
+<th align="center">標準差</th>
+<th align="center">夏普值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Linear Model</td>
+<td align="center">-0.86%</td>
+<td align="center">-8.92%</td>
+<td align="center">-39.16%</td>
+<td align="center">4.56%</td>
+<td align="center">-0.79</td>
+</tr>
+<tr>
+<td align="center">Lasso</td>
+<td align="center">-1.97%</td>
+<td align="center">-7.57%</td>
+<td align="center">-34.21%</td>
+<td align="center">7.36%</td>
+<td align="center">-0.79</td>
+</tr>
+<tr>
+<td align="center">Elastic Net</td>
+<td align="center">-2.59%</td>
+<td align="center">-6.18%</td>
+<td align="center">-28.79%</td>
+<td align="center">8.30%</td>
+<td align="center">-0.72</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">最大報酬</th>
+<th align="center">最小報酬</th>
+<th align="center">勝率</th>
+<th align="center">交易次數</th>
+<th align="center">最大回撤率</th>
+<th align="center">獲利因子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Linear Model</td>
+<td align="center">6.02%</td>
+<td align="center">-26.26%</td>
+<td align="center">35.55%</td>
+<td align="center">45</td>
+<td align="center">41.00%</td>
+<td align="center">0.43</td>
+</tr>
+<tr>
+<td align="center">Lasso</td>
+<td align="center">5.31%</td>
+<td align="center">-26.63%</td>
+<td align="center">50.00%</td>
+<td align="center">18</td>
+<td align="center">34.34%</td>
+<td align="center">0.32</td>
+</tr>
+<tr>
+<td align="center">Elastic Net</td>
+<td align="center">2.27%</td>
+<td align="center">-26.63%</td>
+<td align="center">45.45%</td>
+<td align="center">11</td>
+<td align="center">28.80%</td>
+<td align="center">0.24</td>
+</tr>
+</tbody></table>
+<h5 id="c-SPY"><a href="#c-SPY" class="headerlink" title="c. SPY"></a>c. SPY</h5><p>累積報酬為四項產品中最高，皆超過 50%以上；但標準差在彈性網模型下反而飆很高；勝率皆在 6 成 4 以上，與獲利因子同為四項產品中最高，但 Lasso 模型下勝率最低；交易次數大幅降低。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">平均報酬</th>
+<th align="center">年化報酬</th>
+<th align="center">累積報酬</th>
+<th align="center">標準差</th>
+<th align="center">夏普值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Linear Model</td>
+<td align="center">1.13%</td>
+<td align="center">8.29%</td>
+<td align="center">52.71%</td>
+<td align="center">2.27%</td>
+<td align="center">0.83</td>
+</tr>
+<tr>
+<td align="center">Lasso</td>
+<td align="center">2.20%</td>
+<td align="center">11.63%</td>
+<td align="center">79.52%</td>
+<td align="center">2.20%</td>
+<td align="center">1.05</td>
+</tr>
+<tr>
+<td align="center">Elastic Net</td>
+<td align="center">2.52%</td>
+<td align="center">11.39%</td>
+<td align="center">77.46%</td>
+<td align="center">9.86%</td>
+<td align="center">1.02</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">最大報酬</th>
+<th align="center">最小報酬</th>
+<th align="center">勝率</th>
+<th align="center">交易次數</th>
+<th align="center">最大回撤率</th>
+<th align="center">獲利因子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Linear Model</td>
+<td align="center">10.62%</td>
+<td align="center">-4.78%</td>
+<td align="center">72.00%</td>
+<td align="center">50</td>
+<td align="center">10.56%</td>
+<td align="center">6.67</td>
+</tr>
+<tr>
+<td align="center">Lasso</td>
+<td align="center">35.30%</td>
+<td align="center">-7.32%</td>
+<td align="center">64.70%</td>
+<td align="center">17</td>
+<td align="center">16.02%</td>
+<td align="center">4.48</td>
+</tr>
+<tr>
+<td align="center">Elastic Net</td>
+<td align="center">35.29%</td>
+<td align="center">-9.01%</td>
+<td align="center">71.42%</td>
+<td align="center">14</td>
+<td align="center">17.17%</td>
+<td align="center">4.11</td>
+</tr>
+</tbody></table>
+<h5 id="d-UUP"><a href="#d-UUP" class="headerlink" title="d. UUP"></a>d. UUP</h5><p>最大回測率四項產品中最低，年化報酬率表現最接近 0，綜觀整體績效指標，相較其他產品，三個方法間的結果差異最不明顯，但整體而言 Lasso 下績效表現最好。</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">平均報酬</th>
+<th align="center">年化報酬</th>
+<th align="center">累積報酬</th>
+<th align="center">標準差</th>
+<th align="center">夏普值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Linear Model</td>
+<td align="center">0.15%</td>
+<td align="center">-0.57%</td>
+<td align="center">-2.99%</td>
+<td align="center">1.65%</td>
+<td align="center">-0.11</td>
+</tr>
+<tr>
+<td align="center">Lasso</td>
+<td align="center">0.24%</td>
+<td align="center">0.12%</td>
+<td align="center">0.63%</td>
+<td align="center">1.83%</td>
+<td align="center">0.02</td>
+</tr>
+<tr>
+<td align="center">Elastic Net</td>
+<td align="center">0.17%</td>
+<td align="center">-0.20%</td>
+<td align="center">-1.09%</td>
+<td align="center">1.53%</td>
+<td align="center">-0.03</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">最大報酬</th>
+<th align="center">最小報酬</th>
+<th align="center">勝率</th>
+<th align="center">交易次數</th>
+<th align="center">最大回撤率</th>
+<th align="center">獲利因子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Linear Model</td>
+<td align="center">7.65%</td>
+<td align="center">-4.01%</td>
+<td align="center">53.7%</td>
+<td align="center">55</td>
+<td align="center">16.47%</td>
+<td align="center">1.35</td>
+</tr>
+<tr>
+<td align="center">Lasso</td>
+<td align="center">3.57%</td>
+<td align="center">-4.47%</td>
+<td align="center">60.0%</td>
+<td align="center">20</td>
+<td align="center">8.88%</td>
+<td align="center">1.48</td>
+</tr>
+<tr>
+<td align="center">Elastic Net</td>
+<td align="center">3.57%</td>
+<td align="center">-4.39%</td>
+<td align="center">63.3%</td>
+<td align="center">30</td>
+<td align="center">10.85%</td>
+<td align="center">1.43</td>
+</tr>
+</tbody></table>
+<h3 id="五、基金績效圖"><a href="#五、基金績效圖" class="headerlink" title="五、基金績效圖"></a>五、基金績效圖</h3><h4 id="1-0050tw"><a href="#1-0050tw" class="headerlink" title="1. 0050tw"></a>1. 0050tw</h4><ul>
+<li>Linear Model<br><img src="https://i.imgur.com/jJGytXu.png"></li>
+<li>Lasso<br><img src="https://i.imgur.com/v2QWvMt.png"></li>
+<li>Elastic Net<br><img src="https://i.imgur.com/JdBoh4w.png"></li>
+</ul>
+<h4 id="2-GLD"><a href="#2-GLD" class="headerlink" title="2. GLD"></a>2. GLD</h4><ul>
+<li>Linear Model<br><img src="https://i.imgur.com/b5IMNM2.png"></li>
+<li>Lasso<br><img src="https://i.imgur.com/lTGkQuG.png"></li>
+<li>Elastic Net<br><img src="https://i.imgur.com/8lYJrjb.png"></li>
+</ul>
+<h4 id="3-SPY"><a href="#3-SPY" class="headerlink" title="3. SPY"></a>3. SPY</h4><ul>
+<li>Linear Model<br><img src="https://i.imgur.com/efcVKP5.png"></li>
+<li>Lasso<br><img src="https://i.imgur.com/FBFapyf.png"></li>
+<li>Elastic Net<br><img src="https://i.imgur.com/lyGDij7.png"></li>
+</ul>
+<h4 id="4-UUP"><a href="#4-UUP" class="headerlink" title="4. UUP"></a>4. UUP</h4><ul>
+<li>Linear Model<br><img src="https://i.imgur.com/BDB9y2Q.png"></li>
+<li>Lasso<br><img src="https://i.imgur.com/2JfbSAx.png"></li>
+<li>Elastic Net<br><img src="https://i.imgur.com/7hktDOG.png"></li>
+</ul>
+<h3 id="六、結論"><a href="#六、結論" class="headerlink" title="六、結論"></a>六、結論</h3><p>本次實證利用線性模型對四種商品建構策略，結果可發現在回測績效上並沒有特別亮麗，線性模型較為簡單，而金融市場充斥著複雜的訊息，並非所有訊息都能靠著線性模型萃取而出，雖然如此，本次實，也算是個不錯的嘗試，本方法仍有值得許多可以改進的空間。</p>
+<hr>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://morvanzhou.github.io/tutorials/machine-learning/ML-intro/3-09-l1l2regularization/">L1 &#x2F; L2 正规化 (Regularization)</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC5-4%E8%AC%9B-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E9%80%B2%E9%9A%8E%E5%AF%A6%E7%94%A8%E6%8A%80%E5%B7%A7-%E6%AD%A3%E8%A6%8F%E5%8C%96-8dd14fcd3140">[資料分析&amp;機器學習] 第 5.4 講: 機器學習進階實用技巧-正規化</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/jinping_shi/article/details/52433975">机器学习中正则化项 L1 和 L2 的直观理解</a></li>
+</ul>
+<hr>
+<p><strong>溫馨提醒：</strong></p>
+<ol>
+<li>以上實證皆為本人使用 R&#x2F;Python 撰寫，請勿抄襲。</li>
+<li>投資有賺有賠，本次實作僅為研究使用，投資人投資前應審慎評估，本人不負任何投資賠償責任。</li>
+</ol>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%BF%B4%E6%AD%B8%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">一、迴歸模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MSE-Loss-Function"><span class="toc-number">1.1.</span> <span class="toc-text">MSE(Loss Function)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%AD%A3%E8%A6%8F%E5%8C%96%E6%A8%A1%E5%9E%8B%EF%BC%88Regularization-Model"><span class="toc-number">2.</span> <span class="toc-text">二、正規化模型（Regularization Model)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">2.1.</span> <span class="toc-text">核心思想</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Lasso-Regularization-L1"><span class="toc-number">2.2.</span> <span class="toc-text">1. Lasso Regularization(L1)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%99%95%E7%BD%B0%E5%87%BD%E6%95%B8"><span class="toc-number">2.2.1.</span> <span class="toc-text">處罰函數</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%84%8F%E7%BE%A9"><span class="toc-number">2.2.2.</span> <span class="toc-text">意義</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Ridge-Regularization-L2"><span class="toc-number">2.3.</span> <span class="toc-text">2. Ridge Regularization(L2)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%99%95%E7%BD%B0%E5%87%BD%E6%95%B8-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">處罰函數</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%84%8F%E7%BE%A9-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">意義</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Elastic-Net"><span class="toc-number">2.4.</span> <span class="toc-text">3. Elastic Net</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%99%95%E7%BD%B0%E5%87%BD%E6%95%B8-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">處罰函數</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%84%8F%E7%BE%A9-2"><span class="toc-number">2.4.2.</span> <span class="toc-text">意義</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%B3%87%E6%96%99%E4%BE%86%E6%BA%90%E8%88%87%E5%BB%BA%E6%A8%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">三、資料來源與建模流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Data"><span class="toc-number">3.1.</span> <span class="toc-text">1. Data</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Rolling"><span class="toc-number">3.2.</span> <span class="toc-text">2. Rolling</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%B8%BE%E6%95%88"><span class="toc-number">4.</span> <span class="toc-text">四、績效</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Linear-Model"><span class="toc-number">4.1.</span> <span class="toc-text">1. Linear Model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Lasso"><span class="toc-number">4.2.</span> <span class="toc-text">2. Lasso</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Elastic-Net-1"><span class="toc-number">4.3.</span> <span class="toc-text">3. Elastic Net</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%90%84%E7%94%A2%E5%93%81%E7%B8%BE%E6%95%88%E6%96%B9%E6%B3%95%E6%AF%94%E8%BC%83"><span class="toc-number">4.4.</span> <span class="toc-text">4. 各產品績效方法比較</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#a-0050tw"><span class="toc-number">4.4.1.</span> <span class="toc-text">a. 0050tw</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#b-GLD"><span class="toc-number">4.4.2.</span> <span class="toc-text">b. GLD</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#c-SPY"><span class="toc-number">4.4.3.</span> <span class="toc-text">c. SPY</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#d-UUP"><span class="toc-number">4.4.4.</span> <span class="toc-text">d. UUP</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%9F%BA%E9%87%91%E7%B8%BE%E6%95%88%E5%9C%96"><span class="toc-number">5.</span> <span class="toc-text">五、基金績效圖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-0050tw"><span class="toc-number">5.1.</span> <span class="toc-text">1. 0050tw</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-GLD"><span class="toc-number">5.2.</span> <span class="toc-text">2. GLD</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-SPY"><span class="toc-number">5.3.</span> <span class="toc-text">3. SPY</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-UUP"><span class="toc-number">5.4.</span> <span class="toc-text">4. UUP</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%B5%90%E8%AB%96"><span class="toc-number">6.</span> <span class="toc-text">六、結論</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&text=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&is_video=false&description=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=利用線性回歸、Lasso、彈性網針對4種商品建構策略&body=Check out this article: https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&title=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&name=利用線性回歸、Lasso、彈性網針對4種商品建構策略&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/09/30/2018-09-30-linear-model-strategy-construction/&t=利用線性回歸、Lasso、彈性網針對4種商品建構策略"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

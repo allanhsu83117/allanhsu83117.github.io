@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="基礎R語言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基礎R語言教學">
+<meta property="og:url" content="https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="基礎R語言">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/o1PgDy0.png">
+<meta property="og:image" content="https://i.imgur.com/1jZrBBF.png">
+<meta property="og:image" content="https://i.imgur.com/dksPbGI.png">
+<meta property="og:image" content="http://blog.cloudera.com/wp-content/uploads/2015/12/distribution.png">
+<meta property="og:image" content="https://i.imgur.com/PYu0HYC.png">
+<meta property="article:published_time" content="2018-09-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T11:24:41.388Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="R">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/o1PgDy0.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>基礎R語言教學</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2018/09/25/2018-09-25-machine-learning-in-investment/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2018/09/11/2018-09-11-clustering-with-R/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&text=基礎R語言教學"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&is_video=false&description=基礎R語言教學"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基礎R語言教學&body=Check out this article: https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&name=基礎R語言教學&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&t=基礎R語言教學"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">基礎操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Assignment"><span class="toc-number">2.1.</span> <span class="toc-text">Assignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A8%BB%E8%A7%A3"><span class="toc-number">2.2.</span> <span class="toc-text">註解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A4%8E%E9%81%8B%E7%AE%97"><span class="toc-number">2.3.</span> <span class="toc-text">基礎運算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%8F%E8%BC%AF%E9%81%8B%E7%AE%97"><span class="toc-number">2.4.</span> <span class="toc-text">邏輯運算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E5%AD%97%E5%AD%97%E4%B8%B2"><span class="toc-number">2.5.</span> <span class="toc-text">文字字串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E9%A1%9E%E5%9E%8B"><span class="toc-number">2.6.</span> <span class="toc-text">資料類型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B"><span class="toc-number">2.7.</span> <span class="toc-text">資料結構</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E9%87%8F%E8%88%87%E5%90%91%E9%87%8F%E9%81%8B%E7%AE%97"><span class="toc-number">2.8.</span> <span class="toc-text">向量與向量運算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F%E5%87%BD%E6%95%B8"><span class="toc-number">2.9.</span> <span class="toc-text">排序函數</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E9%87%8F%E6%8C%87%E6%A8%99%E7%94%A8%E6%B3%95-amp-which-%E7%AF%A9%E9%81%B8%E6%A2%9D%E4%BB%B6"><span class="toc-number">2.10.</span> <span class="toc-text">向量指標用法 &amp; which 篩選條件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B5%B1%E8%A8%88%E9%81%8B%E7%AE%97"><span class="toc-number">2.11.</span> <span class="toc-text">統計運算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E8%A3%BD%E5%8C%96%E5%87%BD%E5%BC%8F"><span class="toc-number">2.12.</span> <span class="toc-text">客製化函式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A9%E9%99%A3"><span class="toc-number">2.13.</span> <span class="toc-text">矩陣</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#rbind-cbind-amp-%E7%9F%A9%E9%99%A3%E6%8E%92%E5%BA%8F"><span class="toc-number">2.13.1.</span> <span class="toc-text">rbind.cbind &amp; 矩陣排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9F%A9%E9%99%A3%E6%8E%92%E5%BA%8F"><span class="toc-number">2.13.2.</span> <span class="toc-text">矩陣排序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Frame"><span class="toc-number">2.14.</span> <span class="toc-text">Data.Frame</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%87%89%E7%94%A8"><span class="toc-number">2.14.1.</span> <span class="toc-text">基本應用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E6%A8%99%E7%94%A8%E6%B3%95-amp-which-%E7%AF%A9%E9%81%B8%E8%B3%87%E6%96%99"><span class="toc-number">2.14.2.</span> <span class="toc-text">指標用法 &amp; which 篩選資料</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List"><span class="toc-number">2.15.</span> <span class="toc-text">List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E9%85%8D%E6%8A%BD%E6%A8%A3"><span class="toc-number">2.16.</span> <span class="toc-text">分配抽樣</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#if-else-%E6%A2%9D%E4%BB%B6%E5%88%A4%E6%96%B7%E5%BC%8F"><span class="toc-number">2.17.</span> <span class="toc-text">if else 條件判斷式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%B4%E5%9C%88"><span class="toc-number">2.18.</span> <span class="toc-text">迴圈</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#for-loop"><span class="toc-number">2.18.1.</span> <span class="toc-text">for-loop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#while-loop"><span class="toc-number">2.18.2.</span> <span class="toc-text">while-loop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#repeat-loop"><span class="toc-number">2.18.3.</span> <span class="toc-text">repeat-loop</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A6%8B%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">常見操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%97%E4%BB%B6%E5%AE%89%E8%A3%9D%EF%BC%86%E8%AE%80%E5%8F%96"><span class="toc-number">3.1.</span> <span class="toc-text">套件安裝＆讀取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%80%E5%8F%96%E8%B3%87%E6%96%99"><span class="toc-number">3.2.</span> <span class="toc-text">讀取資料</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#csv-%E6%AA%94"><span class="toc-number">3.2.1.</span> <span class="toc-text">csv 檔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Excel-%E6%AA%94"><span class="toc-number">3.2.2.</span> <span class="toc-text">Excel 檔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#txt-%E6%96%87%E5%AD%97%E6%AA%94"><span class="toc-number">3.2.3.</span> <span class="toc-text">txt 文字檔</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%B4%E6%AD%B8"><span class="toc-number">3.3.</span> <span class="toc-text">迴歸</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B6%9C%E5%90%88%E7%B7%B4%E7%BF%92"><span class="toc-number">3.4.</span> <span class="toc-text">綜合練習</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94"><span class="toc-number">3.4.1.</span> <span class="toc-text">解答</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A3%9C%E5%85%85"><span class="toc-number">3.5.</span> <span class="toc-text">補充</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B1%E8%AE%8A%E7%95%B0%E6%95%B8-covariance"><span class="toc-number">3.5.1.</span> <span class="toc-text">共變異數 covariance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E9%97%9C%E4%BF%82%E6%95%B8-correlation"><span class="toc-number">3.5.2.</span> <span class="toc-text">相關係數 correlation</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        基礎R語言教學
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-09-12T16:00:00.000Z" itemprop="datePublished">2018-09-13</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/R/" rel="tag">R</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>本講義為本人曾在國立中山大學財務管理系開設 3 小時之程式語言課程，若有錯誤請不吝嗇予以指正！</li>
+<li>本講義可免費使用，若要使用於其他公開用途，請寄信告知，感謝！</li>
+<li>教材下載：<a target="_blank" rel="noopener" href="https://goo.gl/atztW1">https://goo.gl/atztW1</a></li>
+</ul>
+<h2 id="基礎操作"><a href="#基礎操作" class="headerlink" title="基礎操作"></a>基礎操作</h2><h3 id="Assignment"><a href="#Assignment" class="headerlink" title="Assignment"></a>Assignment</h3><ol>
+<li><code>&lt;-</code> （快捷鍵：<code>Alt + -</code>）（<code>Alt + 注音符號ㄦ</code>）</li>
+<li><code>=</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x &lt;- 1</span><br><span class="line">y &lt;- 2</span><br><span class="line">y = 9</span><br></pre></td></tr></table></figure>
+
+<h3 id="註解"><a href="#註解" class="headerlink" title="註解"></a>註解</h3><ul>
+<li>加上<code>#</code>字號，輔助說明程式碼，在程式執行過程中不會被執行</li>
+</ul>
+<h3 id="基礎運算"><a href="#基礎運算" class="headerlink" title="基礎運算"></a>基礎運算</h3><ul>
+<li>加<code>+</code>減<code>-</code>乘<code>*</code>除<code>/</code></li>
+<li>整除<code>%/%</code>，餘數計算<code>%%</code></li>
+<li>平方<code>**``^</code>，平方根<code>sqrt(x)</code></li>
+<li>指數<code>exp(x)</code>，對數<code>log(x)</code></li>
+<li><code>NA</code> : 缺失值</li>
+<li><code>NaN</code> : Not a Number(無意義的數)</li>
+<li><code>Inf</code>: 正無窮大</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(100+200)/(10+5)</span><br><span class="line">(21-8)*(7-3)</span><br><span class="line">10^4;10**4</span><br><span class="line">sqrt(100);100^0.5</span><br><span class="line">exp(2)</span><br><span class="line">log(10)</span><br></pre></td></tr></table></figure>
+
+<h3 id="邏輯運算"><a href="#邏輯運算" class="headerlink" title="邏輯運算"></a>邏輯運算</h3><ul>
+<li><code>&amp;</code>與<code>&amp;&amp;</code> (AND)</li>
+<li><code>|</code> 與 <code>||</code> (OR)</li>
+<li><code>!</code> (NOT)</li>
+<li><code>==</code> (等於)</li>
+<li><code>!=</code> (不等於)</li>
+<li>大於(<code>&gt;</code>)，小於(<code>&lt;</code>)</li>
+<li>大於等於(<code>&gt;=</code>)，小於等於(<code>&lt;=</code>)</li>
+<li><code>%in%</code> (包含於)</li>
+</ul>
+<h3 id="文字字串"><a href="#文字字串" class="headerlink" title="文字字串"></a>文字字串</h3><ul>
+<li>字串可由單引號（<code>&#39;&#39;</code>）或雙引號（<code>&quot;&quot;</code>）構成</li>
+<li><code>paste()</code>：將字串與數字做黏合，字與字之間有間隔</li>
+<li><code>paste0()</code>：將字串與數字做黏合，字與字之間沒有間隔</li>
+<li><code>print()</code>：顯示變數結果</li>
+<li><code>cat()</code>：將字串與數字做黏合，並且顯示出來，可作為進度條使用</li>
+<li>更多內容請詳閱：<a target="_blank" rel="noopener" href="https://www.ptt.cc/bbs/Statistics/M.1277714037.A.2CC.html">https://www.ptt.cc/bbs/Statistics/M.1277714037.A.2CC.html</a></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">paste(&#x27;Allen&#x27;, &quot;Mark&quot;, &quot;Peggy&quot;)  # with blanks</span><br><span class="line">&gt; &quot;Allen Mark Peggy&quot;</span><br><span class="line">paste0(&quot;Allen&quot;, &quot;Mark&quot;, &quot;Peggy&quot;) # without blanks</span><br><span class="line">&gt; &quot;AllenMarkPeggy&quot;</span><br><span class="line"></span><br><span class="line">paste0(&quot;MA_&quot;, 5)</span><br><span class="line">&gt; &quot;MA_5&quot;</span><br><span class="line"></span><br><span class="line"># 可利用for迴圈與paste0()進行欄位命名</span><br><span class="line">for(i in c(5, 10, 20, 60))&#123;</span><br><span class="line">  cat(&quot;目前進行到:&quot;, i, &quot;\t&quot;)</span><br><span class="line">  name &lt;- paste0(&quot;MA_&quot;, i)</span><br><span class="line">  print(name)</span><br><span class="line">&#125;</span><br><span class="line">&gt; 目前進行到: 5 	[1] &quot;MA_5&quot;</span><br><span class="line">  目前進行到: 10 	[1] &quot;MA_10&quot;</span><br><span class="line">  目前進行到: 20 	[1] &quot;MA_20&quot;</span><br><span class="line">  目前進行到: 60 	[1] &quot;MA_60&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="資料類型"><a href="#資料類型" class="headerlink" title="資料類型"></a>資料類型</h3><table>
+<thead>
+<tr>
+<th align="center">資料類型</th>
+<th>辨別函數</th>
+<th>轉換函數</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">character</td>
+<td>is.character()</td>
+<td>as.character()</td>
+</tr>
+<tr>
+<td align="center">complex</td>
+<td>is.complex()</td>
+<td>as.complex()</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td>is.double()</td>
+<td>as.double()</td>
+</tr>
+<tr>
+<td align="center">integer</td>
+<td>is.integer()</td>
+<td>as.integer()</td>
+</tr>
+<tr>
+<td align="center">logical</td>
+<td>is.logical()</td>
+<td>as.logical()</td>
+</tr>
+<tr>
+<td align="center">NA</td>
+<td>is.na()</td>
+<td>as.na()</td>
+</tr>
+<tr>
+<td align="center">numeric</td>
+<td>is.numeric()</td>
+<td>as.numeric()</td>
+</tr>
+</tbody></table>
+<h3 id="資料結構"><a href="#資料結構" class="headerlink" title="資料結構"></a>資料結構</h3><table>
+<thead>
+<tr>
+<th align="center">變數種類</th>
+<th>說明</th>
+<th align="center">使用頻率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">vector</td>
+<td>儲存單一變數的觀察值</td>
+<td align="center">經常使用</td>
+</tr>
+<tr>
+<td align="center">matrix</td>
+<td>用於矩陣運算，矩陣內僅能放入數值</td>
+<td align="center">經常使用</td>
+</tr>
+<tr>
+<td align="center">data-frame</td>
+<td>儲存整個資料檔，內容可包含數值與字串等，像 Excel 那樣的表格</td>
+<td align="center">經常使用</td>
+</tr>
+<tr>
+<td align="center">list</td>
+<td>可儲存多種物件(objects)，向量、矩陣、data-frame、function 等等</td>
+<td align="center">偶爾</td>
+</tr>
+<tr>
+<td align="center">factor</td>
+<td>儲存分類變數(性別、等第…)</td>
+<td align="center">偶爾</td>
+</tr>
+<tr>
+<td align="center">array</td>
+<td>多維矩陣</td>
+<td align="center">很少</td>
+</tr>
+<tr>
+<td align="center">ts</td>
+<td>儲存時間序列資料，通常會使用其他更好的套件</td>
+<td align="center">很少</td>
+</tr>
+</tbody></table>
+<h3 id="向量與向量運算"><a href="#向量與向量運算" class="headerlink" title="向量與向量運算"></a>向量與向量運算</h3><ul>
+<li>經常使用 c( )結合各種小元素，形成一個較大的物件</li>
+<li><code>seq</code>：seq(起始值, 結束值, by &#x3D; 遞增值)</li>
+<li><code>rep</code>: rep(x, times &#x3D; 重複次數, each &#x3D; x 內的元素重複幾次)</li>
+<li><code>length</code>：計算向量中的元素個數</li>
+<li><code>sum</code>：將向量中的所有元素加總</li>
+<li><code>prod</code>：將向量中的所有元素相乘</li>
+<li><code>cumsum</code>：累積相加</li>
+<li><code>cumprod</code>：累積相乘</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">aa=c(1,2,3,4,5);aa=c(1:5);aa=seq(from = 1, to = 5, by = 1)</span><br><span class="line"></span><br><span class="line">bb=c(6:10)</span><br><span class="line"></span><br><span class="line">name=c(&quot;Amy&quot;,&quot;Betty&quot;,&quot;Cindy&quot;,&quot;Dora&quot;,&quot;Emily&quot;,&quot;Frank&quot;,&quot;Grace&quot;,&quot;Hank&quot;,&quot;Ivy&quot;,&quot;John&quot;)</span><br><span class="line"></span><br><span class="line"># What&#x27;s the difference?</span><br><span class="line">&quot;name&quot;</span><br><span class="line">name</span><br><span class="line"></span><br><span class="line">rep(bb, times = 2)</span><br><span class="line">rep(bb, each = 2)</span><br><span class="line">rep(bb, times = 2, each = 3)</span><br><span class="line">length(aa)</span><br><span class="line">sum(aa)</span><br><span class="line">prod(bb)</span><br><span class="line">cumsum(aa)</span><br><span class="line">cumprod(bb)</span><br><span class="line"></span><br><span class="line"># 抽樣</span><br><span class="line">sample(name, size = 3, replace = F, prob = rep(0.1, 10))</span><br><span class="line">sample(name, size = 3, replace = T, prob = c(0.2, 0.05, 0.05, 0.05, 0.05, rep(0.6/5, 5)))</span><br></pre></td></tr></table></figure>
+
+<h3 id="排序函數"><a href="#排序函數" class="headerlink" title="排序函數"></a>排序函數</h3><ul>
+<li><code>sort</code>：數字由小到大排序(也可以由大到小排序)</li>
+<li><code>rank</code>：顯示每個元素在排序之後的「排序順位」</li>
+<li><code>order</code>：先將向量的元素由小到大排序，再將排好之後的元素在原來向量的數字指標回傳</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">c=c(1,10,5,22,6,19,20)</span><br><span class="line">sort(c)</span><br><span class="line">sort(c, decreasing = T)</span><br><span class="line">rank(c)</span><br><span class="line">order(c)</span><br><span class="line">c[order(c)]</span><br><span class="line">c[order(c, decreasing=T)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="向量指標用法-amp-which-篩選條件"><a href="#向量指標用法-amp-which-篩選條件" class="headerlink" title="向量指標用法 &amp; which 篩選條件"></a>向量指標用法 &amp; which 篩選條件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">x &lt;- c(11, 12, 13)</span><br><span class="line"></span><br><span class="line">x[2]</span><br><span class="line">x[4]</span><br><span class="line">x[c(1, 3)]</span><br><span class="line">x[c(3)];x[3]</span><br><span class="line">x[c(1,2,3)];x[1:3]</span><br><span class="line"></span><br><span class="line">which(x &gt; 11)      # 回傳元素在第幾個位置</span><br><span class="line">x[which(x &gt; 11)]   # 取出符合條件的元素</span><br><span class="line"></span><br><span class="line">x &lt;- c(11, 12, 13, NA)</span><br><span class="line"># 取出非NA值</span><br><span class="line">x[which(!(is.na(x)))]; x[which(is.na(x)==F)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="統計運算"><a href="#統計運算" class="headerlink" title="統計運算"></a>統計運算</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">y &lt;- c(1, 12, 100)</span><br><span class="line"></span><br><span class="line">mean(y)</span><br><span class="line">var(y)</span><br><span class="line">sd(y)</span><br><span class="line">max(y)</span><br><span class="line">min(y)</span><br><span class="line">median(y)</span><br></pre></td></tr></table></figure>
+
+<h3 id="客製化函式"><a href="#客製化函式" class="headerlink" title="客製化函式"></a>客製化函式</h3><ul>
+<li>以標準化為例</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">standard &lt;- function(x)&#123;</span><br><span class="line">  z &lt;- (x-mean(x))/sd(x)</span><br><span class="line">  return(z)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">stdd &lt;- standard(aa)</span><br></pre></td></tr></table></figure>
+
+<h3 id="矩陣"><a href="#矩陣" class="headerlink" title="矩陣"></a>矩陣</h3><ul>
+<li><code>matrix(data = NA, nrow = 列數, ncol = 欄數, dimnames = 給定列和欄名稱, byrow = 排列元素是否按列排序,預設為FALSE)</code></li>
+<li><code>t(A)</code>：轉置矩陣</li>
+<li><code>solve(A)</code>：反矩陣</li>
+<li><code>%*%</code>：矩陣相乘</li>
+<li><code>diag(A)</code>：回傳矩陣 A 的對角元素</li>
+<li><code>diag(diag(A))</code>：生成僅有對角元素的對角矩陣</li>
+<li><code>diag(3)</code>：生成單位矩陣</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">A=matrix(1:20,nrow=5,ncol=4)</span><br><span class="line">B=matrix(21:40,nrow=5,byrow=TRUE)</span><br><span class="line">nrow(A)</span><br><span class="line">ncol(B)</span><br><span class="line">A*2</span><br><span class="line">A-B</span><br><span class="line">A*B       #單純相乘，矩陣相乘是要用%*%</span><br><span class="line">A %*% B   #行列不符，無法相乘</span><br><span class="line">t(A)</span><br><span class="line">t(A) %*% B</span><br><span class="line">C=matrix(rnorm(25), nrow=5,ncol=5)         #rnorm是從一個平均數為0，標準差為1的常態分配中隨機選出25個數字</span><br><span class="line">solve(C)  #逆矩陣/反矩陣</span><br></pre></td></tr></table></figure>
+
+<h4 id="rbind-cbind-amp-矩陣排序"><a href="#rbind-cbind-amp-矩陣排序" class="headerlink" title="rbind.cbind &amp; 矩陣排序"></a>rbind.cbind &amp; 矩陣排序</h4><ul>
+<li>matrix 與 data.frame 同樣適用</li>
+<li><code>rbind</code><br><img src="https://i.imgur.com/o1PgDy0.png"></li>
+<li><code>cbind</code><br><img src="https://i.imgur.com/1jZrBBF.png"></li>
+</ul>
+<blockquote>
+<p>重要：合併時請注意資料長度是否相同</p>
+</blockquote>
+<h4 id="矩陣排序"><a href="#矩陣排序" class="headerlink" title="矩陣排序"></a>矩陣排序</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">xx&lt;-c(1, 1, 3:1, 1:4, 3)</span><br><span class="line">yy&lt;-c(9, 9:1)</span><br><span class="line">zz&lt;-c(2, 1:9)</span><br><span class="line">xyz&lt;-rbind(xx,yy,zz)</span><br><span class="line">xyz[, order(xyz[1, ])]      #根據第一列去排序，下面的也會跟著排</span><br><span class="line">xyz[order(xyz[ ,1]), ]      #根據第一欄去排序，後面的也會跟著排</span><br></pre></td></tr></table></figure>
+
+<h3 id="Data-Frame"><a href="#Data-Frame" class="headerlink" title="Data.Frame"></a>Data.Frame</h3><h4 id="基本應用"><a href="#基本應用" class="headerlink" title="基本應用"></a>基本應用</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">d=c(&quot;Amy&quot;,&quot;Betty&quot;,&quot;Cindy&quot;,&quot;Dora&quot;,&quot;Emily&quot;,&quot;Frank&quot;,&quot;Grace&quot;,&quot;Hank&quot;,&quot;Ivy&quot;,&quot;John&quot;)      #文字要加引號</span><br><span class="line">e=c(1:10)</span><br><span class="line"></span><br><span class="line">sheet &lt;- data.frame(d,e)</span><br><span class="line">colnames(sheet) &lt;- c(&quot;name&quot;,&quot;number&quot;)</span><br><span class="line">sheet1 &lt;- data.frame(name = d, number = e)</span><br><span class="line">str(sheet)                                #查詢變數種類</span><br><span class="line">sheet$name &lt;- as.character(sheet$name)    #轉換變數種類</span><br></pre></td></tr></table></figure>
+
+<h4 id="指標用法-amp-which-篩選資料"><a href="#指標用法-amp-which-篩選資料" class="headerlink" title="指標用法 &amp; which 篩選資料"></a>指標用法 &amp; which 篩選資料</h4><ul>
+<li>以鳶尾花資料集(iris dataset)為例<br>_ Sepal.length（花萼長度）<br>_ Sepal.width（花萼寬度）<br>_ Petal.length（花瓣長度）<br>_ Petal.width（花瓣寬度） * Species（物種）：山鳶尾(setosa)、變色鳶尾(versicolor)、維吉尼亞鳶尾(virginica)、<br><img src="https://i.imgur.com/dksPbGI.png"></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">data(&quot;iris&quot;)</span><br><span class="line"></span><br><span class="line">iris[60, ]</span><br><span class="line">iris[, 3]</span><br><span class="line">iris[60, 3]</span><br><span class="line">iris[, &quot;Species&quot;];iris$Species</span><br><span class="line"></span><br><span class="line"># 取出山鳶尾的資料</span><br><span class="line">which(iris$Species　==　&quot;setosa&quot;)</span><br><span class="line">iris[which(iris$Species　==　&quot;setosa&quot;),]</span><br></pre></td></tr></table></figure>
+
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rec &lt;- list(name=&quot;Mark&quot;, age=28, scores=c(81, 79, 96))</span><br><span class="line"></span><br><span class="line">rec$name;rec[[1]]</span><br></pre></td></tr></table></figure>
+
+<h3 id="分配抽樣"><a href="#分配抽樣" class="headerlink" title="分配抽樣"></a>分配抽樣</h3><p><img src="http://blog.cloudera.com/wp-content/uploads/2015/12/distribution.png" alt="Distribution"></p>
+<ul>
+<li>d：機率密度函數</li>
+<li>p：累積機率密度函數</li>
+<li>q：分位數</li>
+<li>r：隨機抽樣</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#從標準常態分配中隨機抽出25個數字</span><br><span class="line">rnorm(25);rnorm(25, mean = 0, sd = 1);rnorm(25, 0, 1)</span><br><span class="line"></span><br><span class="line">runif(25, min = 0, max = 1)        # 均勻分配</span><br><span class="line">rpois(25, 2)                       # poisson分配</span><br><span class="line">rhyper(25, 2, 3, 10)               # 超幾何分配</span><br><span class="line">rexp(25, rate = 10)                # exponential 分配</span><br><span class="line">rgamma(25, shape = 2, rate = 10)   # gamma分配</span><br><span class="line">rbinom(25, size = 10, prob = 0.5)  # 二項分配</span><br><span class="line">rcauchy(25)                        # 柯西分配</span><br><span class="line">rnbinom(25, 50, 0.2)               # 負二項分配</span><br><span class="line"></span><br><span class="line">x &lt;- seq(-4, 4, 0.1)</span><br><span class="line">dnorm(x)                           # pdf</span><br><span class="line">pnorm(x)                           # cdf</span><br><span class="line">qnorm(0.05);qnorm(0.95)</span><br><span class="line"></span><br><span class="line">plot(x, dnorm(x), type=&quot;h&quot;, main=&quot;N(0,1)&quot;)  # pdf, type=&quot;h&quot;(histogram)</span><br><span class="line">plot(x, pnorm(x), type=&quot;l&quot;, main=&quot;N(0,1)&quot;)  # cdf, type=&quot;l&quot;(line)</span><br></pre></td></tr></table></figure>
+
+<h3 id="if-else-條件判斷式"><a href="#if-else-條件判斷式" class="headerlink" title="if else 條件判斷式"></a>if else 條件判斷式</h3><ul>
+<li><code>else</code> 與 <code>else if</code>可視為一種可拆式配件，有需要再用即可</li>
+<li><code>else if</code>的寫法必須在 else 之前</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">A=-4</span><br><span class="line"></span><br><span class="line">if(A&gt;0)&#123;</span><br><span class="line">  B=1</span><br><span class="line">&#125;else if(A==0)&#123;</span><br><span class="line">  B=0</span><br><span class="line">&#125;else&#123;</span><br><span class="line">  B=-1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 寫法1</span><br><span class="line">if(A&gt;0)&#123;</span><br><span class="line">  B=1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 寫法2</span><br><span class="line">if(A&gt;0)&#123;</span><br><span class="line">  B=1</span><br><span class="line">&#125;else&#123;</span><br><span class="line">  B=-1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 寫法3</span><br><span class="line">if(A&gt;0)&#123;</span><br><span class="line">  B=1</span><br><span class="line">&#125;else if(A==0)&#123;</span><br><span class="line">  B=0</span><br><span class="line">&#125;else if(...)&#123;</span><br><span class="line">  B=-1</span><br><span class="line">&#125;else if(...)&#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 寫法4</span><br><span class="line">iris$Species &lt;- ifelse(iris$Species==&quot;setosa&quot;, 1, 0)</span><br></pre></td></tr></table></figure>
+
+<h3 id="迴圈"><a href="#迴圈" class="headerlink" title="迴圈"></a>迴圈</h3><h4 id="for-loop"><a href="#for-loop" class="headerlink" title="for-loop"></a>for-loop</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 計算 1+2+3+4...+100 的值是多少？</span><br><span class="line">j &lt;- 0</span><br><span class="line"></span><br><span class="line">for(i in 1:100)&#123;</span><br><span class="line">  j &lt;- j + i</span><br><span class="line">  print(j)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 99乘法表</span><br><span class="line">table &lt;- matrix(NA, nrow=9, ncol=9)</span><br><span class="line"></span><br><span class="line"># 巢狀迴圈</span><br><span class="line">for(i in 1:9)&#123;</span><br><span class="line">  for(j in 1:9)&#123;</span><br><span class="line">    table[i, j] &lt;- i * j</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="while-loop"><a href="#while-loop" class="headerlink" title="while-loop"></a>while-loop</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 計算 1+2+3+4...+100 的值是多少？</span><br><span class="line">i &lt;- 1</span><br><span class="line">ww &lt;- 0</span><br><span class="line"></span><br><span class="line">while(i &lt; 101)&#123;   # 當符合裡面的條件時，就會一直重複括號內的程式碼，直到不符合為止</span><br><span class="line"></span><br><span class="line">  # 迴圈內重複進行的動作</span><br><span class="line">  ww &lt;- ww + i</span><br><span class="line">  i &lt;- i + 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ww</span><br></pre></td></tr></table></figure>
+
+<h4 id="repeat-loop"><a href="#repeat-loop" class="headerlink" title="repeat-loop"></a>repeat-loop</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 計算 1+2+3+4...+100 的值是多少？</span><br><span class="line">i &lt;- 1</span><br><span class="line">rr &lt;- 0</span><br><span class="line"></span><br><span class="line">repeat&#123;           # repeat和while很像，差別在於條件可以寫在任何地方，並且使用break跳出迴圈</span><br><span class="line"></span><br><span class="line">  if(i &gt; 100) break # 當i比100大時，用break跳出迴圈</span><br><span class="line"></span><br><span class="line">  # 迴圈內重複進行的動作</span><br><span class="line">  rr &lt;- rr + i</span><br><span class="line">  i &lt;- i + 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rr</span><br></pre></td></tr></table></figure>
+
+<h2 id="常見操作"><a href="#常見操作" class="headerlink" title="常見操作"></a>常見操作</h2><h3 id="套件安裝＆讀取"><a href="#套件安裝＆讀取" class="headerlink" title="套件安裝＆讀取"></a>套件安裝＆讀取</h3><ul>
+<li><code>install.packages</code>：安裝套件</li>
+<li><code>library</code>：讀取套件</li>
+<li><code>require</code>：安裝＋讀取套件</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">install.packages(&quot;openxlsx&quot;)</span><br><span class="line">library(openxlsx)</span><br><span class="line">require(openxlsx)</span><br></pre></td></tr></table></figure>
+
+<h3 id="讀取資料"><a href="#讀取資料" class="headerlink" title="讀取資料"></a>讀取資料</h3><h4 id="csv-檔"><a href="#csv-檔" class="headerlink" title="csv 檔"></a>csv 檔</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data &lt;- read.csv(&quot;E:/R程式教學/10檔股票日頻報酬率.csv&quot;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Excel-檔"><a href="#Excel-檔" class="headerlink" title="Excel 檔"></a>Excel 檔</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">close1 &lt;- read.xlsx(&quot;E:\\R程式教學\\10檔股票日頻收盤價.xlsx&quot;,sheet=1)</span><br></pre></td></tr></table></figure>
+
+<h4 id="txt-文字檔"><a href="#txt-文字檔" class="headerlink" title="txt 文字檔"></a>txt 文字檔</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">close2 &lt;- read.table(file = &quot;10檔股票日頻收盤價.txt&quot;, sep = &quot;\t&quot;, head = T, stringsAsFactor = F)</span><br></pre></td></tr></table></figure>
+
+<h3 id="迴歸"><a href="#迴歸" class="headerlink" title="迴歸"></a>迴歸</h3><ul>
+<li><code>lm</code>：lm(formula &#x3D; y~x, data&#x3D;資料集)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#簡單迴歸</span><br><span class="line">reg &lt;- lm(data[,ncol(data)]~data[,2])</span><br><span class="line">summary(reg)</span><br><span class="line"></span><br><span class="line">#多元迴歸</span><br><span class="line">reg2 &lt;- lm(data[,ncol(data)]~data[,2]+data[,3]+data[,4])</span><br><span class="line">summary(reg2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="綜合練習"><a href="#綜合練習" class="headerlink" title="綜合練習"></a>綜合練習</h3><ul>
+<li>對大盤指數報酬率與每一檔股票做迴歸分析，並將迴歸係數儲存成一張表格</li>
+<li>提示：for-loop、if else、lm、cbind 或 rbind</li>
+</ul>
+<p>$$<br>Ret_m&#x3D;a_i+b_{i,m}Ret_i \ , \ i&#x3D;1,2, …, 10<br>$$</p>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">for(i in 1:10)&#123;</span><br><span class="line">  reg &lt;- lm(data[, ncol(data)]~data[,i+1])</span><br><span class="line">  coef &lt;- reg$coefficient       #迴歸的係數</span><br><span class="line"></span><br><span class="line">  if(i==1)&#123;</span><br><span class="line">    coef_table &lt;- data.frame(coef)</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    coef_table &lt;- cbind(coef_table,coef)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">colnames(coef_table)=colnames(data)[c(-1, -ncol(data))]</span><br><span class="line">rownames(coef_table)=c(&quot;intercept&quot;,&quot;slope&quot;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="補充"><a href="#補充" class="headerlink" title="補充"></a>補充</h3><h4 id="共變異數-covariance"><a href="#共變異數-covariance" class="headerlink" title="共變異數 covariance"></a>共變異數 covariance</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cov.data &lt;- cov(data[, 2:12])</span><br></pre></td></tr></table></figure>
+
+<h4 id="相關係數-correlation"><a href="#相關係數-correlation" class="headerlink" title="相關係數 correlation"></a>相關係數 correlation</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">corr.data &lt;- cor(data[, 2:12])</span><br><span class="line"></span><br><span class="line"># 視覺化(correlation heatmap)</span><br><span class="line">library(corrplot)</span><br><span class="line">corrplot.mixed(corr.data, tl.col=&quot;black&quot;, tl.pos = &quot;lt&quot;, tl.cex = par(&quot;cex&quot;),</span><br><span class="line">               number.cex = 1)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/PYu0HYC.png"></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">基礎操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Assignment"><span class="toc-number">2.1.</span> <span class="toc-text">Assignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A8%BB%E8%A7%A3"><span class="toc-number">2.2.</span> <span class="toc-text">註解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A4%8E%E9%81%8B%E7%AE%97"><span class="toc-number">2.3.</span> <span class="toc-text">基礎運算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%8F%E8%BC%AF%E9%81%8B%E7%AE%97"><span class="toc-number">2.4.</span> <span class="toc-text">邏輯運算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E5%AD%97%E5%AD%97%E4%B8%B2"><span class="toc-number">2.5.</span> <span class="toc-text">文字字串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E9%A1%9E%E5%9E%8B"><span class="toc-number">2.6.</span> <span class="toc-text">資料類型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B"><span class="toc-number">2.7.</span> <span class="toc-text">資料結構</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E9%87%8F%E8%88%87%E5%90%91%E9%87%8F%E9%81%8B%E7%AE%97"><span class="toc-number">2.8.</span> <span class="toc-text">向量與向量運算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F%E5%87%BD%E6%95%B8"><span class="toc-number">2.9.</span> <span class="toc-text">排序函數</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E9%87%8F%E6%8C%87%E6%A8%99%E7%94%A8%E6%B3%95-amp-which-%E7%AF%A9%E9%81%B8%E6%A2%9D%E4%BB%B6"><span class="toc-number">2.10.</span> <span class="toc-text">向量指標用法 &amp; which 篩選條件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B5%B1%E8%A8%88%E9%81%8B%E7%AE%97"><span class="toc-number">2.11.</span> <span class="toc-text">統計運算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E8%A3%BD%E5%8C%96%E5%87%BD%E5%BC%8F"><span class="toc-number">2.12.</span> <span class="toc-text">客製化函式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A9%E9%99%A3"><span class="toc-number">2.13.</span> <span class="toc-text">矩陣</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#rbind-cbind-amp-%E7%9F%A9%E9%99%A3%E6%8E%92%E5%BA%8F"><span class="toc-number">2.13.1.</span> <span class="toc-text">rbind.cbind &amp; 矩陣排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9F%A9%E9%99%A3%E6%8E%92%E5%BA%8F"><span class="toc-number">2.13.2.</span> <span class="toc-text">矩陣排序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Frame"><span class="toc-number">2.14.</span> <span class="toc-text">Data.Frame</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%87%89%E7%94%A8"><span class="toc-number">2.14.1.</span> <span class="toc-text">基本應用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E6%A8%99%E7%94%A8%E6%B3%95-amp-which-%E7%AF%A9%E9%81%B8%E8%B3%87%E6%96%99"><span class="toc-number">2.14.2.</span> <span class="toc-text">指標用法 &amp; which 篩選資料</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List"><span class="toc-number">2.15.</span> <span class="toc-text">List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E9%85%8D%E6%8A%BD%E6%A8%A3"><span class="toc-number">2.16.</span> <span class="toc-text">分配抽樣</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#if-else-%E6%A2%9D%E4%BB%B6%E5%88%A4%E6%96%B7%E5%BC%8F"><span class="toc-number">2.17.</span> <span class="toc-text">if else 條件判斷式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%B4%E5%9C%88"><span class="toc-number">2.18.</span> <span class="toc-text">迴圈</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#for-loop"><span class="toc-number">2.18.1.</span> <span class="toc-text">for-loop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#while-loop"><span class="toc-number">2.18.2.</span> <span class="toc-text">while-loop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#repeat-loop"><span class="toc-number">2.18.3.</span> <span class="toc-text">repeat-loop</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A6%8B%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">常見操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%97%E4%BB%B6%E5%AE%89%E8%A3%9D%EF%BC%86%E8%AE%80%E5%8F%96"><span class="toc-number">3.1.</span> <span class="toc-text">套件安裝＆讀取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%80%E5%8F%96%E8%B3%87%E6%96%99"><span class="toc-number">3.2.</span> <span class="toc-text">讀取資料</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#csv-%E6%AA%94"><span class="toc-number">3.2.1.</span> <span class="toc-text">csv 檔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Excel-%E6%AA%94"><span class="toc-number">3.2.2.</span> <span class="toc-text">Excel 檔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#txt-%E6%96%87%E5%AD%97%E6%AA%94"><span class="toc-number">3.2.3.</span> <span class="toc-text">txt 文字檔</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%B4%E6%AD%B8"><span class="toc-number">3.3.</span> <span class="toc-text">迴歸</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B6%9C%E5%90%88%E7%B7%B4%E7%BF%92"><span class="toc-number">3.4.</span> <span class="toc-text">綜合練習</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94"><span class="toc-number">3.4.1.</span> <span class="toc-text">解答</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A3%9C%E5%85%85"><span class="toc-number">3.5.</span> <span class="toc-text">補充</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B1%E8%AE%8A%E7%95%B0%E6%95%B8-covariance"><span class="toc-number">3.5.1.</span> <span class="toc-text">共變異數 covariance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E9%97%9C%E4%BF%82%E6%95%B8-correlation"><span class="toc-number">3.5.2.</span> <span class="toc-text">相關係數 correlation</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&text=基礎R語言教學"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&is_video=false&description=基礎R語言教學"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基礎R語言教學&body=Check out this article: https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&title=基礎R語言教學"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&name=基礎R語言教學&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/09/13/2018-09-13-basic-r/&t=基礎R語言教學"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

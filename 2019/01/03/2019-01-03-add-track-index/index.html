@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="追蹤指數">
+<meta property="og:type" content="article">
+<meta property="og:title" content="指數「追蹤」與「增值」">
+<meta property="og:url" content="https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="追蹤指數">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/hRNR3DQ.png">
+<meta property="og:image" content="https://i.imgur.com/7oMKkOF.png">
+<meta property="og:image" content="https://i.imgur.com/Bmbijkj.png">
+<meta property="og:image" content="https://i.imgur.com/kg33siF.png">
+<meta property="og:image" content="https://i.imgur.com/q9wAKTD.png">
+<meta property="og:image" content="https://i.imgur.com/6sxlPlj.png">
+<meta property="og:image" content="https://i.imgur.com/pEQxfue.png">
+<meta property="og:image" content="https://i.imgur.com/YSk6irc.png">
+<meta property="og:image" content="https://i.imgur.com/PbXs5Xy.png">
+<meta property="og:image" content="https://i.imgur.com/XT7Skmu.png">
+<meta property="og:image" content="https://i.imgur.com/uphjiZ4.png">
+<meta property="og:image" content="https://i.imgur.com/BnFX1hI.png">
+<meta property="og:image" content="https://i.imgur.com/cfDapjy.png">
+<meta property="og:image" content="https://i.imgur.com/hBdkhDJ.png">
+<meta property="article:published_time" content="2019-01-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T11:26:05.917Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="Investment">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/hRNR3DQ.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>指數「追蹤」與「增值」</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2018/12/26/2018-12-26-deep-learning-with-imdb/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&text=指數「追蹤」與「增值」"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&is_video=false&description=指數「追蹤」與「增值」"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=指數「追蹤」與「增值」&body=Check out this article: https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&name=指數「追蹤」與「增值」&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&t=指數「追蹤」與「增值」"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B7%92%E8%AB%96"><span class="toc-number">1.</span> <span class="toc-text">緒論</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%BF%BD%E8%B9%A4%E6%8C%87%E6%95%B8"><span class="toc-number">2.</span> <span class="toc-text">一、追蹤指數</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E6%96%99"><span class="toc-number">2.1.</span> <span class="toc-text">資料</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">研究方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A5-Rolling-%E6%96%B9%E5%BC%8F%E6%8C%91%E9%81%B8%E6%AF%8F%E6%9C%9F%E6%A8%A3%E6%9C%AC"><span class="toc-number">2.2.1.</span> <span class="toc-text">以 Rolling 方式挑選每期樣本</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E8%A4%87%E8%A3%BD%E6%B3%95"><span class="toc-number">2.2.2.</span> <span class="toc-text">完全複製法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%E6%AC%A1%E8%A6%8F%E5%8A%83%E6%B1%82%E8%A7%A3%EF%BC%88Quadratic-programming%EF%BC%8CQP%EF%BC%89"><span class="toc-number">2.2.3.</span> <span class="toc-text">二次規劃求解（Quadratic programming，QP）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B5%90%E6%9E%9C"><span class="toc-number">2.3.</span> <span class="toc-text">結果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E8%A4%87%E8%A3%BD%E6%B3%95-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">完全複製法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%E6%AC%A1%E8%A6%8F%E5%8A%83%E6%B1%82%E8%A7%A3%EF%BC%88Quadratic-Programming%EF%BC%8CQP%EF%BC%89"><span class="toc-number">2.3.2.</span> <span class="toc-text">二次規劃求解（Quadratic Programming，QP）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B5%90%E8%AB%96"><span class="toc-number">2.4.</span> <span class="toc-text">結論</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%A2%9E%E5%80%BC%E6%8C%87%E6%95%B8"><span class="toc-number">3.</span> <span class="toc-text">二、增值指數</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E6%96%99-1"><span class="toc-number">3.1.</span> <span class="toc-text">資料</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95-1"><span class="toc-number">3.2.</span> <span class="toc-text">研究方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A5-Rolling-%E6%96%B9%E5%BC%8F%E6%8C%91%E9%81%B8%E6%AF%8F%E6%9C%9F%E6%A8%A3%E6%9C%AC-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">以 Rolling 方式挑選每期樣本</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%BD%E8%B9%A4%E6%8A%95%E7%B5%84%EF%BC%88%E5%AE%8C%E5%85%A8%E8%A4%87%E8%A3%BD%E6%B3%95%EF%BC%89"><span class="toc-number">3.2.2.</span> <span class="toc-text">追蹤投組（完全複製法）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%80%BC%E6%8A%95%E7%B5%84"><span class="toc-number">3.2.3.</span> <span class="toc-text">增值投組</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E6%AD%A5%E7%B5%90%E6%9E%9C%EF%BC%88%E8%BF%BD%E8%B9%A4%E6%8A%95%E7%B5%84-v-s-%E5%A2%9E%E5%80%BC%E6%8A%95%E7%B5%84%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">初步結果（追蹤投組 v.s. 增值投組）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%A8%E9%9A%AA%E8%AA%BF%E6%95%B4"><span class="toc-number">3.4.</span> <span class="toc-text">風險調整</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%A8%E9%9A%AA%E8%AA%BF%E6%95%B4%E5%BE%8C%E7%B5%90%E6%9E%9C"><span class="toc-number">3.5.</span> <span class="toc-text">風險調整後結果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B8%BE%E6%95%88%E5%88%86%E6%9E%90"><span class="toc-number">3.6.</span> <span class="toc-text">績效分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BE%8C%E7%BA%8C%E6%94%B9%E9%80%B2"><span class="toc-number">3.7.</span> <span class="toc-text">後續改進</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        指數「追蹤」與「增值」
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-01-02T16:00:00.000Z" itemprop="datePublished">2019-01-03</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Investment/">Investment</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Investment/" rel="tag">Investment</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="緒論"><a href="#緒論" class="headerlink" title="緒論"></a>緒論</h3><ul>
+<li>指數追蹤，乃試圖複製與某個指數相同的投資組合，藉由縮小追蹤誤差，企圖賺取相同的報酬，這概念看似簡單但執行上確是不容易，一般來說實務操作都會有交易成本，光是交易成本就讓複製相同的投資組合形成第一道阻礙，然而股票也有上下市與合併收購的問題存在，以及其他大大小小的障礙，這些實務上的問題可能就讓人先打退堂鼓。</li>
+<li>就算都克服這些問題，人們賺錢的慾望永不止息，接著就衍生出增值指數的概念，這概念是我要複製同樣的投資組合也想要賺取比大盤更好的超額報酬，然而除了賺錢外，投資人也應該要有風險意識，面臨大盤下跌趨勢時，必須做好資金管理避免在市場一蹶不振。</li>
+<li>今天的實證會帶大家一步一步從追蹤指數到增值指數，最後則是針對投資組合進行風險控制。</li>
+</ul>
+<h3 id="一、追蹤指數"><a href="#一、追蹤指數" class="headerlink" title="一、追蹤指數"></a>一、追蹤指數</h3><p>追蹤標的：台灣 50 指數<br>目標：以市值前 30、40、50 大股票，追蹤台灣 50 指數並盡可能降低追蹤誤差</p>
+<h4 id="資料"><a href="#資料" class="headerlink" title="資料"></a><strong>資料</strong></h4><p>資料來源：台灣經濟新報 TEJ<br>資料期間：2016&#x2F;01&#x2F;01~2018&#x2F;10&#x2F;31<br>資料內容：台灣上市櫃股票</p>
+<h4 id="研究方法"><a href="#研究方法" class="headerlink" title="研究方法"></a><strong>研究方法</strong></h4><h5 id="以-Rolling-方式挑選每期樣本"><a href="#以-Rolling-方式挑選每期樣本" class="headerlink" title="以 Rolling 方式挑選每期樣本"></a><strong>以 Rolling 方式挑選每期樣本</strong></h5><p>In-Sample：每季調整的前一天<br>Out-of-Sample：每季調整(含)的未來 3 個月</p>
+<h5 id="完全複製法"><a href="#完全複製法" class="headerlink" title="完全複製法"></a><strong>完全複製法</strong></h5><ol>
+<li>濾出台灣 50 指數在期間的成分股變動。</li>
+<li>在每季的最後一天選出市值前 30&#x2F;40&#x2F;50 大的股票。</li>
+<li>以市值加權法計算各股票權重</li>
+<li>計算追蹤誤差</li>
+<li>每次調整重複 1~4</li>
+</ol>
+<h5 id="二次規劃求解（Quadratic-programming，QP）"><a href="#二次規劃求解（Quadratic-programming，QP）" class="headerlink" title="二次規劃求解（Quadratic programming，QP）"></a><strong>二次規劃求解（Quadratic programming，QP）</strong></h5><ol>
+<li>濾出台灣 50 指數在期間的成分股變動。</li>
+<li>在每季的最後一天選出市值前 30&#x2F;40&#x2F;50 大的股票。</li>
+<li>目標式：極小化追蹤誤差(TE)</li>
+<li>限制式：<ul>
+<li>所有股票權重和為 1</li>
+<li>權重介於 0 到 1 之間（不進行槓桿）</li>
+</ul>
+</li>
+<li>由目標式與限制式可計算各成分股之權重</li>
+<li>計算追蹤誤差</li>
+<li>每次調整重複 1~6</li>
+</ol>
+<p><img src="https://i.imgur.com/hRNR3DQ.png"></p>
+<h4 id="結果"><a href="#結果" class="headerlink" title="結果"></a><strong>結果</strong></h4><h5 id="完全複製法-1"><a href="#完全複製法-1" class="headerlink" title="完全複製法"></a><strong>完全複製法</strong></h5><ul>
+<li>追蹤誤差</li>
+</ul>
+<p><img src="https://i.imgur.com/7oMKkOF.png"></p>
+<table>
+<thead>
+<tr>
+<th align="center">季別</th>
+<th align="center">30 檔追蹤誤差(%)</th>
+<th align="center">40 檔追蹤誤差(%)</th>
+<th align="center">50 檔追蹤誤差(%)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">2016Q1</td>
+<td align="center">0.183</td>
+<td align="center">0.193</td>
+<td align="center">0.198</td>
+</tr>
+<tr>
+<td align="center">2016Q2</td>
+<td align="center">0.402</td>
+<td align="center">0.381</td>
+<td align="center">0.379</td>
+</tr>
+<tr>
+<td align="center">2016Q3</td>
+<td align="center">0.237</td>
+<td align="center">0.220</td>
+<td align="center">0.221</td>
+</tr>
+<tr>
+<td align="center">2016Q4</td>
+<td align="center">0.182</td>
+<td align="center">0.168</td>
+<td align="center">0.136</td>
+</tr>
+<tr>
+<td align="center">2017Q1</td>
+<td align="center">0.170</td>
+<td align="center">0.148</td>
+<td align="center">0.132</td>
+</tr>
+<tr>
+<td align="center">2017Q2</td>
+<td align="center">0.333</td>
+<td align="center">0.321</td>
+<td align="center">0.319</td>
+</tr>
+<tr>
+<td align="center">2017Q3</td>
+<td align="center">0.197</td>
+<td align="center">0.190</td>
+<td align="center">0.197</td>
+</tr>
+<tr>
+<td align="center">2017Q4</td>
+<td align="center">0.147</td>
+<td align="center">0.171</td>
+<td align="center">0.193</td>
+</tr>
+<tr>
+<td align="center">2018Q1</td>
+<td align="center">0.232</td>
+<td align="center">0.238</td>
+<td align="center">0.252</td>
+</tr>
+<tr>
+<td align="center">2018Q2</td>
+<td align="center">0.396</td>
+<td align="center">0.366</td>
+<td align="center">0.381</td>
+</tr>
+<tr>
+<td align="center">2018Q3</td>
+<td align="center">0.307</td>
+<td align="center">0.341</td>
+<td align="center">0.361</td>
+</tr>
+<tr>
+<td align="center">2018Q4</td>
+<td align="center">0.345</td>
+<td align="center">0.328</td>
+<td align="center">0.299</td>
+</tr>
+<tr>
+<td align="center"><strong>平均</strong></td>
+<td align="center"><strong>0.261</strong></td>
+<td align="center"><strong>0.255</strong></td>
+<td align="center"><strong>0.256</strong></td>
+</tr>
+</tbody></table>
+<h5 id="二次規劃求解（Quadratic-Programming，QP）"><a href="#二次規劃求解（Quadratic-Programming，QP）" class="headerlink" title="二次規劃求解（Quadratic Programming，QP）"></a><strong>二次規劃求解（Quadratic Programming，QP）</strong></h5><table>
+<thead>
+<tr>
+<th align="center">期間</th>
+<th align="center">30 檔追蹤誤差</th>
+<th align="center">40 檔追蹤誤差</th>
+<th align="center">50 檔追蹤誤差</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">2017&#x2F;11-2018&#x2F;1</td>
+<td align="center">0.90%</td>
+<td align="center">2.00%</td>
+<td align="center">2.10%</td>
+</tr>
+<tr>
+<td align="center">2018&#x2F;2-2018&#x2F;4</td>
+<td align="center">0.80%</td>
+<td align="center">2.10%</td>
+<td align="center">2.40%</td>
+</tr>
+<tr>
+<td align="center">2018&#x2F;5-2018&#x2F;7</td>
+<td align="center">2.40%</td>
+<td align="center">2.90%</td>
+<td align="center">3.30%</td>
+</tr>
+<tr>
+<td align="center">2018&#x2F;8-2018&#x2F;10</td>
+<td align="center">2.40%</td>
+<td align="center">3.80%</td>
+<td align="center">4.00%</td>
+</tr>
+<tr>
+<td align="center"><strong>平均</strong></td>
+<td align="center"><strong>1.60%</strong></td>
+<td align="center"><strong>2.80%</strong></td>
+<td align="center"><strong>2.90%</strong></td>
+</tr>
+</tbody></table>
+<h4 id="結論"><a href="#結論" class="headerlink" title="結論"></a><strong>結論</strong></h4><p>由兩表可知，二次規劃求解的追蹤誤差並非最小，完全複製法相較下追蹤誤差降低許多，而且也不需要過度複雜的數學運算，然而完全複製法也並非完全複製台灣 50，這是因為股票在除權息調整時會將追蹤誤差拉大，另外也需要考慮股票上下市或是合併的問題，以 2018Q3 為例，日月光(2311)改名為日月光控股(3711)，原來在台灣 50 的日月光和矽品合併，空出的名額由國巨取代，在實證過程中由於資料取得繁瑣並沒有考慮這些問題，這也是為何完全複製法沒辦法完全複製指數其中的原因。</p>
+<h3 id="二、增值指數"><a href="#二、增值指數" class="headerlink" title="二、增值指數"></a>二、增值指數</h3><p>追蹤標的：台灣加權指數<br>目標：以市值前 250、300、350 大股票，除了追蹤台灣加權指數並將追蹤誤差限制在 4%以下，此外增值追蹤投組使得主動報酬 (alpha)穩定在 1%</p>
+<h4 id="資料-1"><a href="#資料-1" class="headerlink" title="資料"></a><strong>資料</strong></h4><p>資料來源：台灣經濟新報 TEJ<br>資料期間：2014&#x2F;12&#x2F;01~2018&#x2F;10&#x2F;31<br>資料內容：台灣上市櫃股票調整後股價</p>
+<blockquote>
+<p>因使用調整後股價，在指數選取方面採用 Y9997 報酬指數</p>
+<blockquote>
+<p><strong>報酬指數</strong>：除了在採樣股票異動或增資除權時進行調整之外，當公司發放現金股利時，也調整讓指數不會因股票除息而下跌，因此，會產生類似加回現金股利的作用，使得利用該指數所計算之投資報酬率中，亦包含現金股利之報酬。</p>
+</blockquote>
+</blockquote>
+<h4 id="研究方法-1"><a href="#研究方法-1" class="headerlink" title="研究方法"></a><strong>研究方法</strong></h4><h5 id="以-Rolling-方式挑選每期樣本-1"><a href="#以-Rolling-方式挑選每期樣本-1" class="headerlink" title="以 Rolling 方式挑選每期樣本"></a><strong>以 Rolling 方式挑選每期樣本</strong></h5><p>In-Sample：每季調整的前一天<br>Out-of-Sample：每季調整(含)的未來 3 個月</p>
+<h5 id="追蹤投組（完全複製法）"><a href="#追蹤投組（完全複製法）" class="headerlink" title="追蹤投組（完全複製法）"></a><strong>追蹤投組（完全複製法）</strong></h5><ol>
+<li>濾出台灣加權指數在 In-Sample 期間的成分股。</li>
+<li>在每季的最後一天選出市值前 250&#x2F;300&#x2F;350 大的股票。</li>
+<li>以市值加權法計算各股票權重。</li>
+<li>計算追蹤誤差。</li>
+<li>每次調整重複 1~4。</li>
+</ol>
+<h5 id="增值投組"><a href="#增值投組" class="headerlink" title="增值投組"></a><strong>增值投組</strong></h5><p><img src="https://i.imgur.com/Bmbijkj.png"></p>
+<ol>
+<li>濾出台灣加權指數在 In-Sample 期間的成分股。</li>
+<li>在每季的最後一天選出 <strong>累積市值 80%</strong> 的股票。</li>
+<li>將 <strong>累積市值 80%</strong> 的股票採完全複製法依市值加權計算權重。</li>
+<li>剩餘的 20%權重則<strong>以 ROE 挑選</strong>股票補足。</li>
+<li>ROE 由大至小依比例計算權重</li>
+<li>每次調整重複 1~5。</li>
+</ol>
+<p><strong>注意：</strong></p>
+<ol>
+<li>增值投組的因子挑選過程複雜，需要進一步針對各個因子評分，在此僅以 ROE 為例。</li>
+<li>本次增值投組並無考慮減碼或放空。</li>
+</ol>
+<h4 id="初步結果（追蹤投組-v-s-增值投組）"><a href="#初步結果（追蹤投組-v-s-增值投組）" class="headerlink" title="初步結果（追蹤投組 v.s. 增值投組）"></a><strong>初步結果（追蹤投組 v.s. 增值投組）</strong></h4><p>由以下 3 個表格可發現，以 ROE 增值後的投組，雖然追蹤誤差都還在 4%的標準內，但主動報酬並沒有特別出色，在 2018Q3 可發現主動報酬皆超過 -10%以上，基本上將之前的正報酬都吃掉了，為避免投組在市場劇烈波動時承受過多的風險，因此接下來將針對<strong>增值投組</strong>進行<strong>風險調整</strong>。</p>
+<ul>
+<li>250 檔<br><img src="https://i.imgur.com/kg33siF.png"></li>
+<li>300 檔<br><img src="https://i.imgur.com/q9wAKTD.png"></li>
+<li>350 檔<br><img src="https://i.imgur.com/6sxlPlj.png"></li>
+</ul>
+<h4 id="風險調整"><a href="#風險調整" class="headerlink" title="風險調整"></a><strong>風險調整</strong></h4><ul>
+<li><p>接著我們針對增值投組進行風險擇時調整，按過去半年的報酬率預測下個月的波動度，並將目標波動度設為 12%，希望在熊市時減少投組的水位，在牛市時槓桿投資。<br><img src="https://i.imgur.com/pEQxfue.png"><br><img src="https://i.imgur.com/YSk6irc.png"></p>
+</li>
+<li><p>當預期波動度(24%)大於目標波動度(12%)，此時算出來的係數項為 0.5，代表預期未來的波動較高，因此針對原本的增值投組進行減碼投資。</p>
+</li>
+<li><p>當預期波動度(6%)大於目標波動度(12%)，此時算出來的係數項為 2，代表預期未來的波動較低，因此針對原本的增值投組進行槓桿投資。</p>
+</li>
+</ul>
+<blockquote>
+<p>上述公式參考 <a target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S0304405X14002566?via=ihub">Pedro Barroso, Pedro Santa-Clara(2015)</a></p>
+</blockquote>
+<h4 id="風險調整後結果"><a href="#風險調整後結果" class="headerlink" title="風險調整後結果"></a><strong>風險調整後結果</strong></h4><p>風險調整後不僅將追蹤誤差拉高了(平均而言仍在 4%內)，主動報酬也有明顯的提升，而在 2018Q3 在風險調整後主動報酬也有些微提升，但仍受制於整體市場大跌的因素，此方式盡可能在大跌時減少持有水位。但整體而言針對投組進行風險調整是有效提升績效的，接著針對各個投組與大盤進行績效分析。</p>
+<ul>
+<li><p>250 檔<br><img src="https://i.imgur.com/PbXs5Xy.png"></p>
+</li>
+<li><p>300 檔<br><img src="https://i.imgur.com/XT7Skmu.png"></p>
+</li>
+<li><p>350 檔<br><img src="https://i.imgur.com/uphjiZ4.png"></p>
+</li>
+</ul>
+<h4 id="績效分析"><a href="#績效分析" class="headerlink" title="績效分析"></a><strong>績效分析</strong></h4><p>在此次實證過程中，250 檔的主動報酬最多，績效也是最好的，風險調整後的年化報酬 7.7%，相較於大盤僅有 6.5%，夏普比率高達 0.621，相較於大盤僅有 0.537。不論是 250&#x2F;300&#x2F;350 檔，標準差與最大回撤率在進行風險調整後皆有下降，年化報酬平均提升 0.5%~1.2%，以 250 檔來看，夏普比率提升最明顯。</p>
+<h4 id="後續改進"><a href="#後續改進" class="headerlink" title="後續改進"></a><strong>後續改進</strong></h4><ol>
+<li>此次實證僅以 ROE 因子作為例子，實際上必須針對各個因子進行評分，因子挑選過程繁瑣，需考慮因子間的相關性、顯著性等等，甚至透過降維的方式萃取因子。</li>
+<li>本次實證並無考慮減碼與放空，後續可考慮以梯形法的方式，針對因子表現較好的股票進行加碼，因子表現較差的股票則進行減碼（放空），如此一來可獲得更多的主動報酬。</li>
+<li>修正波動度的預測期間，可考慮將移動窗格的時間縮短為 90 天或是 60 天，長天期的移動窗格容易有滯後的情形，因此在預測波動度時會產生偏誤。</li>
+<li>可考慮加入機器學習或是深度學習的模型進行股票篩選，既然因子挑選的過程繁瑣，何不將這些因子當成因子放入模型中，讓電腦自動學習，加碼未來會上漲的股票，放空未來會下跌的股票，我想這也是個不錯的嘗試。</li>
+</ol>
+<ul>
+<li><p>250 檔<br><img src="https://i.imgur.com/BnFX1hI.png"></p>
+</li>
+<li><p>300 檔<br><img src="https://i.imgur.com/cfDapjy.png"></p>
+</li>
+<li><p>350 檔<br><img src="https://i.imgur.com/hBdkhDJ.png"></p>
+</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S0304405X14002566?via=ihub">Barroso, P., Santa-Clara, P., 2015. Momentum has its moments. Journal of Financial Economics, 116(1), 111-120.</a></li>
+</ol>
+<hr>
+<p><strong>溫馨提醒：</strong></p>
+<ol>
+<li>以上實證皆為本人使用 R&#x2F;Python 撰寫，請勿抄襲。</li>
+<li>投資有賺有賠，本次實作僅為研究使用，投資人投資前應審慎評估，本人不負任何投資賠償責任。</li>
+</ol>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B7%92%E8%AB%96"><span class="toc-number">1.</span> <span class="toc-text">緒論</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%BF%BD%E8%B9%A4%E6%8C%87%E6%95%B8"><span class="toc-number">2.</span> <span class="toc-text">一、追蹤指數</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E6%96%99"><span class="toc-number">2.1.</span> <span class="toc-text">資料</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">研究方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A5-Rolling-%E6%96%B9%E5%BC%8F%E6%8C%91%E9%81%B8%E6%AF%8F%E6%9C%9F%E6%A8%A3%E6%9C%AC"><span class="toc-number">2.2.1.</span> <span class="toc-text">以 Rolling 方式挑選每期樣本</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E8%A4%87%E8%A3%BD%E6%B3%95"><span class="toc-number">2.2.2.</span> <span class="toc-text">完全複製法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%E6%AC%A1%E8%A6%8F%E5%8A%83%E6%B1%82%E8%A7%A3%EF%BC%88Quadratic-programming%EF%BC%8CQP%EF%BC%89"><span class="toc-number">2.2.3.</span> <span class="toc-text">二次規劃求解（Quadratic programming，QP）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B5%90%E6%9E%9C"><span class="toc-number">2.3.</span> <span class="toc-text">結果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E8%A4%87%E8%A3%BD%E6%B3%95-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">完全複製法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%E6%AC%A1%E8%A6%8F%E5%8A%83%E6%B1%82%E8%A7%A3%EF%BC%88Quadratic-Programming%EF%BC%8CQP%EF%BC%89"><span class="toc-number">2.3.2.</span> <span class="toc-text">二次規劃求解（Quadratic Programming，QP）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B5%90%E8%AB%96"><span class="toc-number">2.4.</span> <span class="toc-text">結論</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%A2%9E%E5%80%BC%E6%8C%87%E6%95%B8"><span class="toc-number">3.</span> <span class="toc-text">二、增值指數</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E6%96%99-1"><span class="toc-number">3.1.</span> <span class="toc-text">資料</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95-1"><span class="toc-number">3.2.</span> <span class="toc-text">研究方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A5-Rolling-%E6%96%B9%E5%BC%8F%E6%8C%91%E9%81%B8%E6%AF%8F%E6%9C%9F%E6%A8%A3%E6%9C%AC-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">以 Rolling 方式挑選每期樣本</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%BD%E8%B9%A4%E6%8A%95%E7%B5%84%EF%BC%88%E5%AE%8C%E5%85%A8%E8%A4%87%E8%A3%BD%E6%B3%95%EF%BC%89"><span class="toc-number">3.2.2.</span> <span class="toc-text">追蹤投組（完全複製法）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%80%BC%E6%8A%95%E7%B5%84"><span class="toc-number">3.2.3.</span> <span class="toc-text">增值投組</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E6%AD%A5%E7%B5%90%E6%9E%9C%EF%BC%88%E8%BF%BD%E8%B9%A4%E6%8A%95%E7%B5%84-v-s-%E5%A2%9E%E5%80%BC%E6%8A%95%E7%B5%84%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">初步結果（追蹤投組 v.s. 增值投組）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%A8%E9%9A%AA%E8%AA%BF%E6%95%B4"><span class="toc-number">3.4.</span> <span class="toc-text">風險調整</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%A8%E9%9A%AA%E8%AA%BF%E6%95%B4%E5%BE%8C%E7%B5%90%E6%9E%9C"><span class="toc-number">3.5.</span> <span class="toc-text">風險調整後結果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B8%BE%E6%95%88%E5%88%86%E6%9E%90"><span class="toc-number">3.6.</span> <span class="toc-text">績效分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BE%8C%E7%BA%8C%E6%94%B9%E9%80%B2"><span class="toc-number">3.7.</span> <span class="toc-text">後續改進</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&text=指數「追蹤」與「增值」"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&is_video=false&description=指數「追蹤」與「增值」"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=指數「追蹤」與「增值」&body=Check out this article: https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&title=指數「追蹤」與「增值」"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&name=指數「追蹤」與「增值」&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2019/01/03/2019-01-03-add-track-index/&t=指數「追蹤」與「增值」"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

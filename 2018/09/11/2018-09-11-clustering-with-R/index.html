@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="R語言集群分析教學">
+<meta property="og:type" content="article">
+<meta property="og:title" content="集群分析">
+<meta property="og:url" content="https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="R語言集群分析教學">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://allanhsu83117.github.io/images/formula/euclidean1.png">
+<meta property="og:image" content="https://allanhsu83117.github.io/images/formula/euclidean2.png">
+<meta property="og:image" content="https://allanhsu83117.github.io/images/formula/manhattan1.png">
+<meta property="og:image" content="https://allanhsu83117.github.io/images/formula/manhattan2.png">
+<meta property="og:image" content="https://i.imgur.com/MA0Np0Q.png">
+<meta property="og:image" content="https://i.imgur.com/dksPbGI.png">
+<meta property="og:image" content="https://i.imgur.com/Ee0WJk4.png">
+<meta property="og:image" content="https://i.imgur.com/PLiEalJ.png">
+<meta property="og:image" content="https://i.imgur.com/OWPZWgc.png">
+<meta property="og:image" content="https://i.imgur.com/MBLDIBt.png">
+<meta property="og:image" content="https://i.imgur.com/2KEhCND.png">
+<meta property="og:image" content="https://i.imgur.com/HR4clB8.png">
+<meta property="og:image" content="https://allanhsu83117.github.io/images/formula/silhouette_coefficient.png">
+<meta property="og:image" content="https://i.imgur.com/3o4HDt2.png">
+<meta property="og:image" content="https://i.imgur.com/uJ91f4L.png">
+<meta property="og:image" content="https://i.imgur.com/kKFcQWj.png">
+<meta property="og:image" content="https://i.imgur.com/8ClQpRt.png">
+<meta property="og:image" content="https://allanhsu83117.github.io/images/formula/gap.png">
+<meta property="og:image" content="https://i.imgur.com/oN7dADc.png">
+<meta property="og:image" content="https://i.imgur.com/bmWSvZ2.png">
+<meta property="og:image" content="https://i.imgur.com/RpUJMJz.png">
+<meta property="og:image" content="https://i.imgur.com/xEK5ylK.png">
+<meta property="og:image" content="https://i.imgur.com/Jrenb3b.png">
+<meta property="og:image" content="https://i.imgur.com/EWt2bkv.png">
+<meta property="og:image" content="https://i.imgur.com/1BgObls.png">
+<meta property="og:image" content="https://i.imgur.com/klqgvOF.png">
+<meta property="og:image" content="https://i.imgur.com/vUx8t7u.png">
+<meta property="og:image" content="https://i.imgur.com/jfgbTXk.png">
+<meta property="article:published_time" content="2018-09-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T11:24:34.929Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="R">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://allanhsu83117.github.io/images/formula/euclidean1.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>集群分析</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2018/09/13/2018-09-13-basic-r/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2018/01/22/2018-01-22-gradient-descent/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&text=集群分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&is_video=false&description=集群分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=集群分析&body=Check out this article: https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&name=集群分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&t=集群分析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E8%88%AC%E9%9B%86%E7%BE%A4%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">一般集群分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A6%81%E4%BB%B6%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">要件：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%A7%E8%87%B4%E5%8F%AF%E5%88%86%E7%82%BA%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">大致可分為：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Distance"><span class="toc-number">2.</span> <span class="toc-text">Distance</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%90%E5%BC%8F%E8%B7%9D%E9%9B%A2"><span class="toc-number">2.1.</span> <span class="toc-text">歐式距離</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%BC%E5%93%88%E9%A0%93%E8%B7%9D%E9%9B%A2%EF%BC%88%E7%B5%95%E5%B0%8D%E8%AA%A4%E5%B7%AE%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">曼哈頓距離（絕對誤差）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E5%89%B2%E5%BC%8F%E5%88%86%E7%BE%A4%EF%BC%88Partitional-Clustering%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">切割式分群（Partitional Clustering）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#K-means"><span class="toc-number">3.1.</span> <span class="toc-text">K-means</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">3.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-number">3.1.2.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E9%B3%B6%E5%B0%BE%E8%8A%B1%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%89"><span class="toc-number">3.1.3.</span> <span class="toc-text">範例（鳶尾花資料集）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#K-medoid-x2F-PAM%EF%BC%88Patition-around-medoid%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">K-medoid &#x2F; PAM（Patition around medoid）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E9%B3%B6%E5%B0%BE%E8%8A%B1%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%89-1"><span class="toc-number">3.2.3.</span> <span class="toc-text">範例（鳶尾花資料集）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8E%E5%B1%A4%E5%BC%8F%E5%88%86%E7%BE%A4%EF%BC%88Hierarchical-Clustering%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">階層式分群（Hierarchical Clustering）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">4.0.1.</span> <span class="toc-text">原理</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E5%BC%8F-Agglomerative%EF%BC%88AGNES%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">聚合式 Agglomerative（AGNES）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="toc-number">4.1.1.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E9%B3%B6%E5%B0%BE%E8%8A%B1%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%89-2"><span class="toc-number">4.1.2.</span> <span class="toc-text">範例（鳶尾花資料集）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E5%BC%8F-Divisive%EF%BC%88DIANA%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">分割式 Divisive（DIANA）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-3"><span class="toc-number">4.2.1.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B"><span class="toc-number">4.2.2.</span> <span class="toc-text">範例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%88%86%E7%BE%A4%E6%95%B8"><span class="toc-number">5.</span> <span class="toc-text">最佳分群數</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Elbow-method"><span class="toc-number">5.1.</span> <span class="toc-text">Elbow method</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#k-means"><span class="toc-number">5.1.1.</span> <span class="toc-text">k-means</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#k-medoid"><span class="toc-number">5.1.2.</span> <span class="toc-text">k-medoid</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Hierarchical-clustering"><span class="toc-number">5.1.3.</span> <span class="toc-text">Hierarchical clustering</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Average-Silhouette-method"><span class="toc-number">5.2.</span> <span class="toc-text">Average Silhouette method</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number">5.2.1.</span> <span class="toc-text">方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#k-means-1"><span class="toc-number">5.2.2.</span> <span class="toc-text">k-means</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#k-medoid-1"><span class="toc-number">5.2.3.</span> <span class="toc-text">k-medoid</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Hierarchical-clustering-1"><span class="toc-number">5.2.4.</span> <span class="toc-text">Hierarchical clustering</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gap-statistic-method"><span class="toc-number">5.3.</span> <span class="toc-text">Gap statistic method</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#k-means-2"><span class="toc-number">5.3.1.</span> <span class="toc-text">k-means</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#k-medoid-2"><span class="toc-number">5.3.2.</span> <span class="toc-text">k-medoid</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Hierarchical-clustering-2"><span class="toc-number">5.3.3.</span> <span class="toc-text">Hierarchical clustering</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%82%E9%96%93%E5%BA%8F%E5%88%97%E9%9B%86%E7%BE%A4%E5%88%86%E6%9E%90"><span class="toc-number">6.</span> <span class="toc-text">時間序列集群分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A6%8B%E9%9B%86%E7%BE%A4%E6%96%B9%E6%B3%95"><span class="toc-number">6.1.</span> <span class="toc-text">常見集群方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A6%81%E4%BB%B6"><span class="toc-number">6.2.</span> <span class="toc-text">要件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%90%AD%E9%85%8D%E7%94%A8%E6%B3%95"><span class="toc-number">6.3.</span> <span class="toc-text">搭配用法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E5%89%B2%E5%BC%8F%E5%88%86%E7%BE%A4%EF%BC%88Partitional-Clustering%EF%BC%89-1"><span class="toc-number">7.</span> <span class="toc-text">切割式分群（Partitional Clustering）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PAM"><span class="toc-number">7.1.</span> <span class="toc-text">PAM</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-amp-%E6%B5%81%E7%A8%8B"><span class="toc-number">7.1.1.</span> <span class="toc-text">原理 &amp; 流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E4%BB%A5%E5%8F%B0%E7%81%A3%E5%B8%82%E5%80%BC%E5%89%8D-50-%E5%A4%A7%E8%82%A1%E7%A5%A8%E7%82%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">7.1.2.</span> <span class="toc-text">範例（以台灣市值前 50 大股票為例）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DBA-DTW"><span class="toc-number">7.2.</span> <span class="toc-text">DBA+DTW</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-amp-%E6%B5%81%E7%A8%8B-1"><span class="toc-number">7.2.1.</span> <span class="toc-text">原理 &amp; 流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E4%BB%A5%E5%8F%B0%E7%81%A3%E5%B8%82%E5%80%BC%E5%89%8D-50-%E5%A4%A7%E8%82%A1%E7%A5%A8%E7%82%BA%E4%BE%8B%EF%BC%89-1"><span class="toc-number">7.2.2.</span> <span class="toc-text">範例（以台灣市值前 50 大股票為例）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8E%E5%B1%A4%E5%BC%8F%E5%88%86%E7%BE%A4%EF%BC%88Hierarchical-Clustering%EF%BC%89-1"><span class="toc-number">8.</span> <span class="toc-text">階層式分群（Hierarchical Clustering）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-amp-%E6%B5%81%E7%A8%8B-2"><span class="toc-number">8.0.1.</span> <span class="toc-text">原理 &amp; 流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E4%BB%A5%E5%8F%B0%E7%81%A3%E5%B8%82%E5%80%BC%E5%89%8D-50-%E5%A4%A7%E8%82%A1%E7%A5%A8%E7%82%BA%E4%BE%8B%EF%BC%89-2"><span class="toc-number">8.0.2.</span> <span class="toc-text">範例（以台灣市值前 50 大股票為例）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%88%86%E7%BE%A4%E6%95%B8%EF%BC%88CVI%EF%BC%8CCluster-validity-indices%EF%BC%89"><span class="toc-number">9.</span> <span class="toc-text">最佳分群數（CVI，Cluster validity indices）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PAM-1"><span class="toc-number">9.1.</span> <span class="toc-text">PAM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DBA-DTW-1"><span class="toc-number">9.2.</span> <span class="toc-text">DBA+DTW</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hierarchical-clustering-3"><span class="toc-number">9.3.</span> <span class="toc-text">Hierarchical clustering</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-number">10.</span> <span class="toc-text">參考資料</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number"></span> <span class="toc-text">Reference</span></a>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        集群分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-09-10T16:00:00.000Z" itemprop="datePublished">2018-09-11</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/R/" rel="tag">R</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="一般集群分析"><a href="#一般集群分析" class="headerlink" title="一般集群分析"></a>一般集群分析</h3><h4 id="要件："><a href="#要件：" class="headerlink" title="要件："></a>要件：</h4><ul>
+<li><strong>Distance</strong>：計算點與點以及群與群之間的相似程度，常見的演算法有：<ul>
+<li>歐式距離</li>
+<li>曼哈頓距離</li>
+</ul>
+</li>
+<li><strong>Centroid</strong>：決定每群中心點的方法</li>
+</ul>
+<h4 id="大致可分為："><a href="#大致可分為：" class="headerlink" title="大致可分為："></a>大致可分為：</h4><ul>
+<li><strong>階層式分群（Hierarchical Clustering）</strong><ul>
+<li>聚合式 Agglomerative（AGNES）</li>
+<li>分割式 Divisive（DIANA）</li>
+<li>其他：CURE、BIRCH、CHAMELEON</li>
+</ul>
+</li>
+<li><strong>切割式分群（Partitional Clustering）</strong><ul>
+<li>K-means</li>
+<li>K-medoid／PAM（Patition around medoid）</li>
+</ul>
+</li>
+</ul>
+<h3 id="Distance"><a href="#Distance" class="headerlink" title="Distance"></a>Distance</h3><h4 id="歐式距離"><a href="#歐式距離" class="headerlink" title="歐式距離"></a>歐式距離</h4><p>在 2 維空間(平面)中，點 x&#x3D;(x1, x2)與點 y&#x3D;(y1, y2)之間的歐式距離為<br><img src="/images/formula/euclidean1.png"><br>一般通式寫成：<br><img src="/images/formula/euclidean2.png"></p>
+<h4 id="曼哈頓距離（絕對誤差）"><a href="#曼哈頓距離（絕對誤差）" class="headerlink" title="曼哈頓距離（絕對誤差）"></a>曼哈頓距離（絕對誤差）</h4><p>在 2 維空間(平面)中，點 x&#x3D;(x1, x2)與點 y&#x3D;(y1, y2)之間的曼哈頓距離為<br><img src="/images/formula/manhattan1.png"><br>一般通式寫成：<br><img src="/images/formula/manhattan2.png"></p>
+<h3 id="切割式分群（Partitional-Clustering）"><a href="#切割式分群（Partitional-Clustering）" class="headerlink" title="切割式分群（Partitional Clustering）"></a>切割式分群（Partitional Clustering）</h3><h4 id="K-means"><a href="#K-means" class="headerlink" title="K-means"></a>K-means</h4><h5 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h5><p>給定一個資料集，按照樣本之間的距離大小，將資料集切割成 k 群，讓群內的點盡量緊密地連在一起（越小越好），而群與群之間的距離越大越好</p>
+<h5 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h5><ol>
+<li>給定群數 k，隨機產生 k 個群聚中心點（資料空間內任意值）</li>
+<li>計算每個資料點與每個中心點的距離</li>
+<li>資料點與其最相近的中心點會被劃分成一群，形成 k 群</li>
+<li>利用目前得到的分群重新計算中心點（平均每個點的值）</li>
+<li>重複 2~4 的步驟直到收斂（達到最大迭代次數 or 群中心點每次更換的變動距離最小）<br><img src="https://i.imgur.com/MA0Np0Q.png"><blockquote>
+<p>圖片來源：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/skyEva/p/5630820.html">http://www.cnblogs.com/skyEva/p/5630820.html</a></p>
+</blockquote>
+</li>
+</ol>
+<h5 id="範例（鳶尾花資料集）"><a href="#範例（鳶尾花資料集）" class="headerlink" title="範例（鳶尾花資料集）"></a>範例（鳶尾花資料集）</h5><ul>
+<li><p>鳶尾花資料集(iris dataset)</p>
+<ul>
+<li>Sepal.length（花萼長度）</li>
+<li>Sepal.width（花萼寬度）</li>
+<li>Petal.length（花瓣長度）</li>
+<li>Petal.width（花瓣寬度）</li>
+<li>Species（物種）：山鳶尾(setosa)、變色鳶尾(versicolor)、維吉尼亞鳶尾(virginica)</li>
+</ul>
+</li>
+<li><p>套件讀取</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">library(factoextra)</span><br><span class="line">library(cluster)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>資料處理</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 讀取資料</span><br><span class="line">data(&quot;iris&quot;)</span><br><span class="line"># 將特徵標準化以利分群</span><br><span class="line">iris.x &lt;- apply(iris[, -5], 2, function(x)&#123;(x-mean(x))/sd(x)&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>k-means</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># k-means</span><br><span class="line">km.iris &lt;- kmeans(iris.x, centers = 3)</span><br><span class="line"># 分群視覺化</span><br><span class="line">fviz_cluster(km.iris, data = iris.x, geom = &quot;point&quot;,</span><br><span class="line">             stand = T, ellipse.type = &quot;norm&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/dksPbGI.png"></p>
+<h4 id="K-medoid-x2F-PAM（Patition-around-medoid）"><a href="#K-medoid-x2F-PAM（Patition-around-medoid）" class="headerlink" title="K-medoid &#x2F; PAM（Patition around medoid）"></a>K-medoid &#x2F; PAM（Patition around medoid）</h4><h5 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h5><p>與 K-means 的做法類似，差別在於&#x3D;&#x3D;k-means&#x3D;&#x3D;所選定的中心點為群內所有資料點之<strong>平均值</strong>，而&#x3D;&#x3D;k-medoid&#x3D;&#x3D;則是以群內某個<strong>樣本點</strong>作為中心點</p>
+<h5 id="流程-1"><a href="#流程-1" class="headerlink" title="流程"></a>流程</h5><ol>
+<li>給定群數 k，隨機選取 k 個群聚中心點（必須是樣本點）</li>
+<li>計算每個資料點到每個中心點的距離</li>
+<li>資料點與其最相近的中心點會被劃分成一群，形成 k 群</li>
+<li>利用目前得到的分群重新計算中心點<ol>
+<li>計算群內所有樣本點至某一個樣本點的曼哈頓距離和（絕對誤差）</li>
+<li>選出使群內絕對誤差距離最小之樣本點作為新的中心點</li>
+</ol>
+</li>
+<li>重複 2~4 的步驟直到收斂（達到最大迭代次數 or 群中心點每次更換的變動距離最小）</li>
+</ol>
+<h5 id="範例（鳶尾花資料集）-1"><a href="#範例（鳶尾花資料集）-1" class="headerlink" title="範例（鳶尾花資料集）"></a>範例（鳶尾花資料集）</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># K-medoid</span><br><span class="line">pam.iris &lt;- pam(iris.x, k = 3)</span><br><span class="line"></span><br><span class="line"># 分群視覺化</span><br><span class="line">fviz_cluster(pam.iris, stand = T, geom = &quot;point&quot;,</span><br><span class="line">             ellipse.type = &quot;norm&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/Ee0WJk4.png"></p>
+<h3 id="階層式分群（Hierarchical-Clustering）"><a href="#階層式分群（Hierarchical-Clustering）" class="headerlink" title="階層式分群（Hierarchical Clustering）"></a>階層式分群（Hierarchical Clustering）</h3><h5 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h5><p>透過一種階層架構的方式，將資料層層聚合或分裂，以產生樹狀結構<br>常見的方式有：</p>
+<ul>
+<li><p>聚合（AGNES）：由樹的底層開始，由下而上將資料或群集合併</p>
+</li>
+<li><p>分裂（DIANA）：由樹的頂層開始，由上而下將群集逐次分裂<br><img src="https://i.imgur.com/PLiEalJ.png"></p>
+</li>
+<li><p>樹狀圖<br><img src="https://i.imgur.com/OWPZWgc.png"></p>
+<blockquote>
+<p>圖片來源：<a target="_blank" rel="noopener" href="http://www.sthda.com/english/articles/28-hierarchical-clustering-essentials/90-agglomerative-clustering-essentials/">STHDA</a></p>
+</blockquote>
+</li>
+</ul>
+<h4 id="聚合式-Agglomerative（AGNES）"><a href="#聚合式-Agglomerative（AGNES）" class="headerlink" title="聚合式 Agglomerative（AGNES）"></a>聚合式 Agglomerative（AGNES）</h4><p><img src="https://i.imgur.com/MBLDIBt.png"></p>
+<blockquote>
+<p>圖片來源：<a target="_blank" rel="noopener" href="http://bluewhale.cc/2016-04-19/hierarchical-clustering.html">藍鯨的網站分析筆記-層次聚類算法的原理及實現</a></p>
+</blockquote>
+<h5 id="流程-2"><a href="#流程-2" class="headerlink" title="流程"></a>流程</h5><ol>
+<li>將每個資料點各自視為一個群集</li>
+<li>找出所有群集間，兩個距離最相近的群集</li>
+<li>合併兩個群集成一個新的群集</li>
+<li>重複步驟 2~3 直至我們所設定的群數</li>
+</ol>
+<ul>
+<li><strong>Distance</strong>：利用<strong>歐式距離</strong>判斷資料間的遠近</li>
+<li><strong>Centroid</strong>：根據所算出之距離，進行資料的聚合，大致有下列方法：<ul>
+<li>單一連結法 Single linkage（最近法）<ul>
+<li>不同群中最接近之兩點距離</li>
+</ul>
+</li>
+<li>完全連結法 Complete linkage（最遠法）<ul>
+<li>不同群中最遠之兩點距離</li>
+</ul>
+</li>
+<li>平均法 Average linkage<ul>
+<li>不同群中各點間距離總和之平均</li>
+</ul>
+</li>
+<li>中心法 Centroid linkage<ul>
+<li>不同群中之中心點距離</li>
+</ul>
+</li>
+<li>華德法 Ward Method<ul>
+<li>將兩群合併後，各點到合併後的中心點之距離平方和</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="範例（鳶尾花資料集）-2"><a href="#範例（鳶尾花資料集）-2" class="headerlink" title="範例（鳶尾花資料集）"></a>範例（鳶尾花資料集）</h5><ul>
+<li>建立距離矩陣</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>參數</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>method</td>
+<td>euclidean(歐式距離)、manhattan(曼哈頓距離)、canberra、maximum、binary、minkowski</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dist.res &lt;- dist(iris.x, method = &quot;euclidean&quot;)    # 歐式距離</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Hierarchical clustering</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>參數</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>method</td>
+<td>single、complete、average、centroid、ward.D2</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hc &lt;- hclust(dist.res, method = &quot;complete&quot;)</span><br><span class="line"></span><br><span class="line"># 分群視覺化</span><br><span class="line">plot(hc)</span><br><span class="line">rect.hclust(hc, k = 3, border = 2:4)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/2KEhCND.png"></p>
+<h4 id="分割式-Divisive（DIANA）"><a href="#分割式-Divisive（DIANA）" class="headerlink" title="分割式 Divisive（DIANA）"></a>分割式 Divisive（DIANA）</h4><h5 id="流程-3"><a href="#流程-3" class="headerlink" title="流程"></a>流程</h5><p>與聚合式（AGNES）相反，不多贅述</p>
+<h5 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h5><p>請參考上方</p>
+<h3 id="最佳分群數"><a href="#最佳分群數" class="headerlink" title="最佳分群數"></a>最佳分群數</h3><p>一般有三種方法可供判斷：</p>
+<ul>
+<li>Elbow method</li>
+<li>Average Silhouette method</li>
+<li>Gap statistic method</li>
+</ul>
+<h4 id="Elbow-method"><a href="#Elbow-method" class="headerlink" title="Elbow method"></a>Elbow method</h4><p><img src="https://i.imgur.com/HR4clB8.png"></p>
+<ul>
+<li>利用組內變異數 SSE 來衡量分群的好壞</li>
+<li>隨著分群數的增加，組內變異數 SSE 會不斷地減少，此方法認為增加分群數，分群效果並不能增強，因此存在一個「拐點」，該點即為最佳分群數</li>
+<li>分群數從 1 到 3 下降地最快，之後下降地很慢，因此 3 為最佳分群數</li>
+<li>但「拐點」的認定相當主觀，這也是 Elbow method 的最大缺陷</li>
+<li><a target="_blank" rel="noopener" href="https://link.springer.com/article/10.1007%2FBF02289263">Robert L. Thorndike (December 1953)</a></li>
+</ul>
+<h5 id="k-means"><a href="#k-means" class="headerlink" title="k-means"></a>k-means</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fviz_nbclust(iris.x, kmeans, method = &quot;wss&quot;) +</span><br><span class="line">  geom_vline(xintercept = 3, linetype = 2)</span><br></pre></td></tr></table></figure>
+
+<h5 id="k-medoid"><a href="#k-medoid" class="headerlink" title="k-medoid"></a>k-medoid</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fviz_nbclust(iris.x, pam, method = &quot;wss&quot;) +</span><br><span class="line">  geom_vline(xintercept = 3, linetype = 2)</span><br></pre></td></tr></table></figure>
+
+<h5 id="Hierarchical-clustering"><a href="#Hierarchical-clustering" class="headerlink" title="Hierarchical clustering"></a>Hierarchical clustering</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fviz_nbclust(iris.x, hcut, method = &quot;wss&quot;) +</span><br><span class="line">  geom_vline(xintercept = 3, linetype = 2)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Average-Silhouette-method"><a href="#Average-Silhouette-method" class="headerlink" title="Average Silhouette method"></a>Average Silhouette method</h4><ul>
+<li>結合內聚力與分散力，用來衡量群聚效果的好壞</li>
+<li>其值越大，代表分群效果越好</li>
+<li><a target="_blank" rel="noopener" href="http://svn.donarmstrong.com/don/trunk/projects/research/papers_to_read/statistics/silhouettes_a_graphical_aid_to_the_interpretation_and_validation_of_cluster_analysis_rousseeuw_j_comp_app_math_20_53_1987.pdf">Peter J. Rousseeuw (1986)</a></li>
+</ul>
+<h5 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h5><ol>
+<li>計算樣本點 i 至同群內其他樣本點的平均距離 ai，ai 越小，代表樣本點 i 越應該被歸類至該群</li>
+<li>計算樣本點 i 至其他某群 Cj 的所有樣本之平均距離 bij，bi 越大，代表樣本點 i 越不屬於該群</li>
+<li>ai 稱為組內不相似度，bi 稱為組間不相似度，根據兩者定義<strong>輪廓係數（Silhouette coefficient）</strong></li>
+</ol>
+<p><img src="/images/formula/silhouette_coefficient.png"></p>
+<ol start="4">
+<li>判斷：<ul>
+<li>si 接近 1，代表樣本 i 的分群合理</li>
+<li>si 接近-1，代表樣本 i 更應該被分類至其他群內</li>
+<li>si 接近 0，代表樣本 i 在兩個群的邊界上</li>
+</ul>
+</li>
+</ol>
+<h5 id="k-means-1"><a href="#k-means-1" class="headerlink" title="k-means"></a>k-means</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fviz_nbclust(iris.x, kmeans, method = &quot;silhouette&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/3o4HDt2.png"></p>
+<h5 id="k-medoid-1"><a href="#k-medoid-1" class="headerlink" title="k-medoid"></a>k-medoid</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fviz_nbclust(iris.x, pam, method = &quot;silhouette&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/uJ91f4L.png"></p>
+<h5 id="Hierarchical-clustering-1"><a href="#Hierarchical-clustering-1" class="headerlink" title="Hierarchical clustering"></a>Hierarchical clustering</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fviz_nbclust(iris.x, hcut, method = &quot;silhouette&quot;,</span><br><span class="line">             hc_method = &quot;complete&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/kKFcQWj.png"></p>
+<h4 id="Gap-statistic-method"><a href="#Gap-statistic-method" class="headerlink" title="Gap statistic method"></a>Gap statistic method</h4><p><img src="https://i.imgur.com/8ClQpRt.png"></p>
+<ul>
+<li>將原本 Elbow method 中所提到的缺陷進行改良</li>
+</ul>
+<p><img src="/images/formula/gap.png"></p>
+<ul>
+<li>當 k 最小，Gap 值最大時，k 即為最佳分群數</li>
+<li><a target="_blank" rel="noopener" href="http://web.stanford.edu/~hastie/Papers/gap.pdf">R. Tibshirani, G. Walther, and T. Hastie (Standford University, 2001)</a></li>
+</ul>
+<h5 id="k-means-2"><a href="#k-means-2" class="headerlink" title="k-means"></a>k-means</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gap_stat &lt;- clusGap(iris.x, FUN = kmeans, nstart = 25,</span><br><span class="line">                    K.max = 10, B = 50)</span><br><span class="line">fviz_gap_stat(gap_stat)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/oN7dADc.png"></p>
+<h5 id="k-medoid-2"><a href="#k-medoid-2" class="headerlink" title="k-medoid"></a>k-medoid</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gap_stat &lt;- clusGap(iris.x, FUN = pam, K.max = 10, B = 50)</span><br><span class="line">fviz_gap_stat(gap_stat)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/bmWSvZ2.png"></p>
+<h5 id="Hierarchical-clustering-2"><a href="#Hierarchical-clustering-2" class="headerlink" title="Hierarchical clustering"></a>Hierarchical clustering</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gap_stat &lt;- clusGap(iris.x, FUN = hcut, K.max = 10, B = 50)</span><br><span class="line">fviz_gap_stat(gap_stat)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/RpUJMJz.png"></p>
+<hr>
+<h3 id="時間序列集群分析"><a href="#時間序列集群分析" class="headerlink" title="時間序列集群分析"></a>時間序列集群分析</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://cran.r-project.org/web/packages/dtwclust/vignettes/dtwclust.pdf">dtwclust 套件使用說明</a></li>
+</ul>
+<h4 id="常見集群方法"><a href="#常見集群方法" class="headerlink" title="常見集群方法"></a>常見集群方法</h4><ul>
+<li><strong>階層式分群（Hierarchical Clustering）</strong><ul>
+<li>聚合式 Agglomerative（AGNES）</li>
+<li>分割式 Divisive（DIANA）</li>
+<li>其他：Any other suitable time-series centroid method</li>
+</ul>
+</li>
+<li><strong>切割式分群（Partitional Clustering）</strong><ul>
+<li>PAM（Patition around medoid）</li>
+<li>DBA+DTW</li>
+</ul>
+</li>
+</ul>
+<h4 id="要件"><a href="#要件" class="headerlink" title="要件"></a>要件</h4><ul>
+<li><p><strong>Distance</strong>：</p>
+<ul>
+<li><strong>動態時間校正 DTW（Dynamic time warping distance）</strong><ul>
+<li>改寫自歐式距離</li>
+<li>找出一條路徑最短，使得兩不同長度序列的距離最短</li>
+<li>找出波形之間的相似度</li>
+<li><a target="_blank" rel="noopener" href="http://waoffice.ee.kuas.edu.tw/download/%E5%BB%BA%E5%BE%B7%E7%A0%94%E7%A9%B6%E6%89%80%E8%B3%87%E6%96%99/%E4%B8%83%E6%9C%88%E8%AA%B2%E7%A8%8B/%E5%8B%95%E6%85%8B%E6%99%82%E9%96%93%E6%A0%A1%E6%AD%A3/%E5%8B%95%E6%85%8B%E6%99%82%E9%96%93%E6%A0%A1%E6%AD%A3.ppt">原理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Centroid</strong>：</p>
+<ul>
+<li>PAM</li>
+<li>DBA（DTW barycenter averaging）<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/I_am_huang/article/details/77345659">原理第 15 頁</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="搭配用法"><a href="#搭配用法" class="headerlink" title="搭配用法"></a>搭配用法</h4><table>
+<thead>
+<tr>
+<th align="center">Prototyping function</th>
+<th align="center">Distance</th>
+<th>Algorithm</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">PAM</td>
+<td align="center">歐式距離／DTW</td>
+<td>Time-series with minimum sum of distances to the other series in the group</td>
+</tr>
+<tr>
+<td align="center">DBA</td>
+<td align="center">DTW</td>
+<td>Average of points grouped according to DTW alignments</td>
+</tr>
+</tbody></table>
+<h3 id="切割式分群（Partitional-Clustering）-1"><a href="#切割式分群（Partitional-Clustering）-1" class="headerlink" title="切割式分群（Partitional Clustering）"></a>切割式分群（Partitional Clustering）</h3><h4 id="PAM"><a href="#PAM" class="headerlink" title="PAM"></a>PAM</h4><h5 id="原理-amp-流程"><a href="#原理-amp-流程" class="headerlink" title="原理 &amp; 流程"></a>原理 &amp; 流程</h5><p>基本上與一般集群分析的 k-medoid 雷同，請參考上方說明</p>
+<h5 id="範例（以台灣市值前-50-大股票為例）"><a href="#範例（以台灣市值前-50-大股票為例）" class="headerlink" title="範例（以台灣市值前 50 大股票為例）"></a>範例（以台灣市值前 50 大股票為例）</h5><ul>
+<li>資料預處理</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"># 套件讀取（請自行安裝）</span><br><span class="line">library(tidyverse)</span><br><span class="line">library(tidyquant)</span><br><span class="line">library(dtwclust)</span><br><span class="line">library(cluster)</span><br><span class="line"></span><br><span class="line"># 讀取資料</span><br><span class="line">data &lt;- read.table(&quot;stockdata.txt&quot;, sep = &quot;\t&quot;, header = T, stringsAsFactors = F)</span><br><span class="line"># 欄位命名</span><br><span class="line">colnames(data) &lt;- c(&quot;code&quot;, &quot;name&quot;, &quot;date&quot;, &quot;open&quot;, &quot;high&quot;, &quot;low&quot;, &quot;close&quot;, &quot;volume&quot;, &quot;mv&quot;)</span><br><span class="line"></span><br><span class="line"># 取出2018年1月2日市值前50大的股票</span><br><span class="line">top &lt;- data %&gt;%</span><br><span class="line">  arrange(code, date) %&gt;%</span><br><span class="line">  group_by(code) %&gt;%</span><br><span class="line">  filter(date==20180102) %&gt;%</span><br><span class="line">  arrange(desc(mv)) %&gt;%</span><br><span class="line">  group_by() %&gt;%</span><br><span class="line">  slice(., 1:50) %&gt;%</span><br><span class="line">  pull(name)</span><br><span class="line"></span><br><span class="line"># 建立日頻報酬率table</span><br><span class="line">dayLogRet &lt;- data %&gt;%</span><br><span class="line">  arrange(code, date) %&gt;%</span><br><span class="line">  group_by(name) %&gt;%</span><br><span class="line">  filter(name %in% top) %&gt;%</span><br><span class="line">  mutate(dayLogRet=log(close/lag(close, 1))) %&gt;%</span><br><span class="line">  group_by() %&gt;%</span><br><span class="line">  select(code, name, date, dayLogRet) %&gt;%</span><br><span class="line">  na.omit()</span><br><span class="line"></span><br><span class="line">##################### 重要 #####################</span><br><span class="line"></span><br><span class="line"># 將資料轉成 dtwclust套件的讀取格式</span><br><span class="line">symbol &lt;- unique(dayLogRet$name)</span><br><span class="line">stockRetData &lt;- lapply(symbol, function(iy)&#123;</span><br><span class="line">  stockRet &lt;- dayLogRet %&gt;% filter(name==iy) %&gt;% .$dayLogRet</span><br><span class="line">  return(stockRet)</span><br><span class="line">&#125;)</span><br><span class="line">names(stockRetData) &lt;- symbol</span><br><span class="line"></span><br><span class="line"># 需先將資料進行標準化，以利更好的分群結果</span><br><span class="line">stockRetData_z &lt;- zscore(stockRetData)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>PAM</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pc_k &lt;- tsclust(stockRetData_z,</span><br><span class="line">                k=3,</span><br><span class="line">                distance=&quot;dtw_basic&quot;,</span><br><span class="line">                centroid = &quot;pam&quot;)</span><br><span class="line"></span><br><span class="line"># 儲存分群資訊</span><br><span class="line">pCluster &lt;- data.frame(name=names(pc_k@datalist), group=pc_k@cluster)</span><br><span class="line">pCluster &lt;- pCluster %&gt;% arrange(group)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>參數說明</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">可調整參數</th>
+<th align="center">參數值</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">series</td>
+<td align="center">stockRetData_z</td>
+<td>必須將 data.frame 轉成 list 格式放入</td>
+</tr>
+<tr>
+<td align="center">k</td>
+<td align="center">3</td>
+<td>群數，通常依經驗決定</td>
+</tr>
+<tr>
+<td align="center">distance</td>
+<td align="center">“dtw_basic”</td>
+<td>距離演算法，預設為歐式距離，若為時間序列，建議使用 dtw_basic</td>
+</tr>
+<tr>
+<td align="center">centroid</td>
+<td align="center">“pam”</td>
+<td>決定每群中心點的方法</td>
+</tr>
+</tbody></table>
+<ul>
+<li>畫圖</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot(pc_k)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/xEK5ylK.png"></p>
+<h4 id="DBA-DTW"><a href="#DBA-DTW" class="headerlink" title="DBA+DTW"></a>DBA+DTW</h4><h5 id="原理-amp-流程-1"><a href="#原理-amp-流程-1" class="headerlink" title="原理 &amp; 流程"></a>原理 &amp; 流程</h5><p>請見上方 DBA 與 DTW 原理</p>
+<h5 id="範例（以台灣市值前-50-大股票為例）-1"><a href="#範例（以台灣市值前-50-大股票為例）-1" class="headerlink" title="範例（以台灣市值前 50 大股票為例）"></a>範例（以台灣市值前 50 大股票為例）</h5><ul>
+<li>DBA+DTW 分群</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dba_k &lt;- tsclust(stockRetData_z,</span><br><span class="line">                 k=3,</span><br><span class="line">                 distance = &quot;dtw_basic&quot;,</span><br><span class="line">                 centroid = &quot;dba&quot;)</span><br><span class="line"></span><br><span class="line"># 儲存分群資訊</span><br><span class="line">dbCluster &lt;- data.frame(name=names(dba_k@datalist), group=dba_k@cluster)</span><br><span class="line">dbCluster &lt;- dbCluster %&gt;% arrange(group)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>參數說明</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">可調整參數</th>
+<th align="center">參數值</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">series</td>
+<td align="center">stockRetData_z</td>
+<td>必須將 data.frame 轉成 list 格式放入</td>
+</tr>
+<tr>
+<td align="center">k</td>
+<td align="center">3</td>
+<td>群數，通常依經驗決定</td>
+</tr>
+<tr>
+<td align="center">distance</td>
+<td align="center">“dtw_basic”</td>
+<td>距離演算法，預設為歐式距離，若為時間序列，建議使用 dtw_basic</td>
+</tr>
+<tr>
+<td align="center">centroid</td>
+<td align="center">“dba”</td>
+<td>決定每群中心點的方法</td>
+</tr>
+</tbody></table>
+<ul>
+<li>畫圖</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot(dba_k)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/Jrenb3b.png"></p>
+<h3 id="階層式分群（Hierarchical-Clustering）-1"><a href="#階層式分群（Hierarchical-Clustering）-1" class="headerlink" title="階層式分群（Hierarchical Clustering）"></a>階層式分群（Hierarchical Clustering）</h3><h5 id="原理-amp-流程-2"><a href="#原理-amp-流程-2" class="headerlink" title="原理 &amp; 流程"></a>原理 &amp; 流程</h5><p>基本上與一般集群分析方法雷同，請參考上方說明</p>
+<h5 id="範例（以台灣市值前-50-大股票為例）-2"><a href="#範例（以台灣市值前-50-大股票為例）-2" class="headerlink" title="範例（以台灣市值前 50 大股票為例）"></a>範例（以台灣市值前 50 大股票為例）</h5><ul>
+<li>階層式分群（AGNES）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hcaCluster &lt;- tsclust(stockRetData_z,</span><br><span class="line">                      type=&quot;h&quot;,</span><br><span class="line">                      k=3,</span><br><span class="line">                      distance=&quot;dtw_basic&quot;,</span><br><span class="line">                      control=hierarchical_control(method=agnes))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>參數說明</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">可調整參數</th>
+<th align="center">參數值</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">series</td>
+<td align="center">stockRetData_z</td>
+<td>必須將 data.frame 轉成 list 格式放入</td>
+</tr>
+<tr>
+<td align="center">type</td>
+<td align="center">“h”</td>
+<td>h 為階層式集群的代號</td>
+</tr>
+<tr>
+<td align="center">k</td>
+<td align="center">3</td>
+<td>群數，通常依經驗決定</td>
+</tr>
+<tr>
+<td align="center">distance</td>
+<td align="center">“dtw_basic”</td>
+<td>距離演算法，通常用 dtw_basic 即可</td>
+</tr>
+<tr>
+<td align="center">control</td>
+<td align="center">hierarchical_control(method&#x3D;agnes))</td>
+<td>method 可使用 agnes 或 diana</td>
+</tr>
+</tbody></table>
+<ul>
+<li>樹狀圖（AGNES）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot(hcaCluster)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/EWt2bkv.png"></p>
+<ul>
+<li>階層式分群（DIANA）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hcaCluster &lt;- tsclust(stockRetData_z,</span><br><span class="line">                      type=&quot;h&quot;,</span><br><span class="line">                      k=3,</span><br><span class="line">                      distance=&quot;dtw_basic&quot;,</span><br><span class="line">                      control=hierarchical_control(method=diana))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>樹狀圖（DIANA）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot(hcaCluster)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/1BgObls.png"></p>
+<h3 id="最佳分群數（CVI，Cluster-validity-indices）"><a href="#最佳分群數（CVI，Cluster-validity-indices）" class="headerlink" title="最佳分群數（CVI，Cluster validity indices）"></a>最佳分群數（CVI，Cluster validity indices）</h3><ul>
+<li>利用 dtwclust 套件中的 cvi 函式</li>
+<li>cvi 函式中有多項指標，詳細請見<a target="_blank" rel="noopener" href="https://cran.r-project.org/web/packages/dtwclust/vignettes/dtwclust.pdf">dtwclust 套件使用說明</a>第 24 頁</li>
+<li>以下僅示範 cvi 函式的用法</li>
+</ul>
+<h4 id="PAM-1"><a href="#PAM-1" class="headerlink" title="PAM"></a>PAM</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 需要設定多群的k</span><br><span class="line">pc_cvi &lt;- tsclust(stockRetData_z,</span><br><span class="line">                  k=2:10,</span><br><span class="line">                  distance = &quot;dtw_basic&quot;,</span><br><span class="line">                  centroid = &quot;pam&quot;)</span><br><span class="line"># 將結果命名</span><br><span class="line">names(pc_cvi) &lt;- paste0(&quot;k_&quot;,2:10)</span><br><span class="line"></span><br><span class="line"># 使用sapply搭配cvi函式同時計算多群的衡量效果</span><br><span class="line">pc_eva &lt;- sapply(pc_cvi, cvi, type = &quot;internal&quot;)</span><br><span class="line"></span><br><span class="line"># 使用Average Silhouette method衡量</span><br><span class="line">plot(x=2:10, pc_eva[c(&quot;Sil&quot;),], type=&quot;l&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/klqgvOF.png"></p>
+<h4 id="DBA-DTW-1"><a href="#DBA-DTW-1" class="headerlink" title="DBA+DTW"></a>DBA+DTW</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 需要設定多群的k</span><br><span class="line">dba_k &lt;- tsclust(stockRetData_z,</span><br><span class="line">                 k=2:10,</span><br><span class="line">                 distance = &quot;dtw_basic&quot;,</span><br><span class="line">                 centroid = &quot;dba&quot;)</span><br><span class="line"># 將結果命名</span><br><span class="line">names(dba_cvi) &lt;- paste0(&quot;k_&quot;,2:10)</span><br><span class="line"></span><br><span class="line"># 使用sapply搭配cvi函式同時計算多群的衡量效果</span><br><span class="line">dba_eva &lt;- sapply(dba_cvi, cvi, type = &quot;internal&quot;)</span><br><span class="line"></span><br><span class="line"># 使用Average Silhouette method衡量</span><br><span class="line">plot(x=2:10, dba_eva[c(&quot;Sil&quot;),], type=&quot;l&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/vUx8t7u.png"></p>
+<h4 id="Hierarchical-clustering-3"><a href="#Hierarchical-clustering-3" class="headerlink" title="Hierarchical clustering"></a>Hierarchical clustering</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 需要設定多群的k</span><br><span class="line">hcaCluster &lt;- tsclust(stockRetData_z,</span><br><span class="line">                      type=&quot;h&quot;,</span><br><span class="line">                      k=2:10,</span><br><span class="line">                      distance=&quot;dtw_basic&quot;,</span><br><span class="line">                      control=hierarchical_control(method=diana))</span><br><span class="line"></span><br><span class="line"># 將結果命名</span><br><span class="line">names(hcaCluster) &lt;- paste0(&quot;k_&quot;,2:10)</span><br><span class="line"></span><br><span class="line"># 使用sapply搭配cvi函式同時計算多群的衡量效果</span><br><span class="line">hca_eva &lt;- sapply(hcaCluster, cvi, type = &quot;internal&quot;)</span><br><span class="line"></span><br><span class="line"># 使用Average Silhouette method衡量</span><br><span class="line">plot(x=2:10, hca_eva[c(&quot;Sil&quot;),], type=&quot;l&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/jfgbTXk.png"></p>
+<hr>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/databatman/article/details/50445561">机器学习：K-means 和 K-medoids 对比</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/coder_Gray/article/details/79705032">聚类算法——k-medoids 算法</a></li>
+<li><a target="_blank" rel="noopener" href="https://rpubs.com/skydome20/R-Note9-Clustering">R 筆記–(9)分群分析(Clustering)</a></li>
+<li><a target="_blank" rel="noopener" href="https://dotblogs.com.tw/dragon229/2013/02/04/89919">K means 演算法</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6164214.html">K-Means 聚类算法原理</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24546995">【机器学习】确定最佳聚类数目的 10 种方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wangxiaopeng0329/article/details/53542606">聚类评估算法-轮廓系数（Silhouette Coefficient ）</a></li>
+<li><a target="_blank" rel="noopener" href="http://bluewhale.cc/2016-04-19/hierarchical-clustering.html">层次聚类算法的原理及实现 Hierarchical Clustering</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.sthda.com/english/articles/29-cluster-validation-essentials/96-determining-the-optimal-number-of-clusters-3-must-know-methods/#three-popular-methods-for-determining-the-optimal-number-of-clusters">Determining The Optimal Number Of Clusters: 3 Must Know Methods</a></li>
+<li><a target="_blank" rel="noopener" href="http://mirlab.org/jang/books/dcpr/dpDtw.asp?title=8-4%20Dynamic%20Time%20Warping&language=chinese">Dynamic Time Warping</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/I_am_huang/article/details/77345659">DTW Barycenter Averaging（DBA）——平均序列求法</a></li>
+</ol>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://link.springer.com/article/10.1007%2FBF02289263">Robert L. Thorndike (December 1953)</a></li>
+<li><a target="_blank" rel="noopener" href="http://svn.donarmstrong.com/don/trunk/projects/research/papers_to_read/statistics/silhouettes_a_graphical_aid_to_the_interpretation_and_validation_of_cluster_analysis_rousseeuw_j_comp_app_math_20_53_1987.pdf">Peter J. Rousseeuw (1986)</a></li>
+<li><a target="_blank" rel="noopener" href="http://web.stanford.edu/~hastie/Papers/gap.pdf">R. Tibshirani, G. Walther, and T. Hastie (Standford University, 2001)</a></li>
+<li><a target="_blank" rel="noopener" href="http://www1.cs.columbia.edu/~jopa/Papers/PaparrizosSIGMOD2015.pdf">Paparrizos and Gravano (2015)</a></li>
+<li><a target="_blank" rel="noopener" href="https://cran.r-project.org/web/packages/dtwclust/vignettes/dtwclust.pdf">Comparing Time-Series Clustering Algorithms in R Using the dtwclust Package</a></li>
+</ol>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E8%88%AC%E9%9B%86%E7%BE%A4%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">一般集群分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A6%81%E4%BB%B6%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">要件：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%A7%E8%87%B4%E5%8F%AF%E5%88%86%E7%82%BA%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">大致可分為：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Distance"><span class="toc-number">2.</span> <span class="toc-text">Distance</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%90%E5%BC%8F%E8%B7%9D%E9%9B%A2"><span class="toc-number">2.1.</span> <span class="toc-text">歐式距離</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%BC%E5%93%88%E9%A0%93%E8%B7%9D%E9%9B%A2%EF%BC%88%E7%B5%95%E5%B0%8D%E8%AA%A4%E5%B7%AE%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">曼哈頓距離（絕對誤差）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E5%89%B2%E5%BC%8F%E5%88%86%E7%BE%A4%EF%BC%88Partitional-Clustering%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">切割式分群（Partitional Clustering）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#K-means"><span class="toc-number">3.1.</span> <span class="toc-text">K-means</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">3.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-number">3.1.2.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E9%B3%B6%E5%B0%BE%E8%8A%B1%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%89"><span class="toc-number">3.1.3.</span> <span class="toc-text">範例（鳶尾花資料集）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#K-medoid-x2F-PAM%EF%BC%88Patition-around-medoid%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">K-medoid &#x2F; PAM（Patition around medoid）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E9%B3%B6%E5%B0%BE%E8%8A%B1%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%89-1"><span class="toc-number">3.2.3.</span> <span class="toc-text">範例（鳶尾花資料集）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8E%E5%B1%A4%E5%BC%8F%E5%88%86%E7%BE%A4%EF%BC%88Hierarchical-Clustering%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">階層式分群（Hierarchical Clustering）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">4.0.1.</span> <span class="toc-text">原理</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E5%BC%8F-Agglomerative%EF%BC%88AGNES%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">聚合式 Agglomerative（AGNES）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="toc-number">4.1.1.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E9%B3%B6%E5%B0%BE%E8%8A%B1%E8%B3%87%E6%96%99%E9%9B%86%EF%BC%89-2"><span class="toc-number">4.1.2.</span> <span class="toc-text">範例（鳶尾花資料集）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E5%BC%8F-Divisive%EF%BC%88DIANA%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">分割式 Divisive（DIANA）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-3"><span class="toc-number">4.2.1.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B"><span class="toc-number">4.2.2.</span> <span class="toc-text">範例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%88%86%E7%BE%A4%E6%95%B8"><span class="toc-number">5.</span> <span class="toc-text">最佳分群數</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Elbow-method"><span class="toc-number">5.1.</span> <span class="toc-text">Elbow method</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#k-means"><span class="toc-number">5.1.1.</span> <span class="toc-text">k-means</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#k-medoid"><span class="toc-number">5.1.2.</span> <span class="toc-text">k-medoid</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Hierarchical-clustering"><span class="toc-number">5.1.3.</span> <span class="toc-text">Hierarchical clustering</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Average-Silhouette-method"><span class="toc-number">5.2.</span> <span class="toc-text">Average Silhouette method</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number">5.2.1.</span> <span class="toc-text">方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#k-means-1"><span class="toc-number">5.2.2.</span> <span class="toc-text">k-means</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#k-medoid-1"><span class="toc-number">5.2.3.</span> <span class="toc-text">k-medoid</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Hierarchical-clustering-1"><span class="toc-number">5.2.4.</span> <span class="toc-text">Hierarchical clustering</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gap-statistic-method"><span class="toc-number">5.3.</span> <span class="toc-text">Gap statistic method</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#k-means-2"><span class="toc-number">5.3.1.</span> <span class="toc-text">k-means</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#k-medoid-2"><span class="toc-number">5.3.2.</span> <span class="toc-text">k-medoid</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Hierarchical-clustering-2"><span class="toc-number">5.3.3.</span> <span class="toc-text">Hierarchical clustering</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%82%E9%96%93%E5%BA%8F%E5%88%97%E9%9B%86%E7%BE%A4%E5%88%86%E6%9E%90"><span class="toc-number">6.</span> <span class="toc-text">時間序列集群分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A6%8B%E9%9B%86%E7%BE%A4%E6%96%B9%E6%B3%95"><span class="toc-number">6.1.</span> <span class="toc-text">常見集群方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A6%81%E4%BB%B6"><span class="toc-number">6.2.</span> <span class="toc-text">要件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%90%AD%E9%85%8D%E7%94%A8%E6%B3%95"><span class="toc-number">6.3.</span> <span class="toc-text">搭配用法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E5%89%B2%E5%BC%8F%E5%88%86%E7%BE%A4%EF%BC%88Partitional-Clustering%EF%BC%89-1"><span class="toc-number">7.</span> <span class="toc-text">切割式分群（Partitional Clustering）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PAM"><span class="toc-number">7.1.</span> <span class="toc-text">PAM</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-amp-%E6%B5%81%E7%A8%8B"><span class="toc-number">7.1.1.</span> <span class="toc-text">原理 &amp; 流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E4%BB%A5%E5%8F%B0%E7%81%A3%E5%B8%82%E5%80%BC%E5%89%8D-50-%E5%A4%A7%E8%82%A1%E7%A5%A8%E7%82%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">7.1.2.</span> <span class="toc-text">範例（以台灣市值前 50 大股票為例）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DBA-DTW"><span class="toc-number">7.2.</span> <span class="toc-text">DBA+DTW</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-amp-%E6%B5%81%E7%A8%8B-1"><span class="toc-number">7.2.1.</span> <span class="toc-text">原理 &amp; 流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E4%BB%A5%E5%8F%B0%E7%81%A3%E5%B8%82%E5%80%BC%E5%89%8D-50-%E5%A4%A7%E8%82%A1%E7%A5%A8%E7%82%BA%E4%BE%8B%EF%BC%89-1"><span class="toc-number">7.2.2.</span> <span class="toc-text">範例（以台灣市值前 50 大股票為例）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8E%E5%B1%A4%E5%BC%8F%E5%88%86%E7%BE%A4%EF%BC%88Hierarchical-Clustering%EF%BC%89-1"><span class="toc-number">8.</span> <span class="toc-text">階層式分群（Hierarchical Clustering）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-amp-%E6%B5%81%E7%A8%8B-2"><span class="toc-number">8.0.1.</span> <span class="toc-text">原理 &amp; 流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%88%E4%BB%A5%E5%8F%B0%E7%81%A3%E5%B8%82%E5%80%BC%E5%89%8D-50-%E5%A4%A7%E8%82%A1%E7%A5%A8%E7%82%BA%E4%BE%8B%EF%BC%89-2"><span class="toc-number">8.0.2.</span> <span class="toc-text">範例（以台灣市值前 50 大股票為例）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%88%86%E7%BE%A4%E6%95%B8%EF%BC%88CVI%EF%BC%8CCluster-validity-indices%EF%BC%89"><span class="toc-number">9.</span> <span class="toc-text">最佳分群數（CVI，Cluster validity indices）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PAM-1"><span class="toc-number">9.1.</span> <span class="toc-text">PAM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DBA-DTW-1"><span class="toc-number">9.2.</span> <span class="toc-text">DBA+DTW</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hierarchical-clustering-3"><span class="toc-number">9.3.</span> <span class="toc-text">Hierarchical clustering</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-number">10.</span> <span class="toc-text">參考資料</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number"></span> <span class="toc-text">Reference</span></a>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&text=集群分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&is_video=false&description=集群分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=集群分析&body=Check out this article: https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&title=集群分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&name=集群分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/09/11/2018-09-11-clustering-with-R/&t=集群分析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="深度學習與文字探勘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習模型在文本的情緒預測">
+<meta property="og:url" content="https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/index.html">
+<meta property="og:site_name" content="Coding Area">
+<meta property="og:description" content="深度學習與文字探勘">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/bc4dC94.png">
+<meta property="og:image" content="https://i.imgur.com/BtN5V6v.jpg">
+<meta property="og:image" content="https://i.imgur.com/yibKunZ.png">
+<meta property="og:image" content="https://i.imgur.com/zY39jiF.jpg">
+<meta property="og:image" content="https://i.imgur.com/vQE4kVZ.png">
+<meta property="og:image" content="https://i.imgur.com/a59AIiz.jpg">
+<meta property="og:image" content="https://i.imgur.com/cbLeXZz.png">
+<meta property="og:image" content="https://i.imgur.com/FuFvHjj.jpg">
+<meta property="og:image" content="https://i.imgur.com/ohP9HC8.png">
+<meta property="og:image" content="https://i.imgur.com/mz9gkPl.jpg">
+<meta property="og:image" content="https://i.imgur.com/NsQjT2R.png">
+<meta property="article:published_time" content="2018-12-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T11:25:55.289Z">
+<meta property="article:author" content="Allan">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/bc4dC94.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>深度學習模型在文本的情緒預測</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="القائمة"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="الأعلى" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2019/01/03/2019-01-03-add-track-index/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2018/10/13/2018-10-13-webcrawler-sql-automation/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="回到頁首" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&text=深度學習模型在文本的情緒預測"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&is_video=false&description=深度學習模型在文本的情緒預測"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=深度學習模型在文本的情緒預測&body=Check out this article: https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&name=深度學習模型在文本的情緒預測&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&t=深度學習模型在文本的情緒預測"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E4%BB%8B%E7%B4%B9%E8%88%87%E9%A0%90%E6%B8%AC%E7%9B%AE%E6%A8%99"><span class="toc-number">1.</span> <span class="toc-text">資料介紹與預測目標</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%83%E6%95%B8%E8%A8%AD%E5%AE%9A"><span class="toc-number">2.</span> <span class="toc-text">參數設定</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E7%89%B9%E5%BE%B5%E9%81%B8%E5%8F%96"><span class="toc-number">2.1.</span> <span class="toc-text">資料特徵選取</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E6%A8%A1%E5%9E%8B%E5%8F%83%E6%95%B8%E8%A8%AD%E5%AE%9A"><span class="toc-number">3.</span> <span class="toc-text">深度學習模型參數設定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%B1%A4%E6%84%9F%E7%9F%A5%E5%99%A8-Multiple-Layer-Perceptron-MLP"><span class="toc-number">4.</span> <span class="toc-text">多層感知器 Multiple Layer Perceptron(MLP)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B"><span class="toc-number">4.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC"><span class="toc-number">4.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4"><span class="toc-number">4.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3"><span class="toc-number">4.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%99%E5%90%91-GRU-Bidirectional-GRU"><span class="toc-number">5.</span> <span class="toc-text">雙向 GRU (Bidirectional GRU)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B-1"><span class="toc-number">5.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC-1"><span class="toc-number">5.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4-1"><span class="toc-number">5.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-1"><span class="toc-number">5.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B7%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF-Convolutional-Neuron-Network-CNN-Bidirectional-GRU"><span class="toc-number">6.</span> <span class="toc-text">卷積神經網路 Convolutional Neuron Network (CNN)+Bidirectional GRU</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B-2"><span class="toc-number">6.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC-2"><span class="toc-number">6.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4-2"><span class="toc-number">6.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-2"><span class="toc-number">6.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Merge-Multiple-CNN-model"><span class="toc-number">7.</span> <span class="toc-text">Merge Multiple CNN model</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B-3"><span class="toc-number">7.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC-3"><span class="toc-number">7.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4-3"><span class="toc-number">7.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-3"><span class="toc-number">7.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Merge-Multiple-GRU-model"><span class="toc-number">8.</span> <span class="toc-text">Merge Multiple GRU model</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B-4"><span class="toc-number">8.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC-4"><span class="toc-number">8.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4-4"><span class="toc-number">8.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-4"><span class="toc-number">8.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%BC%8F%E5%AD%B8%E7%BF%92-Ensembling-Learning"><span class="toc-number">9.</span> <span class="toc-text">集成式學習 Ensembling Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-%E5%A4%9A%E6%95%B8%E6%B1%BA"><span class="toc-number">9.1.</span> <span class="toc-text">方法 (多數決)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-5"><span class="toc-number">9.2.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A0%90%E6%B8%AC%E7%B5%90%E6%9E%9C"><span class="toc-number">10.</span> <span class="toc-text">預測結果</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        深度學習模型在文本的情緒預測
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Allan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-12-25T16:00:00.000Z" itemprop="datePublished">2018-12-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Deep-Learning/" rel="tag">Deep Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="資料介紹與預測目標"><a href="#資料介紹與預測目標" class="headerlink" title="資料介紹與預測目標"></a>資料介紹與預測目標</h3><p>資料：IMDB Movie reviews sentiment classification<br>標準： 88%(RNN)<br>目標： 90%以上</p>
+<h3 id="參數設定"><a href="#參數設定" class="headerlink" title="參數設定"></a>參數設定</h3><h4 id="資料特徵選取"><a href="#資料特徵選取" class="headerlink" title="資料特徵選取"></a>資料特徵選取</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Max_feature = 20000          # 資料特徵數</span><br><span class="line">Max_length  =   500          # 句子長度</span><br></pre></td></tr></table></figure>
+
+<h3 id="深度學習模型參數設定"><a href="#深度學習模型參數設定" class="headerlink" title="深度學習模型參數設定"></a>深度學習模型參數設定</h3><ul>
+<li>由於此次模型有包含 GRU（LSTM 的快速版），為避免耗費過多時間，因此 <strong>迭代次數</strong> 只設定 3 次，相對地必須提高 <strong>批次訓練的樣本數</strong>，在此設定為 100</li>
+<li>今次預測問題為文字情緒的好壞，也就是說 y_label 只有 0 與 1 的值，因此 <strong>損失函數</strong> 設定為 **binary_crossentropy(二元分類)**，相對地輸出層的 <strong>激活函數</strong> 必須設定為 <strong>sigmoid(羅吉斯回歸的一種)</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Epoch = 3                    # 迭代次數</span><br><span class="line">batch_size = 100             # 批次訓練樣本</span><br><span class="line">validation_split = 0.2       # 設定驗證集資料</span><br><span class="line"></span><br><span class="line">loss = &quot;binary_crossentropy&quot; # 損失函數</span><br><span class="line">optimizer = &quot;adam&quot;           # 優化器</span><br><span class="line">metrics = &quot;accuracy&quot;         # 評分</span><br></pre></td></tr></table></figure>
+
+<h3 id="多層感知器-Multiple-Layer-Perceptron-MLP"><a href="#多層感知器-Multiple-Layer-Perceptron-MLP" class="headerlink" title="多層感知器 Multiple Layer Perceptron(MLP)"></a>多層感知器 Multiple Layer Perceptron(MLP)</h3><h4 id="模型架構"><a href="#模型架構" class="headerlink" title="模型架構"></a><strong>模型架構</strong></h4><p><img src="https://i.imgur.com/bc4dC94.png"></p>
+<h4 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a><strong>程式碼</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"># Initialize model</span><br><span class="line">model &lt;- keras_model_sequential()</span><br><span class="line">model %&gt;%</span><br><span class="line">  # Creates dense embedding layer; outputs 3D tensor</span><br><span class="line">  # with shape (batch_size, sequence_length, output_dim)</span><br><span class="line"></span><br><span class="line">  layer_embedding(input_dim = max_features,</span><br><span class="line">                  output_dim = 128,</span><br><span class="line">                  input_length = maxlen) %&gt;%</span><br><span class="line">  layer_flatten() %&gt;%</span><br><span class="line">  layer_dense(units = 32, activation = &quot;relu&quot;) %&gt;%</span><br><span class="line">  layer_dense(units = 1, activation = &#x27;sigmoid&#x27;)</span><br><span class="line"></span><br><span class="line"># Optimizer</span><br><span class="line">model %&gt;% compile(</span><br><span class="line">  loss = &#x27;binary_crossentropy&#x27;,</span><br><span class="line">  optimizer = &#x27;adam&#x27;,</span><br><span class="line">  metrics = c(&#x27;accuracy&#x27;)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Train model</span><br><span class="line">model %&gt;% fit(</span><br><span class="line">  x_train, y_train,</span><br><span class="line">  batch_size = 100,</span><br><span class="line">  epochs = 3,</span><br><span class="line">  validation_split = 0.2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Prediction &amp; ConfusionMatrix</span><br><span class="line">dnn_y_pred &lt;- model %&gt;% predict(x_test)</span><br><span class="line">dnn_y_pred &lt;- as.numeric(dnn_y_pred &gt; 0.5)</span><br><span class="line">dnn_results &lt;- model %&gt;% evaluate(x_test, y_test)</span><br><span class="line">dnn_cMatrix &lt;- table(dnn_y_pred,y_test)</span><br></pre></td></tr></table></figure>
+
+<h4 id="訓練"><a href="#訓練" class="headerlink" title="訓練"></a><strong>訓練</strong></h4><p><img src="https://i.imgur.com/BtN5V6v.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Train on 20000 samples, validate on 5000 samples</span><br><span class="line">Epoch 1/3</span><br><span class="line">20000/20000 [==============================] - 6s 280us/step - loss: 0.3990 - acc: 0.8002 - val_loss: 0.3048 - val_acc: 0.8710</span><br><span class="line">Epoch 2/3</span><br><span class="line">20000/20000 [==============================] - 5s 239us/step - loss: 0.0590 - acc: 0.9800 - val_loss: 0.3775 - val_acc: 0.8622</span><br><span class="line">Epoch 3/3</span><br><span class="line">20000/20000 [==============================] - 5s 237us/step - loss: 0.0033 - acc: 0.9998 - val_loss: 0.4416 - val_acc: 0.8704</span><br></pre></td></tr></table></figure>
+
+<h4 id="混淆矩陣"><a href="#混淆矩陣" class="headerlink" title="混淆矩陣"></a><strong>混淆矩陣</strong></h4><table>
+<thead>
+<tr>
+<th style="text-align:center">MLP</th>
+<th style="text-align:center" colspan = "3">真實值</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center" rowspan="3">預測值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">11060</td>
+<td style="text-align:center">1914</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1440</td>
+<td style="text-align:center">10586</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="雙向-GRU-Bidirectional-GRU"><a href="#雙向-GRU-Bidirectional-GRU" class="headerlink" title="雙向 GRU (Bidirectional GRU)"></a>雙向 GRU (Bidirectional GRU)</h3><ul>
+<li>GRU 為 LSTM 的一種，速度比 LSTM 更快，且預測力差不多</li>
+</ul>
+<h4 id="模型架構-1"><a href="#模型架構-1" class="headerlink" title="模型架構"></a><strong>模型架構</strong></h4><p><img src="https://i.imgur.com/yibKunZ.png"></p>
+<h4 id="程式碼-1"><a href="#程式碼-1" class="headerlink" title="程式碼"></a><strong>程式碼</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"># Initialize model</span><br><span class="line">model &lt;- keras_model_sequential()</span><br><span class="line">model %&gt;%</span><br><span class="line">  # Creates dense embedding layer; outputs 3D tensor</span><br><span class="line">  # with shape (batch_size, sequence_length, output_dim)</span><br><span class="line"></span><br><span class="line">  layer_embedding(input_dim = max_features,</span><br><span class="line">                  output_dim = 128,</span><br><span class="line">                  input_length = maxlen) %&gt;%</span><br><span class="line">  bidirectional(layer_gru(units = 32)) %&gt;%</span><br><span class="line">  layer_global_max_pooling_1d() %&gt;%</span><br><span class="line">  layer_dense(units = 20, activation = &quot;relu&quot;) %&gt;%</span><br><span class="line">  layer_dropout(rate = 0.05) %&gt;%</span><br><span class="line">  layer_dense(units = 1, activation = &#x27;sigmoid&#x27;)</span><br><span class="line"></span><br><span class="line"># Optimizer</span><br><span class="line">model %&gt;% compile(</span><br><span class="line">  loss = &#x27;binary_crossentropy&#x27;,</span><br><span class="line">  optimizer = &#x27;adam&#x27;,</span><br><span class="line">  metrics = c(&#x27;accuracy&#x27;)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Train model</span><br><span class="line">model %&gt;% fit(</span><br><span class="line">  x_train, y_train,</span><br><span class="line">  batch_size = 100,</span><br><span class="line">  epochs = 3,</span><br><span class="line">  # validation_data = list(x_test, y_test)</span><br><span class="line">  validation_split = 0.2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Prediction &amp; ConfusionMatrix</span><br><span class="line">b_lstm_y_pred &lt;- model %&gt;% predict_proba(x_test)</span><br><span class="line">b_lstm_y_pred &lt;- as.numeric(b_lstm_y_pred &gt; 0.5)</span><br><span class="line">b_lstm_results &lt;- model %&gt;% evaluate(x_test, y_test)</span><br><span class="line">b_lstm_cMatrix &lt;- table(b_lstm_y_pred,y_test)</span><br></pre></td></tr></table></figure>
+
+<h4 id="訓練-1"><a href="#訓練-1" class="headerlink" title="訓練"></a><strong>訓練</strong></h4><p><img src="https://i.imgur.com/zY39jiF.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Train on 20000 samples, validate on 5000 samples</span><br><span class="line">Epoch 1/3</span><br><span class="line">20000/20000 [==============================] - 573s 29ms/step - loss: 0.3693 - acc: 0.8347 - val_loss: 0.2629 - val_acc: 0.8902</span><br><span class="line">Epoch 2/3</span><br><span class="line">20000/20000 [==============================] - 570s 29ms/step - loss: 0.1591 - acc: 0.9407 - val_loss: 0.3182 - val_acc: 0.8810</span><br><span class="line">Epoch 3/3</span><br><span class="line">20000/20000 [==============================] - 575s 29ms/step - loss: 0.0619 - acc: 0.9801 - val_loss: 0.3378 - val_acc: 0.8860</span><br></pre></td></tr></table></figure>
+
+<h4 id="混淆矩陣-1"><a href="#混淆矩陣-1" class="headerlink" title="混淆矩陣"></a><strong>混淆矩陣</strong></h4><table>
+<thead>
+<tr>
+<th style="text-align:center">Bi_GRU</th>
+<th style="text-align:center" colspan = "3">真實值</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center" rowspan="3">預測值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">10779</td>
+<td style="text-align:center">1341</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1721</td>
+<td style="text-align:center">11159</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="卷積神經網路-Convolutional-Neuron-Network-CNN-Bidirectional-GRU"><a href="#卷積神經網路-Convolutional-Neuron-Network-CNN-Bidirectional-GRU" class="headerlink" title="卷積神經網路 Convolutional Neuron Network (CNN)+Bidirectional GRU"></a>卷積神經網路 Convolutional Neuron Network (CNN)+Bidirectional GRU</h3><h4 id="模型架構-2"><a href="#模型架構-2" class="headerlink" title="模型架構"></a><strong>模型架構</strong></h4><p><img src="https://i.imgur.com/vQE4kVZ.png"></p>
+<h4 id="程式碼-2"><a href="#程式碼-2" class="headerlink" title="程式碼"></a><strong>程式碼</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"># Initialize model</span><br><span class="line">model &lt;- keras_model_sequential()</span><br><span class="line">model %&gt;%</span><br><span class="line">  # Creates dense embedding layer; outputs 3D tensor</span><br><span class="line">  # with shape (batch_size, sequence_length, output_dim)</span><br><span class="line"></span><br><span class="line">  layer_embedding(input_dim = max_features,</span><br><span class="line">                  output_dim = 256,</span><br><span class="line">                  input_length = maxlen) %&gt;%</span><br><span class="line">  layer_conv_1d(filters = 128,</span><br><span class="line">                padding = &#x27;valid&#x27;,</span><br><span class="line">                kernel_size = 5) %&gt;%</span><br><span class="line">  layer_dropout(rate = 0.2) %&gt;%</span><br><span class="line">  bidirectional(layer_gru(units = 32, return_sequences = T)) %&gt;%</span><br><span class="line">  layer_global_max_pooling_1d() %&gt;%</span><br><span class="line">  layer_dense(units = 20, activation = &quot;relu&quot;) %&gt;%</span><br><span class="line">  layer_dropout(rate = 0.05) %&gt;%</span><br><span class="line">  layer_dense(units = 1, activation = &#x27;sigmoid&#x27;)</span><br><span class="line"></span><br><span class="line"># Optimizer</span><br><span class="line">model %&gt;% compile(</span><br><span class="line">  loss = &#x27;binary_crossentropy&#x27;,</span><br><span class="line">  optimizer = &#x27;adam&#x27;,</span><br><span class="line">  metrics = c(&#x27;accuracy&#x27;)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Train model</span><br><span class="line">model %&gt;% fit(</span><br><span class="line">  x_train, y_train,</span><br><span class="line">  batch_size = 100,</span><br><span class="line">  epochs = 3,</span><br><span class="line">  # validation_data = list(x_test, y_test)</span><br><span class="line">  validation_split = 0.2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Prediction &amp; ConfusionMatrix</span><br><span class="line">cnn_lstm_y_pred &lt;- model %&gt;% predict(x_test)</span><br><span class="line">cnn_lstm_y_pred &lt;- as.numeric(cnn_lstm_y_pred &gt; 0.5)</span><br><span class="line">cnn_lstm_results &lt;- model %&gt;% evaluate(x_test, y_test)</span><br><span class="line">cnn_lstm_cMatrix &lt;- table(cnn_lstm_y_pred,y_test)</span><br></pre></td></tr></table></figure>
+
+<h4 id="訓練-2"><a href="#訓練-2" class="headerlink" title="訓練"></a><strong>訓練</strong></h4><p><img src="https://i.imgur.com/a59AIiz.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Train on 20000 samples, validate on 5000 samples</span><br><span class="line">Epoch 1/3</span><br><span class="line">20000/20000 [==============================] - 581s 29ms/step - loss: 0.3985 - acc: 0.8095 - val_loss: 0.2526 - val_acc: 0.9016</span><br><span class="line">Epoch 2/3</span><br><span class="line">20000/20000 [==============================] - 580s 29ms/step - loss: 0.1638 - acc: 0.9393 - val_loss: 0.2626 - val_acc: 0.8952</span><br><span class="line">Epoch 3/3</span><br><span class="line">20000/20000 [==============================] - 584s 29ms/step - loss: 0.0729 - acc: 0.9766 - val_loss: 0.3134 - val_acc: 0.8956</span><br></pre></td></tr></table></figure>
+
+<h4 id="混淆矩陣-2"><a href="#混淆矩陣-2" class="headerlink" title="混淆矩陣"></a><strong>混淆矩陣</strong></h4><table>
+<thead>
+<tr>
+<th style="text-align:center">CNN+Bi_GRU</th>
+<th style="text-align:center" colspan = "3">真實值</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center" rowspan="3">預測值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">11428</td>
+<td style="text-align:center">1912</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1072</td>
+<td style="text-align:center">10588</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="Merge-Multiple-CNN-model"><a href="#Merge-Multiple-CNN-model" class="headerlink" title="Merge Multiple CNN model"></a>Merge Multiple CNN model</h3><h4 id="模型架構-3"><a href="#模型架構-3" class="headerlink" title="模型架構"></a><strong>模型架構</strong></h4><p><img src="https://i.imgur.com/cbLeXZz.png"></p>
+<h4 id="程式碼-3"><a href="#程式碼-3" class="headerlink" title="程式碼"></a><strong>程式碼</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"># Initialize model</span><br><span class="line">input &lt;- layer_input(shape = c(maxlen))</span><br><span class="line">model &lt;- input %&gt;%</span><br><span class="line">  # Creates dense embedding layer; outputs 3D tensor</span><br><span class="line">  # with shape (batch_size, sequence_length, output_dim)</span><br><span class="line"></span><br><span class="line">  layer_embedding(max_features, 300, input_length=maxlen, trainable = TRUE)</span><br><span class="line"></span><br><span class="line">conv1 = model %&gt;% layer_conv_1d(filters=128,</span><br><span class="line">                                kernel_size =3,</span><br><span class="line">                                padding =&#x27;valid&#x27;,</span><br><span class="line">                                activation=&#x27;relu&#x27;) %&gt;%</span><br><span class="line">                  layer_global_max_pooling_1d()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">conv2 = model %&gt;% layer_conv_1d(filters=128,</span><br><span class="line">                                kernel_size =4,</span><br><span class="line">                                padding =&#x27;valid&#x27;,</span><br><span class="line">                                activation=&#x27;relu&#x27;) %&gt;%</span><br><span class="line">                  layer_global_max_pooling_1d()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">conv3 = model %&gt;% layer_conv_1d(filters=128,</span><br><span class="line">                                kernel_size =5,</span><br><span class="line">                                padding =&#x27;valid&#x27;,</span><br><span class="line">                                activation=&#x27;relu&#x27;) %&gt;%</span><br><span class="line">                  layer_global_max_pooling_1d()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">merge.layer &lt;- layer_concatenate(c(conv1, conv2, conv3))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">output &lt;- merge.layer %&gt;%</span><br><span class="line">  layer_dense(units = 1, activation = &#x27;sigmoid&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model &lt;- keras_model(</span><br><span class="line">  inputs = input,</span><br><span class="line">  outputs = output</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Optimizer</span><br><span class="line">model %&gt;% compile(</span><br><span class="line">  loss = &#x27;binary_crossentropy&#x27;,</span><br><span class="line">  optimizer = &#x27;adam&#x27;,</span><br><span class="line">  metrics = c(&#x27;accuracy&#x27;)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Train model</span><br><span class="line">model %&gt;% fit(</span><br><span class="line">  x_train, y_train,</span><br><span class="line">  batch_size = 100,</span><br><span class="line">  epochs = 3,</span><br><span class="line">  validation_split = 0.2</span><br><span class="line">)</span><br><span class="line"># Prediction &amp; ConfusionMatrix</span><br><span class="line">m3_cnn_y_pred &lt;- model %&gt;% predict(x_test)</span><br><span class="line">m3_cnn_y_pred &lt;- as.numeric(m3_cnn_y_pred &gt; 0.5)</span><br><span class="line">m3_cnn_results &lt;- model %&gt;% evaluate(x_test, y_test)</span><br><span class="line">m3_cnn_cMatrix &lt;- table(m3_cnn_y_pred,y_test)</span><br></pre></td></tr></table></figure>
+
+<h4 id="訓練-3"><a href="#訓練-3" class="headerlink" title="訓練"></a><strong>訓練</strong></h4><p><img src="https://i.imgur.com/FuFvHjj.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Train on 22500 samples, validate on 2500 samples</span><br><span class="line">Epoch 1/3</span><br><span class="line">22500/22500 [==============================] - 16s 726us/step - loss: 0.3514 - acc: 0.8429 - val_loss: 0.2651 - val_acc: 0.8936</span><br><span class="line">Epoch 2/3</span><br><span class="line">22500/22500 [==============================] - 15s 685us/step - loss: 0.1357 - acc: 0.9516 - val_loss: 0.2513 - val_acc: 0.9056</span><br><span class="line">Epoch 3/3</span><br><span class="line">22500/22500 [==============================] - 15s 679us/step - loss: 0.0278 - acc: 0.9943 - val_loss: 0.2620 - val_acc: 0.9136</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="混淆矩陣-3"><a href="#混淆矩陣-3" class="headerlink" title="混淆矩陣"></a><strong>混淆矩陣</strong></h4><table>
+<thead>
+<tr>
+<th style="text-align:center">merge_CNN</th>
+<th style="text-align:center" colspan = "3">真實值</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center" rowspan="3">預測值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">11388</td>
+<td style="text-align:center">1404</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1112</td>
+<td style="text-align:center">11096</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="Merge-Multiple-GRU-model"><a href="#Merge-Multiple-GRU-model" class="headerlink" title="Merge Multiple GRU model"></a>Merge Multiple GRU model</h3><h4 id="模型架構-4"><a href="#模型架構-4" class="headerlink" title="模型架構"></a><strong>模型架構</strong></h4><p><img src="https://i.imgur.com/ohP9HC8.png"></p>
+<h4 id="程式碼-4"><a href="#程式碼-4" class="headerlink" title="程式碼"></a><strong>程式碼</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># Initialize model</span><br><span class="line">input &lt;- layer_input(shape = c(maxlen))</span><br><span class="line">model &lt;- input %&gt;%</span><br><span class="line">  # Creates dense embedding layer; outputs 3D tensor</span><br><span class="line">  # with shape (batch_size, sequence_length, output_dim)</span><br><span class="line"></span><br><span class="line">  layer_embedding(max_features, 300, input_length=maxlen, trainable = TRUE)</span><br><span class="line"></span><br><span class="line">gru1 = model %&gt;% layer_gru(units = 128, return_sequences = T)</span><br><span class="line"></span><br><span class="line">gru2 = model %&gt;% layer_gru(units = 64, return_sequences = T)</span><br><span class="line"></span><br><span class="line">gru3 = model %&gt;% layer_gru(units = 32, return_sequences = T)</span><br><span class="line"></span><br><span class="line">merge.layer &lt;- layer_concatenate(c(gru1, gru2, gru3))</span><br><span class="line"></span><br><span class="line">output &lt;- merge.layer %&gt;%</span><br><span class="line">  layer_global_average_pooling_1d() %&gt;%</span><br><span class="line">  layer_dense(units = 1, activation = &#x27;sigmoid&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model &lt;- keras_model(</span><br><span class="line">  inputs = input,</span><br><span class="line">  outputs = output</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Optimizers</span><br><span class="line">model %&gt;% compile(</span><br><span class="line">  loss = &#x27;binary_crossentropy&#x27;,</span><br><span class="line">  optimizer = &#x27;adam&#x27;,</span><br><span class="line">  metrics = c(&#x27;accuracy&#x27;)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Train model</span><br><span class="line"></span><br><span class="line">model %&gt;% fit(</span><br><span class="line">  x_train, y_train,</span><br><span class="line">  batch_size = 100,</span><br><span class="line">  epochs = 3,</span><br><span class="line">  validation_split = 0.2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Prediction &amp; ConfusionMatrix</span><br><span class="line">m3_gru_y_pred &lt;- model %&gt;% predict(x_test)</span><br><span class="line">m3_gru_y_pred &lt;- as.numeric(m3_gru_y_pred &gt; 0.5)</span><br><span class="line">m3_gru_results &lt;- model %&gt;% evaluate(x_test, y_test)</span><br><span class="line">m3_gru_cMatrix &lt;- table(m3_gru_y_pred,y_test)</span><br></pre></td></tr></table></figure>
+
+<h4 id="訓練-4"><a href="#訓練-4" class="headerlink" title="訓練"></a><strong>訓練</strong></h4><p><img src="https://i.imgur.com/mz9gkPl.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Train on 22500 samples, validate on 2500 samples</span><br><span class="line">Epoch 1/3</span><br><span class="line">22500/22500 [==============================] - 896s 40ms/step - loss: 0.3408 - acc: 0.8475 - val_loss: 0.2549 - val_acc: 0.8984</span><br><span class="line">Epoch 2/3</span><br><span class="line">22500/22500 [==============================] - 899s 40ms/step - loss: 0.1502 - acc: 0.9449 - val_loss: 0.2571 - val_acc: 0.9060</span><br><span class="line">Epoch 3/3</span><br><span class="line">22500/22500 [==============================] - 898s 40ms/step - loss: 0.0587 - acc: 0.9817 - val_loss: 0.3179 - val_acc: 0.9020</span><br></pre></td></tr></table></figure>
+
+<h4 id="混淆矩陣-4"><a href="#混淆矩陣-4" class="headerlink" title="混淆矩陣"></a><strong>混淆矩陣</strong></h4><table>
+<thead>
+<tr>
+<th style="text-align:center">merge_GRU</th>
+<th style="text-align:center" colspan = "3">真實值</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center" rowspan="3">預測值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">11233</td>
+<td style="text-align:center">1669</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1267</td>
+<td style="text-align:center">10831</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="集成式學習-Ensembling-Learning"><a href="#集成式學習-Ensembling-Learning" class="headerlink" title="集成式學習 Ensembling Learning"></a>集成式學習 Ensembling Learning</h3><h4 id="方法-多數決"><a href="#方法-多數決" class="headerlink" title="方法 (多數決)"></a><strong>方法 (多數決)</strong></h4><p><img src="https://i.imgur.com/NsQjT2R.png"></p>
+<h4 id="混淆矩陣-5"><a href="#混淆矩陣-5" class="headerlink" title="混淆矩陣"></a><strong>混淆矩陣</strong></h4><table>
+<thead>
+<tr>
+<th style="text-align:center">Ensemble</th>
+<th style="text-align:center" colspan = "3">真實值</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align:center" rowspan="3">預測值</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">11423</td>
+<td style="text-align:center">1359</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1077</td>
+<td style="text-align:center">11141</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="預測結果"><a href="#預測結果" class="headerlink" title="預測結果"></a>預測結果</h3><table>
+<thead>
+<tr>
+<th align="center">模型</th>
+<th align="center">test_set 準確率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">MLP</td>
+<td align="center">86.584%</td>
+</tr>
+<tr>
+<td align="center">Bi-GRU</td>
+<td align="center">87.752%</td>
+</tr>
+<tr>
+<td align="center">CNN+Bi-GRU</td>
+<td align="center">88.064%</td>
+</tr>
+<tr>
+<td align="center">merge-GRU</td>
+<td align="center">88.256%</td>
+</tr>
+<tr>
+<td align="center">merge-CNN</td>
+<td align="center">89.936%</td>
+</tr>
+<tr>
+<td align="center">Ensembling model(多數決:至少 3 個以上)</td>
+<td align="center">90.256%</td>
+</tr>
+</tbody></table>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>請開啟 JavaScript 功能來使用留言系統</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E4%BB%8B%E7%B4%B9%E8%88%87%E9%A0%90%E6%B8%AC%E7%9B%AE%E6%A8%99"><span class="toc-number">1.</span> <span class="toc-text">資料介紹與預測目標</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%83%E6%95%B8%E8%A8%AD%E5%AE%9A"><span class="toc-number">2.</span> <span class="toc-text">參數設定</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E7%89%B9%E5%BE%B5%E9%81%B8%E5%8F%96"><span class="toc-number">2.1.</span> <span class="toc-text">資料特徵選取</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E6%A8%A1%E5%9E%8B%E5%8F%83%E6%95%B8%E8%A8%AD%E5%AE%9A"><span class="toc-number">3.</span> <span class="toc-text">深度學習模型參數設定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%B1%A4%E6%84%9F%E7%9F%A5%E5%99%A8-Multiple-Layer-Perceptron-MLP"><span class="toc-number">4.</span> <span class="toc-text">多層感知器 Multiple Layer Perceptron(MLP)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B"><span class="toc-number">4.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC"><span class="toc-number">4.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4"><span class="toc-number">4.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3"><span class="toc-number">4.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%99%E5%90%91-GRU-Bidirectional-GRU"><span class="toc-number">5.</span> <span class="toc-text">雙向 GRU (Bidirectional GRU)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B-1"><span class="toc-number">5.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC-1"><span class="toc-number">5.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4-1"><span class="toc-number">5.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-1"><span class="toc-number">5.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B7%E7%A9%8D%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF-Convolutional-Neuron-Network-CNN-Bidirectional-GRU"><span class="toc-number">6.</span> <span class="toc-text">卷積神經網路 Convolutional Neuron Network (CNN)+Bidirectional GRU</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B-2"><span class="toc-number">6.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC-2"><span class="toc-number">6.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4-2"><span class="toc-number">6.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-2"><span class="toc-number">6.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Merge-Multiple-CNN-model"><span class="toc-number">7.</span> <span class="toc-text">Merge Multiple CNN model</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B-3"><span class="toc-number">7.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC-3"><span class="toc-number">7.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4-3"><span class="toc-number">7.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-3"><span class="toc-number">7.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Merge-Multiple-GRU-model"><span class="toc-number">8.</span> <span class="toc-text">Merge Multiple GRU model</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%A7%8B-4"><span class="toc-number">8.1.</span> <span class="toc-text">模型架構</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC-4"><span class="toc-number">8.2.</span> <span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%93%E7%B7%B4-4"><span class="toc-number">8.3.</span> <span class="toc-text">訓練</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-4"><span class="toc-number">8.4.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%BC%8F%E5%AD%B8%E7%BF%92-Ensembling-Learning"><span class="toc-number">9.</span> <span class="toc-text">集成式學習 Ensembling Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-%E5%A4%9A%E6%95%B8%E6%B1%BA"><span class="toc-number">9.1.</span> <span class="toc-text">方法 (多數決)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%99%A3-5"><span class="toc-number">9.2.</span> <span class="toc-text">混淆矩陣</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A0%90%E6%B8%AC%E7%B5%90%E6%9E%9C"><span class="toc-number">10.</span> <span class="toc-text">預測結果</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&text=深度學習模型在文本的情緒預測"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&is_video=false&description=深度學習模型在文本的情緒預測"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=深度學習模型在文本的情緒預測&body=Check out this article: https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&title=深度學習模型在文本的情緒預測"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&name=深度學習模型在文本的情緒預測&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://allanhsu83117.github.io/2018/12/26/2018-12-26-deep-learning-with-imdb/&t=深度學習模型在文本的情緒預測"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2022
+    Allan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首頁</a></li><!--
+     --><!--
+       --><li><a href="/about/">關於</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/allanhsu83117">專案</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"انسخ!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "تم النسخ!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113494500-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-113494500-1');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+<!-- utterances Comments -->
+
+</body>
+</html>
